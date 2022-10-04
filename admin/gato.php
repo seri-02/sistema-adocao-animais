@@ -33,8 +33,8 @@
         <span>Cadastro do gato</span>
         <form action="func_cadastrar_gato.php" method="post" enctype="multipart/form-data">
             <div class="campo">
-                <label for="nome">Nome do gato</label>
-                <input type="text" name="nome" id="nome" required>
+                <label for="name">Nome do gato</label>
+                <input type="text" name="name" id="name" required>
             </div>
             <div class="campo">
                 <label for="idade">Idade do gato</label>
@@ -48,7 +48,7 @@
                 <textarea name="descricao" id="descricao" cols="30" rows="10" placeholder="Descrição" required></textarea>
             </div>
             <div class="campo">
-            <input type="file" name="img" class="form-control" required>
+            <input type="file" name="image" class="form-control" required>
             </div>
             <button type="submit">
                 Cadastrar

@@ -1,0 +1,16 @@
+{
+    "name": "ana-laura-almeida-ventura/tcc",
+    "description": "TCC | Abrigo para gatos",
+    "minimum-stability": "stable",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ana Laura de Almeida Ventura",
+            "email": "analauraalmeidaventura@gmail.com"
+        }
+    ],
+    "require": {
+        "coffeecode/uploader": "2.0.*"
+    }
+}

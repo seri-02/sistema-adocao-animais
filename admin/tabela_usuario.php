@@ -28,7 +28,7 @@
         <span>
             <a href="../index.php">Abrigo dos gatos</a> 
         </span>
-        <a href="painel.php"><button id="sair"><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
+        <a href="painel.php"><button><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
     </header>
 
         <div class="tabela">

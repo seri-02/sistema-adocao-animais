@@ -46,6 +46,31 @@
         <span id="titulo">Adote</span>
     </div>
 
+    <main class="conteudo">
+        <div class="row-card">
+           
+                <?php
+                    require_once 'lib/conn.php';
+                    $sql = "SELECT id_gato, nome, descricao, img FROM gato";
+                    $stmt = $conn->query($sql);
+                    $gatos = $stmt->fetchAll(PDO::FETCH_OBJ);
+                    foreach($gatos as $gato) {
+                    ?>
+                    <a href="gato.php?id=<?= $gato->id_gato ?>">
+                        <div class="card">
+                            <img src="image/<?= $gato->img ?>">
+                            <h3><?= $gato->nome ?></h1>
+                            <h5><?= $gato->descricao ?></h5>
+                        </div>
+                    </a>
+                    <?php
+                    }
+                ?>
+             
+
+        </div>
+    </main>
+
     <div class="conteudo-atualizacoes">
         <h3>Atualizações do Abrigo</h3>
         <p>Acompanhe-nos!</p>

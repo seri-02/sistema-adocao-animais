@@ -45,10 +45,10 @@
                 <input type="text" name="sexo" id="sexo" required>
             </div>
             <div class="campo">
-                <textarea name="descricao" id="descricao" cols="30" rows="10" placeholder="Descrição" required></textarea>
+                <textarea name="descricao" id="descricao" cols="30" rows="10" maxlength="100" placeholder="Descrição" required></textarea>
             </div>
             <div class="campo">
-            <input type="file" name="image" class="form-control" required>
+            <input type="file" name="img" id="img" class="form-control" required>
             </div>
             <button type="submit">
                 Cadastrar

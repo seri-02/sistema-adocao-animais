@@ -952,6 +952,31 @@ tr:hover {
     width: 2rem;
 }
 
+.row-card {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+
+.card {
+    margin: 2rem;
+    width: 15rem;
+    height: 20rem;
+    align-items: center;
+}
+
+.card img {
+    width: 15rem;
+    height: 15rem;
+}
+
+.card h3 {
+    font-size: 1rem;
+}
+
+.card h5 {
+    font-size: 1rem;
+}
+
 @media all and (max-width: 575.98px) {
     #logo {
         font-weight: 400;
@@ -1242,7 +1267,13 @@ tr:hover {
         justify-content: center;
     }
 
-     
+    .row-card {
+        display: grid;
+        grid-template-columns: auto;
+    } 
+    .card {
+        margin: 2rem 0;
+    }
 }
 
 @media all and (min-width: 576px) and (max-width: 767.98px) {
@@ -1461,6 +1492,15 @@ tr:hover {
     #seja-voluntario-body .conteudo {
         padding: 2rem 0;
     }
+
+    .row-card {
+        display: grid;
+        grid-template-columns: auto auto;
+    } 
+    .card {
+        margin: 2rem 0;
+        margin-right: 0.5rem;
+    }
 }
 
 @media all and (min-width: 768px) and (max-width: 991.98px) {
@@ -1669,6 +1709,15 @@ tr:hover {
        flex-direction: column;
        justify-content: space-between;
     }
+
+    
+    .row-card {
+        display: grid;
+        grid-template-columns: auto auto;
+    } 
+    .card {
+        margin: 2rem;
+    }
 }
 
 @media all and (min-width: 992px) and (max-width: 1399.98px) {
@@ -1821,5 +1870,13 @@ tr:hover {
 
     #seja-voluntario-body .row {
         padding: 0 0 0 9rem;
+    }
+
+    .row-card {
+        display: grid;
+        grid-template-columns: auto auto auto;
+    } 
+    .card {
+        margin: 2rem;
     }
 }

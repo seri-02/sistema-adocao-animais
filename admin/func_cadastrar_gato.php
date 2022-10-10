@@ -19,7 +19,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="10; url=gato.php">
+    <meta http-equiv="refresh" content="2; url=gato.php">
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">
@@ -42,7 +42,7 @@
             extract($_POST);
             try {
                 $novo_nome = $_POST['name'];
-                $sql = "INSERT INTO gato VALUES(0, :nome, :idade, :sexo, :descricao, 0, :nomeimagem)";
+                $sql = "INSERT INTO gato VALUES(0, :nome, :idade, :sexo, :descricao, 1, :nomeimagem)";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindValue(':nome', $name);
                 $stmt->bindValue(':idade', $idade);

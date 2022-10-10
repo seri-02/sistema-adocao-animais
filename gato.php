@@ -44,14 +44,26 @@
             <img src="image/<?= $gato->img ?>" style="height: 50vh; object-fit = cover;">
         </div>
 
-        <div>
-            <h1>O que é preciso saber antes de adotar ?</h1>
-            <h3>1 - Esteja ciente do custo</h3>
-        </div>
+        <form action="func_adotar.php" method="post">
+            <!-- <input type="hidden" name="id_gato" id="id_gato"> -->
+            <div>
+                <label for="nome_adotante">Nome do Adotante</label>
+                <input type="text" id="nome_adotante" name="nome_adotante">
+            </div>
 
-        <form action="">
-            <label for="nomeAdotante">Nome do Adotante</label>
-            <input type="text" id="nomeAdotante" name="nomeAdotante">
+            <div>
+                <label for="email_adotante">Email do Adotante</label>
+                <input type="email" id="email_adotante" name="email_adotante">
+            </div>
+
+            <div>
+                <label for="telefone">Telefone do Adotante</label>
+                <input type="tel" id="telefone" name="telefone">
+            </div>
+
+            <div>
+                <button type="submit">Adotar</button>
+            </div>
         </form>
     </main>
 </body>

@@ -36,7 +36,7 @@
     <main id="painel">
         <h4>Listagens</h4>
         <span>
-            <button class="btn-opcao">Gato</button>
+            <a href="tabela_gato.php"><button class="btn-opcao">Gato</button></a> 
             <a href="tabela_usuario.php"><button id="btn-usuario">Usuário</button></a>
             <a href="tabela_voluntario.php"><button id="btn-voluntario">Voluntário</button></a>
         </span>

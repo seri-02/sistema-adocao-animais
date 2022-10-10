@@ -49,7 +49,7 @@
                     <?php
                         require_once '../lib/conn.php';
 
-                        $sql = "SELECT adocoes.id_adocao, gato.nome, adocoes.nome_adotante, adocoes.telefone     FROM adocoes, gato";
+                        $sql = "SELECT adocoes.id_adocao, gato.nome, adocoes.nome_adotante, adocoes.telefone FROM adocoes, gato";
                         $stmt = $conn->query($sql);
                         $gatos = $stmt->fetchAll(PDO::FETCH_OBJ);
                         foreach ($gatos as $gato) {

@@ -85,7 +85,7 @@
         
         <div id="form-seja-voluntario">
             <span>Cadastre-se</span>
-            <form action="func_cadastro_voluntario.php" method="post" id="seja-voluntario">
+            <form action="function/func_cadastro_voluntario.php" method="post" id="seja-voluntario">
                 <div class="campo">
                     <label for="nome">Digite seu nome</label>
                     <input type="text" name="nome" id="nome">

@@ -1,9 +1,3 @@
-<?php
-  session_start();
-  if(!isset($_SESSION['id_user'])) {
-    header('Location: ../index.php');
-  }
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -19,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="2; url=usuario.php">
+    <meta http-equiv="refresh" content="2; url=admin/admin.php">
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">
@@ -33,31 +27,23 @@
         <?php
             require_once '../lib/conn.php';
 
-            $verifica = "SELECT * FROM usuario WHERE email = :email";
-            $stmt = $conn->prepare($verifica);
-            $stmt->bindValue(":email", $_POST['email']);
-            $stmt->execute(); 
+            $sql = "SELECT * FROM usuario WHERE email = :email AND senha = :senha";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':email', $_POST['email']);
+            $stmt->bindValue(':senha', sha1($_POST['senha']));
+            $stmt->execute();
 
-            if($stmt->rowCount() === 0) {
-                extract($_POST);
-                $sql = "INSERT INTO usuario VALUES(0, :email, :senha, :name)";
-                $insert = $conn->prepare($sql);
-                $insert->bindValue(":email", $email);
-                $insert->bindValue(":senha", sha1($senha));
-                $insert->bindValue(":name", $name);
-                $insert->execute();
-        ?>
-                <div class="alert success">
-                    <i class="far fa-check-circle"></i>
-                    <p class="lead">Usuário cadastrado com sucesso!</p> 
-                </div>
-            
-        <?php
+            if($stmt->rowCount() === 1) {
+                $usuario = $stmt->fetch(PDO::FETCH_OBJ);
+                session_start();
+                $_SESSION['id_user'] = $usuario->id_user;
+                $_SESSION['name'] = $usuario->name;
+                header('Location: ../admin/painel.php');
             } else {
-        ?>
+        ?>  
                 <div class="alert danger">
                     <i class="fas fa-times"></i>
-                    <p class="lead">Email já existente!</p> 
+                    <p class="lead">Email e/ou senha incorretos</p> 
                 </div>
         <?php
             }

@@ -24,7 +24,7 @@
     
     <main>
         <span>Entrar</span>
-        <form action="logar.php" method="post">
+        <form action="../function/logar.php" method="post">
             <div class="campo">
                 <label for="email">Digite seu email</label>
                 <input type="email" name="email" id="email">

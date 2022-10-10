@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="2; url=adocoes.php">
+    <meta http-equiv="refresh" content="2; url=../seja_voluntario.php">
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">
@@ -25,39 +25,21 @@
     
     <main>
         <?php
-            require_once 'lib/conn.php';
+            require_once '../lib/conn.php';
+
             extract($_POST);
 
-            session_start();
-            if(isset($_GET['id'])){
-                $id_gato = $_SESSION['id_gato'] = (int)$_GET['id'];
-            } 
-            else {
-                $id_gato = $_SESSION['id_gato'];
-            }
-
-            $sql_gato = "SELECT adocoes FROM gato WHERE id_gato = :id";
-            $stmt = $conn->prepare($sql_gato);
-            $stmt->bindParam(":id",$id);
-            $stmt->execute();
-            $gato = $stmt->fetch(PDO::FETCH_OBJ);
-
-            $sql = "INSERT INTO adocoes VALUES(0, :fk_id_gato, :nome_adotante, :email_adotante, :telefone)";
+            $sql = 'INSERT INTO voluntario VALUES(0, :nome, :email, :idade, :dia_disponivel)';
             $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':fk_id_gato', $id_gato);
-            $stmt->bindValue(':nome_adotante', $nome_adotante);
-            $stmt->bindValue(':email_adotante', $email_adotante);
-            $stmt->bindValue(':telefone', $telefone);
+            $stmt->bindValue(':nome', $nome);
+            $stmt->bindValue(':email', $email);
+            $stmt->bindValue(':idade', $idade);
+            $stmt->bindValue(':dia_disponivel', $dia_disponivel);
             $stmt->execute();
-
-            $updateGato = "UPDATE gato SET adotado = 0 WHERE id_gato = :id_gato";
-            $update = $conn->prepare($updateGato);
-            $update->bindValue(':id_gato', $id_gato);
-            $update->execute();
         ?>
         <div class="alert success">
             <i class="far fa-check-circle"></i>
-            <p class="lead">Gato adotado com sucesso</p> 
+            <p class="lead">Usuário cadastrado com sucesso!</p> 
         </div>
     </main>
 

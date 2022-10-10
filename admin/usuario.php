@@ -1,8 +1,8 @@
 <?php
-  session_start();
-  if(!isset($_SESSION['id_user'])) {
-    header('Location: ../index.php');
-  }
+    session_start();
+    if(!isset($_SESSION['id_user'])) {
+        header('Location: ../index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -31,7 +31,7 @@
     
     <main class="form-cadastros">
         <span>Cadastre-se</span>
-        <form action="func_cadastrar_usuario.php" method="post">
+        <form action="../function/func_cadastrar_usuario.php" method="post">
             <div class="campo">
                 <label for="nome">Digite seu nome</label>
                 <input type="text" name="name" id="name">

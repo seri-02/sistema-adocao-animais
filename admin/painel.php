@@ -1,8 +1,8 @@
 <?php
-  session_start();
-  if(!isset($_SESSION['id_user'])) {
-    header('Location: ../index.php');
-  }
+    session_start();
+    if(!isset($_SESSION['id_user'])) {
+        header('Location: ../index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -28,7 +28,7 @@
         <span>
             <a href="../index.php">Abrigo dos gatos</a> 
         </span>
-        <a href="sair.php"><button id="sair">Sair <i class="fa-solid fa-right-to-bracket"></i></button></a>
+        <a href="../function/sair.php"><button id="sair">Sair <i class="fa-solid fa-right-to-bracket"></i></button></a>
     </header>
     
     <h3 id="bem-vindo">Bem vindo!</h3>
@@ -36,9 +36,10 @@
     <main id="painel">
         <h4>Listagens</h4>
         <span>
-            <a href="tabela_gato.php"><button class="btn-opcao">Gato</button></a> 
-            <a href="tabela_usuario.php"><button id="btn-usuario">Usuário</button></a>
-            <a href="tabela_voluntario.php"><button id="btn-voluntario">Voluntário</button></a>
+            <a href="tabelas/tabela_adocoes.php"><button class="btn-opcao">Adoções</button></a> 
+            <a href="tabelas/tabela_gatos.php"><button class="btn-opcao">Gatos</button></a> 
+            <a href="tabelas/tabela_usuario.php"><button id="btn-usuario">Usuário</button></a>
+            <a href="tabelas/tabela_voluntario.php"><button id="btn-voluntario">Voluntário</button></a>
         </span>
     </main>
 

@@ -19,7 +19,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="2; url=gato.php">
+    <meta http-equiv="refresh" content="2; url=../admin/usuario.php">
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">
@@ -30,42 +30,36 @@
     </header>
     
     <main>
-    <?php
-        require_once '../lib/conn.php';
-        require __DIR__ . "/../src/Uploader.php";
-        require __DIR__ . "/../src/Image.php";
-
-        $image = new CoffeeCode\Uploader\Image("../image", false, false);
-        $upload = $image->upload($_FILES['img'], $_POST['name']);
-
-        if ($_FILES) {
-            extract($_POST);
-            try {
-                $novo_nome = $_POST['name'];
-                $sql = "INSERT INTO gato VALUES(0, :nome, :idade, :sexo, :descricao, 1, :nomeimagem)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindValue(':nome', $name);
-                $stmt->bindValue(':idade', $idade);
-                $stmt->bindValue(':sexo', $sexo);
-                $stmt->bindValue(':descricao', $descricao);
-                $stmt->bindValue(':nomeimagem', $novo_nome);
-                $stmt->execute();
-        ?>
-
-        <div class="alert success">
-            <i class="far fa-check-circle"></i>
-            <p class="lead">Gato cadastrado com sucesso!</p> 
-        </div>
-
         <?php
-                } catch (Exception $e) {
-                    ?>
-                    <div class="alert danger">
-                        <i class="fas fa-times"></i>
-                        <p class="lead">Extenção de imagem inválida</p> 
-                    </div>
-                    <?php
-                }
+            require_once '../lib/conn.php';
+
+            $verifica = "SELECT * FROM usuario WHERE email = :email";
+            $stmt = $conn->prepare($verifica);
+            $stmt->bindValue(":email", $_POST['email']);
+            $stmt->execute(); 
+
+            if($stmt->rowCount() === 0) {
+                extract($_POST);
+                $sql = "INSERT INTO usuario VALUES(0, :email, :senha, :name)";
+                $insert = $conn->prepare($sql);
+                $insert->bindValue(":email", $email);
+                $insert->bindValue(":senha", sha1($senha));
+                $insert->bindValue(":name", $name);
+                $insert->execute();
+        ?>
+                <div class="alert success">
+                    <i class="far fa-check-circle"></i>
+                    <p class="lead">Usuário cadastrado com sucesso!</p> 
+                </div>
+            
+        <?php
+            } else {
+        ?>
+                <div class="alert danger">
+                    <i class="fas fa-times"></i>
+                    <p class="lead">Email já existente!</p> 
+                </div>
+        <?php
             }
         ?>
     </main>

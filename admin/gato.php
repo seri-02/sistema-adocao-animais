@@ -1,8 +1,8 @@
 <?php
-  session_start();
-  if(!isset($_SESSION['id_user'])) {
-    header('Location: ../index.php');
-  }
+    session_start();
+    if(!isset($_SESSION['id_user'])) {
+        header('Location: ../index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -31,7 +31,7 @@
     
     <main class="form-cadastros">
         <span>Cadastro do gato</span>
-        <form action="func_cadastrar_gato.php" method="post" enctype="multipart/form-data">
+        <form action="../function/func_cadastrar_gato.php" method="post" enctype="multipart/form-data">
             <div class="campo">
                 <label for="name">Nome do gato</label>
                 <input type="text" name="name" id="name" required>

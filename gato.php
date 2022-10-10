@@ -44,8 +44,7 @@
             <img src="image/<?= $gato->img ?>" style="height: 50vh; object-fit = cover;">
         </div>
 
-        <form action="func_adotar.php" method="post">
-            <!-- <input type="hidden" name="id_gato" id="id_gato"> -->
+        <form action="function/func_adotar.php" method="post">
             <div>
                 <label for="nome_adotante">Nome do Adotante</label>
                 <input type="text" id="nome_adotante" name="nome_adotante">

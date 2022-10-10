@@ -9,8 +9,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <script src="js/jquery.js"></script>
-
     <link rel="icon" href="">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,7 +23,7 @@
         <a href="adocoes.php"><button><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
     </header>
     
-    <main>
+    <main class="gatos">
         <?php
             require_once "lib/conn.php";
             session_start();
@@ -41,10 +39,20 @@
             $stmt->execute();
             $gato = $stmt->fetch(PDO::FETCH_OBJ);
         ?>
+        <h1 class="display-4 text-center"><?= $gato->nome ?></h1>
         <div id="img-adocao">
             <img src="image/<?= $gato->img ?>" style="height: 50vh; object-fit = cover;">
         </div>
-        <h1 class="display-4 text-center"><?= $gato->nome ?></h1>
+
+        <div>
+            <h1>O que é preciso saber antes de adotar ?</h1>
+            <h3>1 - Esteja ciente do custo</h3>
+        </div>
+
+        <form action="">
+            <label for="nomeAdotante">Nome do Adotante</label>
+            <input type="text" id="nomeAdotante" name="nomeAdotante">
+        </form>
     </main>
 </body>
 </html>

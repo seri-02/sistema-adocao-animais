@@ -1,0 +1,251 @@
+#adm {
+    background-color: var(--secondary);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#adm header {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    color: var(--light);
+    font-weight: 100;
+    font-size: 3.5rem;
+}
+
+#adm main {
+    margin: auto;
+    width: 480px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#adm main>span {
+    color: var(--dark);
+    font-size: 2rem;
+    padding: 1rem;
+}
+
+#adm main.form-cadastros {
+    margin-bottom: 15rem;
+}
+
+#adm form {
+    display: block;
+    margin: auto;
+    padding: 1rem;
+    background-color: var(--light);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    border-radius: 8px;
+   
+}
+
+#adm input {
+    font-size: 1.125rem;
+    padding: 0.5rem 0rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--dark);
+    outline: none;
+}
+
+#adm button {
+    width: 10rem;
+}
+
+#voltar {
+    text-align: center;
+    color: var(--dark);
+    margin: 7rem auto;
+}
+
+#voltar a {
+    text-decoration: underline;
+    color: var(--dark);
+}
+
+.header-adm span{
+    font-size: 2.5rem;
+}
+
+#adm .header-adm {
+    padding: 1rem 5rem ;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+}
+
+#adm .header-adm #sair {
+    float: right;
+    margin: 0.5rem 2rem 0 0;
+    border: 1px solid var(--primary);
+    background-color: transparent;
+    color: var(--dark);
+    width: 5rem;
+}
+
+#adm .header-adm #sair:hover {
+    background-color: var(--primary);
+    color: var(--light);
+}
+
+#adm h3 {
+    text-align: center;
+}
+
+#adm h4 {
+    color: var(--dark);
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+#footer-adm {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.alert {
+    color: var(--light);
+    width: 30rem;
+    padding: 1rem;
+    margin: auto;
+    margin-bottom: 10rem;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.danger {
+    background-color: rgba(215, 49, 49, 0.668);
+}
+
+.success {
+    background-color: rgba(29, 109, 29, 0.668);
+}
+
+#bem-vindo {
+    text-align: center;
+    color: var(--dark);
+    font-size: 2rem;
+    margin: 3rem auto 0 auto;
+}
+
+#painel button {
+    width: 8rem;
+}
+
+#painel button:hover {
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+#painel div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#cadastros {
+    text-align: center;
+    color: var(--dark);
+    margin: 1rem auto 12rem auto;
+}
+
+.dropbtn {
+    background-color: var(--primary);
+    color: var(--light);
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown i {
+   margin-left: 0.5rem;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--light);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--secondary)
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+.tabela {
+    background-color: var(--primary);
+    width: 90%;
+    height: 30rem;
+    margin: auto;
+    padding: 3rem;
+    overflow-y: scroll;
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;  
+}
+
+.tabela h3 {
+    color: var(--light);
+    margin-bottom: 1rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--dark);
+}
+
+table {
+    border-collapse: collapse;
+    color: var(--light);
+}
+
+th, td {
+    width: 30rem;
+    padding: 0.5rem 2rem;
+    text-align: center;
+}
+
+tr:hover {
+    background-color: var(--secondary);
+    color: var(--dark);
+}
+
+.opcao {
+    width: 2rem;
+}

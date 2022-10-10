@@ -9,6 +9,8 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <script src="js/jquery.js"></script>
+
     <link rel="icon" href="">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -92,6 +94,8 @@
         </div>
     </div>
 
+    <button class="back-to-top" href="#"><i class=" fa-solid fa-chevron-up"></i></button>
+
     <footer>
         <div id="conteudo-footer">
             <div class="caixa esquerda">
@@ -146,4 +150,5 @@
 </body>
 <script src="js/btn_menu.js"></script>
 <script src="js/maquina_escrever.js"></script>
+<script src="js/back_to_top.js"></script>
 </html>

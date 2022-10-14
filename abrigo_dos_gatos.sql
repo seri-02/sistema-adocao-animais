@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 10-Out-2022 às 14:59
+-- Tempo de geração: 14-Out-2022 às 10:39
 -- Versão do servidor: 5.7.36
--- versão do PHP: 7.4.26
+-- versão do PHP: 8.0.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,20 +32,23 @@ USE `abrigo_dos_gatos`;
 DROP TABLE IF EXISTS `adocoes`;
 CREATE TABLE IF NOT EXISTS `adocoes` (
   `id_adocao` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_id_gato` int(11) NOT NULL,
+  `fk_id_gato` varchar(50) COLLATE utf8_swedish_ci NOT NULL,
   `nome_adotante` varchar(50) COLLATE utf8_swedish_ci NOT NULL,
   `email_adotante` varchar(100) COLLATE utf8_swedish_ci NOT NULL,
   `telefone` varchar(20) COLLATE utf8_swedish_ci NOT NULL,
   PRIMARY KEY (`id_adocao`),
-  FOREIGN KEY(fk_id_gato) REFERENCES gato(id_gato)    
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+  KEY `fk_id_gato` (`fk_id_gato`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 --
 -- Extraindo dados da tabela `adocoes`
 --
 
-INSERT INTO `adocoes` (`id_adocao`, `nome_adotante`, `email_adotante`, `telefone`) VALUES
-(1, 'ana', 'ana@teste.com', '996335800');
+INSERT INTO `adocoes` (`id_adocao`, `fk_id_gato`, `nome_adotante`, `email_adotante`, `telefone`) VALUES
+(4, '16', 'ana', 'ana@teste.com', '15997001407'),
+(3, '14', 'ana', 'ana@teste.com', '15998776566'),
+(5, '15', 'ana', 'ana@teste.com', '15997001407'),
+(6, '18', 'ana', 'ana@teste.com', '996335800');
 
 -- --------------------------------------------------------
 
@@ -63,14 +66,20 @@ CREATE TABLE IF NOT EXISTS `gato` (
   `adotado` bit(1) NOT NULL,
   `img` varchar(255) COLLATE utf8_swedish_ci NOT NULL,
   PRIMARY KEY (`id_gato`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 --
 -- Extraindo dados da tabela `gato`
 --
 
 INSERT INTO `gato` (`id_gato`, `nome`, `idade`, `sexo`, `descricao`, `adotado`, `img`) VALUES
-(14, 'Fofinho', 4, 'masculino', 'teste', b'1', 'Fofinho');
+(14, 'Fofinho', 4, 'masculino', 'teste', b'0', 'Fofinho'),
+(15, 'Cachorro', 3, 'masculino', 'teste', b'0', 'Cachorro'),
+(16, 'Tom', 6, 'Masculino', 'teste 5', b'0', 'Tom'),
+(17, 'Ana Laura de Almeida Ventura', 4, 'Feminino', 'teste', b'0', 'Ana Laura de Almeida Ventura'),
+(18, 'Teste', 4, 'Masculino', 'tssss', b'0', 'Teste'),
+(19, 'Teste', 4, 'Masculino', 'teste', b'1', 'Teste'),
+(20, 'Teste', 4, 'Masculino', 'te', b'1', 'Teste');
 
 -- --------------------------------------------------------
 
@@ -85,14 +94,15 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `senha` varchar(50) COLLATE utf8_swedish_ci DEFAULT NULL,
   `name` varchar(50) COLLATE utf8_swedish_ci DEFAULT NULL,
   PRIMARY KEY (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 --
 -- Extraindo dados da tabela `usuario`
 --
 
 INSERT INTO `usuario` (`id_user`, `email`, `senha`, `name`) VALUES
-(25, 'ana@teste.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Ana Laura de Almeida Ventura');
+(25, 'ana@teste.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Ana Laura de Almeida Ventura'),
+(26, 'ana11@teste.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Ana Laura de Almeida Ventura');
 
 -- --------------------------------------------------------
 
@@ -108,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `voluntario` (
   `idade` int(11) DEFAULT NULL,
   `dia_disponivel` varchar(50) COLLATE utf8_swedish_ci DEFAULT NULL,
   PRIMARY KEY (`id_voluntario`)
-) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 --
 -- Extraindo dados da tabela `voluntario`
@@ -145,7 +155,8 @@ INSERT INTO `voluntario` (`id_voluntario`, `nome`, `email`, `idade`, `dia_dispon
 (129, 'aaaaaa', 'ana@teste.com', 1, '1'),
 (130, 'Teste', 'ana12@teste.com', 2, '1'),
 (131, 'Teste', 'ana@teste.com', 2, 'a'),
-(132, 'Teste php', 'php@gmail.com', 10, 'Segunda, TerÃ§a, Quarta, Quinta, Sexta');
+(132, 'Teste php', 'php@gmail.com', 10, 'Segunda, TerÃ§a, Quarta, Quinta, Sexta'),
+(133, 'Teste', 'teste@gmail.com', 4, '124');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

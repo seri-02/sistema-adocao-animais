@@ -28,7 +28,6 @@
                 <li><a href="index.php">Home</a></li>
                 <li><a href="adocoes.php">Adoções</a></li>
                 <li><a href="localizacao.php">Localização</a></li>
-                <li><a href="denuncia.php">Denúncia</a></li>
             </ul>
         </nav>
         <ul class="social">
@@ -163,9 +162,21 @@
             </div>
 
             <div class="caixa direita">
-                <h3>Área administrativa</h3>
+				<h3>Contato</h3>
 				<div class="conteudos-footer">
-				    <a href="admin/admin.php"><button>Área administrativa</button></a>	
+					<form action="#">
+						<div class="email">
+							<div class="texto">Email *</div>
+							<input type="email" required>
+						</div>
+						<div class="mensagem">
+							<div class="texto">Mensagem *</div>
+							<textarea rows="2" cols="25" required></textarea>
+						</div>
+						<div class="btn">
+							<button type="submit">Enviar</button>
+						</div>
+					</form>
 				</div>
 			</div>
         </div>

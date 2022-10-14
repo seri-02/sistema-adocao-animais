@@ -64,6 +64,147 @@ footer p {
     line-height: 20px
 }
 
+#conteudo-footer {
+    display: flex;
+}
+
+#conteudo-footer .caixa {
+    flex-basis: 50%;
+    padding: 10px 20px;
+}
+
+.caixa h3 {
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--secondary);
+}
+
+.conteudos-footer {
+    margin: 20px 0 0 0;
+    position: relative;
+}
+
+.social-footer {
+    margin: 20px 0 0 0;
+}
+
+.esquerda {
+    margin-right: 4rem;
+}
+
+.esquerda a {
+    padding: 0 10px;
+}
+
+.esquerda a span {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    text-align: center;
+    line-height: 40px;
+    font-size: 1rem;
+    margin-left: -0.5rem;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.esquerda p {
+    text-align: justify;
+}
+
+#saiba-mais-footer {
+    text-decoration: underline;
+    margin: -0.5rem;
+}
+
+.fas {
+    font-size: 23px;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    transition: 0.3s;
+    cursor: pointer;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.social-footer span:hover {
+    background-color: var(--secondary);
+    color: var(--dark);
+}
+
+.texto { 
+    font-size: 1rem;
+    font-weight: 400;
+    padding-left: 10px;
+}
+
+#telefone {
+    margin: 10px 0;
+}
+
+#mensagem {
+    margin-top: 10px;
+}
+
+footer form input, footer form textarea {
+    width: 80%;
+    font-size: 17px;
+    background: transparent;
+    padding-left: 10px;
+    border: 1px solid var(--light);
+    color: var(--light);
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.direita input {
+    margin-bottom: 1rem;
+    height: 35px;
+}
+
+form .texto {
+    font-size: 17px;
+    margin-bottom: 2px;
+    color: #656565;
+}
+
+form button {
+    width: 80%;
+    margin-top: 2px;
+}
+
+#baixo .centro {
+    padding: 5px;
+    font-size: 15px;
+    background: var(--dark);
+    text-align: center;
+}
+
+#baixo .centro span {
+    color: var(--light);
+}
+
+#baixo .centro a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+#baixo .centro a:hover {
+    text-decoration: underline;
+}
+
 img {
     border-radius: 5px;
     -webkit-border-radius: 5px;

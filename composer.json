@@ -11,6 +11,7 @@
         }
     ],
     "require": {
-        "coffeecode/uploader": "2.0.*"
+        "coffeecode/uploader": "2.0.*",
+        "phpmailer/phpmailer": "^6.6"
     }
 }

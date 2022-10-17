@@ -38,7 +38,6 @@
                         <th>Nome gato</th>
                         <th>Nome Adotante</th>
                         <th>Telefone</th>  
-                        <th>Excluir</th>
                     </tr>
                 </thead>
                 
@@ -56,7 +55,6 @@
                             <td><?= $gato->nome ?></td>
                             <td><?= $gato->nome_adotante ?></td>
                             <td><?= $gato->telefone ?></td>
-                            <td><a href=""><i class="fa-solid fa-trash"></i></a></td>
                         </tr>
                     <?php
                         }

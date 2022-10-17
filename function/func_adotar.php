@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="2; url=adocoes.php">
+    <meta http-equiv="refresh" content="10; url=../adocoes.php">
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">
@@ -36,7 +36,7 @@
                 $id_gato = $_SESSION['id_gato'];
             }
 
-            $sql_gato = "SELECT adocoes FROM gato WHERE id_gato = :id";
+            $sql_gato = "SELECT * FROM gato WHERE id_gato = :id";
             $stmt = $conn->prepare($sql_gato);
             $stmt->bindParam(":id",$id);
             $stmt->execute();

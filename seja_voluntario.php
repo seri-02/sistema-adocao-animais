@@ -86,24 +86,22 @@
             <span>Cadastre-se</span>
             <form action="function/func_cadastro_voluntario.php" method="post" id="seja-voluntario">
                 <div class="campo">
-                    <label for="nome">Digite seu nome</label>
-                    <input type="text" name="nome" id="nome">
+                    <input type="text" name="nome" id="nome" required>
+                    <span>Nome</span>
                 </div>
                 <div class="campo">
-                    <label for="email">Digite seu email</label>
-                    <input type="email" name="email" id="email">
+                    <input type="email" name="email" id="email" required>
+                    <span>Email</span>
                 </div>
                 <div class="campo">
-                    <label for="idade">Digite sua Idade</label>
-                    <input type="number" name="idade" id="idade">
+                    <input type="number" name="idade" id="idade" required>
+                    <span>Idade</span>
                 </div>
                 <div class="campo">
-                    <label for="dia_disponivel">Digite os dias disponível</label>
-                    <input type="text" name="dia_disponivel" id="dia_disponivel">
+                    <input type="text" name="dia_disponivel" id="dia_disponivel" required>
+                    <span>Dias disponível</span>
                 </div>
-                <button type="submit">
-                    Enviar
-                </button>
+                <button type="submit">Enviar</button>
             </form>
         </div>
     </main>
@@ -164,14 +162,14 @@
             <div class="caixa direita">
 				<h3>Contato</h3>
 				<div class="conteudos-footer">
-					<form action="#">
-						<div class="email">
-							<div class="texto">Email *</div>
-							<input type="email" required>
+					<form action="function/enviar.php" method="post">
+						<div class="email campo">
+                            <input type="email" id="email" name="email" required>
+							<span class="texto">Email</span>
 						</div>
-						<div class="mensagem">
-							<div class="texto">Mensagem *</div>
-							<textarea rows="2" cols="25" required></textarea>
+						<div class="mensagem campo">
+                            <textarea rows="2" cols="25" id="msg" name="msg" required></textarea>
+							<span class="texto">Mensagem</span>
 						</div>
 						<div class="btn">
 							<button type="submit">Enviar</button>

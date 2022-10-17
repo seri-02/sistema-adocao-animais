@@ -154,14 +154,14 @@
             <div class="caixa direita">
 				<h3>Contato</h3>
 				<div class="conteudos-footer">
-					<form action="#">
-						<div class="email">
-							<div class="texto">Email *</div>
-							<input type="email" required>
+					<form action="function/enviar.php" method="post">
+						<div class="email campo">
+                            <input type="email" id="email" name="email" required>
+							<span class="texto">Email</span>
 						</div>
-						<div class="mensagem">
-							<div class="texto">Mensagem *</div>
-							<textarea rows="2" cols="25" required></textarea>
+						<div class="mensagem campo">
+                            <textarea rows="2" cols="25" id="msg" name="msg" required></textarea>
+							<span class="texto">Mensagem</span>
 						</div>
 						<div class="btn">
 							<button type="submit">Enviar</button>

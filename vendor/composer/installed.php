@@ -3,7 +3,7 @@
         'name' => 'ana-laura-almeida-ventura/tcc',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'a5db5a9ce843ee624271ae8ce1ec778a67e71a74',
+        'reference' => 'e816ff030c550857fbf9de26a3eb89641209b4ac',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'ana-laura-almeida-ventura/tcc' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'a5db5a9ce843ee624271ae8ce1ec778a67e71a74',
+            'reference' => 'e816ff030c550857fbf9de26a3eb89641209b4ac',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

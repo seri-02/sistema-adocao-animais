@@ -424,7 +424,7 @@
 #seja-voluntario {
     display: block;
     margin: auto;
-    padding: 1rem;
+    padding: 2rem;
     background-color: var(--light);
     display: flex;
     flex-direction: column;
@@ -433,32 +433,51 @@
     border-radius: 8px;
 }
 
-.campo {
-    display: flex;
-    flex-direction: column;
-    margin-top: 0.5rem;
+.campo{ 
+    position: relative;
+    width: 20em;
+    margin-bottom: 1.5em;
 }
 
-.campo:focus-within:not(input[value='']) label {
-    margin-top: -0.75rem;
-    font-size: 0.875rem;
-}
-
-.campo label {
-    position: absolute;
-    color: var(--primary);
-    margin-top: 0.5rem;
-    opacity: 0.8;
-    transition: all 200ms;
-}
-
-.campo input {
-    font-size: 1.125rem;
-    padding: 0.5rem 0rem;
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid var(--dark);
+.campo input, .campo textarea{
+    width: 32rem;
+    padding: 0.65rem;   
+    border: 0.5px solid rgba(32, 32, 32, 0.851);
+    border-radius: 5px;
     outline: none;
+    background-color: transparent;
+    color: black;
+    font-size: 1em;
+    transition: 0.5s;
+}
+
+.campo span{ 
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    pointer-events: none;
+    font-size: 1em;
+    text-transform: uppercase;
+    color: rgba(32, 32, 32, 0.851);
+    transition: 0.5s;
+}
+
+.campo input:valid ~ span,
+.campo input:focus ~ span,
+.campo textarea:valid ~ span,
+.campo textarea:focus ~ span {
+    color: black;
+    font-size: 0.65em;
+    padding: 0 10px;
+    background: var(--light);
+    border-left: 1px solid rgba(32, 32, 32, 0.851);
+    border-right: 1px solid rgba(32, 32, 32, 0.851);
+    letter-spacing: 0.2em;
+    -webkit-transform: translateX(10px) translateY(-15px);
+    transform: translateX(10px) translateY(-15px);
+    -moz-transform: translateX(10px) translateY(-15px);
+    -ms-transform: translateX(10px) translateY(-15px);
+    -o-transform: translateX(10px) translateY(-15px);
 }
 
 #seja-voluntario button {

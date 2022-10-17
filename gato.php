@@ -33,8 +33,8 @@
             else {
                 $id = $_SESSION['id_gato'];
             }
-            $sql_noticias = "SELECT * FROM gato WHERE id_gato = :id";
-            $stmt = $conn->prepare($sql_noticias);
+            $sql_gatos = "SELECT * FROM gato WHERE id_gato = :id";
+            $stmt = $conn->prepare($sql_gatos);
             $stmt->bindParam(":id",$id);
             $stmt->execute();
             $gato = $stmt->fetch(PDO::FETCH_OBJ);

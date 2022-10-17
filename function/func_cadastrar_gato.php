@@ -1,8 +1,8 @@
 <?php
-  session_start();
-  if(!isset($_SESSION['id_user'])) {
-    header('Location: ../index.php');
-  }
+    session_start();
+    if(!isset($_SESSION['id_user'])) {
+        header('Location: ../index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -19,7 +19,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="2; url=admin/gato.php">
+    <meta http-equiv="refresh" content="2; url=../admin/gato.php">
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">

@@ -1,3 +1,4 @@
+@import url(main.css);
 #adm {
     background-color: var(--secondary);
     display: flex;
@@ -36,23 +37,13 @@
 #adm form {
     display: block;
     margin: auto;
-    padding: 1rem;
+    padding: 2rem;
     background-color: var(--light);
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     width: 100%;
     border-radius: 8px;
-   
-}
-
-#adm input {
-    font-size: 1.125rem;
-    padding: 0.5rem 0rem;
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid var(--dark);
-    outline: none;
 }
 
 #adm button {

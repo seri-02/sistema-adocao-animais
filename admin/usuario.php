@@ -33,16 +33,16 @@
         <span>Cadastre-se</span>
         <form action="../function/func_cadastrar_usuario.php" method="post">
             <div class="campo">
-                <label for="nome">Digite seu nome</label>
-                <input type="text" name="name" id="name">
+                <input type="text" name="name" id="name" required>
+                <span>Digite seu nome</span>
             </div>
             <div class="campo">
-                <label for="email">Digite seu email</label>
-                <input type="email" name="email" id="email">
+                <input type="email" name="email" id="email" required>
+                <span>Digite seu email</span>
             </div>
             <div class="campo">
-                <label for="senha">Digite a sua senha</label>
-                <input type="password" name="senha" id="senha">
+                <input type="password" name="senha" id="senha" required>
+                <span>Digite a sua senha</span>
             </div>
             <button type="submit">
                 Cadastrar

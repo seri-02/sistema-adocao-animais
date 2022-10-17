@@ -34,7 +34,7 @@
 
     $mail = new PHPMailer(true);
     try {
-        // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $mail->isSMTP();
         $mail->Host ='smtp.gmail.com';
         $mail->SMTPAuth = true;

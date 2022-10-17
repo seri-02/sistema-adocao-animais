@@ -26,12 +26,12 @@
         <span>Entrar</span>
         <form action="../function/logar.php" method="post">
             <div class="campo">
-                <label for="email">Digite seu email</label>
-                <input type="email" name="email" id="email">
+                <input type="email" name="email" id="email" required>
+                <span>Email</span>
             </div>
             <div class="campo">
-                <label for="senha">Digite a sua senha</label>
-                <input type="password" name="senha" id="senha">
+                <input type="password" name="senha" id="senha" required>
+                <span>Senha</span>
             </div>
             <button type="submit">
                 Entrar

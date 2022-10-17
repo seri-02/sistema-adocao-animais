@@ -151,27 +151,20 @@ footer p {
     margin: 10px 0;
 }
 
-#mensagem {
-    margin-top: 10px;
+footer .campo input, footer .campo textarea {
+    width: 20rem !important;
+    color: var(--light) !important;
+    border: 0.5px solid rgba(188, 188, 188, 0.851);
 }
 
-footer form input, footer form textarea {
-    width: 80%;
-    font-size: 17px;
-    background: transparent;
-    padding-left: 10px;
-    border: 1px solid var(--light);
+footer .campo input:valid ~ span,
+footer .campo input:focus ~ span,
+footer .campo textarea:focus ~ span,
+footer .campo textarea:focus ~ span {
     color: var(--light);
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-}
-
-.direita input {
-    margin-bottom: 1rem;
-    height: 35px;
+    background: var(--dark);
+    border-left: 1px solid rgba(188, 188, 188, 0.851);
+    border-right: 1px solid rgba(188, 188, 188, 0.851);
 }
 
 form .texto {
@@ -332,6 +325,28 @@ legend {
     .conteudo {
         padding: 2rem 3.5rem;
     }
+
+    .campo{ 
+        position: relative;
+        width: 15em;
+        margin-bottom: 1.5em;
+    }
+
+    footer .campo input, footer .campo textarea{
+        width: 13rem;
+    }
+
+    .campo input, .campo textarea{
+        width: 13rem;
+    }
+
+    .campo input:valid ~ span,
+    .campo input:focus ~ span,
+    .campo textarea:valid ~ span,
+    .campo textarea:focus ~ span {
+       margin: 0 10px;
+    }
+
 
     .conteudo-light {
         margin: 0 auto;
@@ -502,6 +517,14 @@ legend {
     
     #adm .header-adm {
         padding: 1rem;
+    }
+
+    #adm .campo span {
+        padding-left: 1rem;
+    }
+
+    #baixo .centro span {
+        font-size: 0.75rem;
     }
     
     #adm .header-adm #sair {

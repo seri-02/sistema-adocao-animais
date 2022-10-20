@@ -28,7 +28,7 @@
         <span>
             <a href="../index.php">Abrigo dos gatos</a> 
         </span>
-        <a href="../function/sair.php"><button id="sair">Sair <i class="fa-solid fa-right-to-bracket"></i></button></a>
+        <a href="../function/sair.php"><button class="sair">Sair <i class="fa-solid fa-right-to-bracket"></i></button></a>
     </header>
     
     <h3 id="bem-vindo">Bem vindo!</h3>

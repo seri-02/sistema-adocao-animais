@@ -42,11 +42,9 @@
             extract($_POST);
             try {
                 $novo_nome = $_POST['name'];
-                $sql = "INSERT INTO gato VALUES(0, :nome, :idade, :sexo, :descricao, 1, :nomeimagem)";
+                $sql = "INSERT INTO gato VALUES(0, :nome, :descricao, 1, :nomeimagem)";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindValue(':nome', $name);
-                $stmt->bindValue(':idade', $idade);
-                $stmt->bindValue(':sexo', $sexo);
                 $stmt->bindValue(':descricao', $descricao);
                 $stmt->bindValue(':nomeimagem', $novo_nome);
                 $stmt->execute();

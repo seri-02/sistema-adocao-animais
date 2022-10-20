@@ -26,7 +26,7 @@
         <span>
             <a href="../index.php">Abrigo dos gatos</a> 
         </span>
-        <a href="../painel.php"><button><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
+        <a href="../painel.php"><button class="sair"><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
     </header>
 
     <div class="tabela">
@@ -38,6 +38,7 @@
                     <th>Nome gato</th>
                     <th>Idade</th>
                     <th>Adotado</th>  
+                    <th>Editar</th>  
                 </tr>
             </thead>
             
@@ -52,7 +53,7 @@
                     <tr>
                         <td class="id"><?= $gato->id_gato ?></td>
                         <td><?= $gato->nome ?></td>
-                        <td><?= $gato->idade ?></td>
+                        <td><?= $gato->descricao ?></td>
                         <td>
                             <?php 
                                 if($gato->adotado == 0) {
@@ -66,6 +67,7 @@
                                 }
                             ?>
                         </td>
+                        <td><a href="../editar_gato.php"><i class="fa-solid fa-user-pen"></i></a></td>
                     </tr>
                 <?php
                     }

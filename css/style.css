@@ -12,7 +12,8 @@
     box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
     background-color: var(--secondary);
     font-family: "Roboto", sans-serif;
     color: #777;
@@ -64,7 +65,7 @@ footer {
     padding: 1rem 0 1rem 5rem;
     padding-left: 5rem;
     border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
+    border-top-right-radius: 40px;  
 }
 
 footer p {
@@ -123,11 +124,6 @@ footer p {
     text-align: justify;
 }
 
-#saiba-mais-footer {
-    text-decoration: underline;
-    margin: -0.5rem;
-}
-
 .fas {
     font-size: 23px;
     width: 45px;
@@ -148,7 +144,7 @@ footer p {
     color: var(--dark);
 }
 
-.texto { 
+.texto {
     font-size: 1rem;
     font-weight: 400;
     padding-left: 10px;
@@ -158,16 +154,17 @@ footer p {
     margin: 10px 0;
 }
 
-footer .campo input, footer .campo textarea {
+footer .campo input,
+footer .campo textarea {
     width: 20rem !important;
     color: var(--light) !important;
     border: 0.5px solid rgba(188, 188, 188, 0.851);
 }
 
-footer .campo input:valid ~ span,
-footer .campo input:focus ~ span,
-footer .campo textarea:focus ~ span,
-footer .campo textarea:focus ~ span {
+footer .campo input:valid~span,
+footer .campo input:focus~span,
+footer .campo textarea:focus~span,
+footer .campo textarea:focus~span {
     color: var(--light);
     background: var(--dark);
     border-left: 1px solid rgba(188, 188, 188, 0.851);
@@ -186,6 +183,8 @@ form button {
 }
 
 #baixo .centro {
+    width: 50%;
+    margin: auto;
     padding: 5px;
     font-size: 15px;
     background: var(--dark);
@@ -314,12 +313,12 @@ legend {
         top: 55%;
     }
 
-    #benecifios-body #titulo{
+    #benecifios-body #titulo {
         font-size: 20px;
         letter-spacing: 0;
     }
 
-    #doe-body #titulo{
+    #doe-body #titulo {
         font-size: 20px;
         letter-spacing: 0;
     }
@@ -338,25 +337,27 @@ legend {
         padding: 2rem 3.5rem;
     }
 
-    .campo{ 
+    .campo {
         position: relative;
         width: 15em;
         margin-bottom: 1.5em;
     }
 
-    footer .campo input, footer .campo textarea{
+    footer .campo input,
+    footer .campo textarea {
         width: 13rem;
     }
 
-    .campo input, .campo textarea{
+    .campo input,
+    .campo textarea {
         width: 13rem;
     }
 
-    .campo input:valid ~ span,
-    .campo input:focus ~ span,
-    .campo textarea:valid ~ span,
-    .campo textarea:focus ~ span {
-       margin: 0 10px;
+    .campo input:valid~span,
+    .campo input:focus~span,
+    .campo textarea:valid~span,
+    .campo textarea:focus~span {
+        margin: 0 10px;
     }
 
 
@@ -404,7 +405,7 @@ legend {
         width: 12rem;
         margin-top: -1rem;
         margin-right: 1.5rem;
-    
+
     }
 
     .fazemos-o-impossivel .conteudo-titulo span.titulo {
@@ -481,9 +482,9 @@ legend {
     }
 
     .conteudo-numero div {
-       display: flex;
-       flex-direction: column;
-       justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .conteudo-numero h3 {
@@ -493,7 +494,7 @@ legend {
         font-weight: 400;
         text-align: center;
     }
-     
+
     .conteudo-numero button {
         margin-right: 1.5rem;
     }
@@ -522,11 +523,11 @@ legend {
         font-size: 2rem;
     }
 
-    .header-adm span{
+    .header-adm span {
         align-self: center;
         font-size: 1.5rem;
     }
-    
+
     #adm .header-adm {
         padding: 1rem;
     }
@@ -538,7 +539,7 @@ legend {
     #baixo .centro span {
         font-size: 0.75rem;
     }
-    
+
     #adm .header-adm #sair {
         float: right;
         margin-left: 2rem;
@@ -565,7 +566,7 @@ legend {
     .row-card {
         display: grid;
         grid-template-columns: auto;
-    } 
+    }
 
     .card {
         margin: 2rem 0;
@@ -576,13 +577,13 @@ legend {
         padding: 1rem;
         width: 20rem;
     }
-    
+
     #qrcode img {
         margin: auto;
         width: 200px;
         height: 200px;
         margin-bottom: 1rem;
-    }    
+    }
 }
 
 @media all and (min-width: 576px) and (max-width: 767.98px) {
@@ -656,12 +657,12 @@ legend {
     .social li:hover div {
         visibility: hidden;
     }
-    
+
     .conteudo-titulo {
         top: 55%;
     }
 
-    #benecifios-body #titulo{
+    #benecifios-body #titulo {
         font-size: 2rem;
     }
 
@@ -687,7 +688,7 @@ legend {
 
     .conteudo-light div p {
         margin-top: 0.5rem;
-    } 
+    }
 
     .conteudo-light img {
         display: none;
@@ -719,7 +720,7 @@ legend {
         width: 12rem;
         margin-top: -1rem;
         margin-right: 1.5rem;
-    
+
     }
 
     .titulo-h3 {
@@ -754,7 +755,7 @@ legend {
     #conteudo-footer {
         flex-wrap: wrap;
         flex-direction: column;
-    } 
+    }
 
     #conteudo-footer .caixa {
         margin: 5px 0;
@@ -764,7 +765,7 @@ legend {
     footer button {
         width: 15rem;
     }
-    
+
     #seja-voluntario-body .row {
         padding: 0;
         flex-direction: column;
@@ -789,9 +790,9 @@ legend {
     }
 
     #seja-voluntario-body .conteudo-numero div {
-       display: flex;
-       flex-direction: column;
-       justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     #form-seja-voluntario {
@@ -816,13 +817,13 @@ legend {
         padding: 2rem;
         width: 30rem;
     }
-    
+
     #qrcode img {
         margin: auto;
         width: 200px;
         height: 200px;
         margin-bottom: 1rem;
-    }  
+    }
 }
 
 @media all and (min-width: 768px) and (max-width: 991.98px) {
@@ -896,12 +897,12 @@ legend {
     .social li:hover div {
         visibility: hidden;
     }
-    
+
     .conteudo-titulo {
         top: 55%;
     }
 
-    #benecifios-body #titulo{
+    #benecifios-body #titulo {
         font-size: 2.5rem;
     }
 
@@ -965,7 +966,7 @@ legend {
         width: 12rem;
         margin-top: -1rem;
         margin-right: 1.5rem;
-    
+
     }
 
     .titulo-h3 {
@@ -992,7 +993,7 @@ legend {
 
     footer {
         justify-content: center;
-        padding:  1rem 0 1rem 3rem;
+        padding: 1rem 0 1rem 3rem;
     }
 
     #conteudo-footer .caixa {
@@ -1027,15 +1028,15 @@ legend {
     }
 
     #seja-voluntario-body .conteudo-numero div {
-       display: flex;
-       flex-direction: column;
-       justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .row-card {
         display: grid;
         grid-template-columns: auto auto;
-    } 
+    }
 
     .card {
         margin: 2rem;
@@ -1045,10 +1046,10 @@ legend {
         padding: 2rem;
         width: 40rem;
     }
-    
+
     #qrcode img {
         margin-bottom: 1rem;
-    }  
+    }
 }
 
 @media all and (min-width: 992px) and (max-width: 1399.98px) {
@@ -1107,12 +1108,12 @@ legend {
     #btn-mobile img {
         margin-left: 2rem;
     }
-    
+
     .conteudo-titulo {
         top: 55%;
     }
 
-    #benecifios-body #titulo{
+    #benecifios-body #titulo {
         font-size: 3rem;
     }
 
@@ -1168,7 +1169,7 @@ legend {
         width: 12rem;
         margin-top: -1rem;
         margin-right: 1.5rem;
-    
+
     }
 
     #titulo-como-ajudar-h3 {
@@ -1204,7 +1205,7 @@ legend {
     .row-card {
         display: grid;
         grid-template-columns: auto auto auto;
-    } 
+    }
 
     .card {
         margin: 2rem;
@@ -1214,8 +1215,8 @@ legend {
         padding: 2rem;
         width: 50rem;
     }
-    
+
     #qrcode img {
         margin-bottom: 1rem;
-    } 
+    }
 }

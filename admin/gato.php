@@ -26,7 +26,7 @@
         <span>
             <a href="../index.php">Abrigo dos gatos</a> 
         </span>
-        <a href="painel.php"><button id="sair"><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
+        <a href="painel.php"><button class="sair"><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
     </header>
     
     <main class="form-cadastros">
@@ -35,14 +35,6 @@
             <div class="campo">
                 <input type="text" name="name" id="name" required>
                 <span>Nome do gato</span>
-            </div>
-            <div class="campo">
-                <input type="text" name="idade" id="idade" required>
-                <span>Idade do gato</span>
-            </div>
-            <div class="campo">
-                <input type="text" name="sexo" id="sexo" required>
-                <span>Sexo</span>
             </div>
             <div class="campo">
                 <textarea name="descricao" id="descricao" cols="30" rows="10" maxlength="100"required></textarea>

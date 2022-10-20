@@ -73,7 +73,7 @@
     align-content: center;
 }
 
-#adm .header-adm #sair {
+#adm .header-adm .sair {
     float: right;
     margin: 0.5rem 2rem 0 0;
     border: 1px solid var(--primary);
@@ -82,7 +82,7 @@
     width: 5rem;
 }
 
-#adm .header-adm #sair:hover {
+#adm .header-adm .sair:hover {
     background-color: var(--primary);
     color: var(--light);
 }

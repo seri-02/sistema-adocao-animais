@@ -56,7 +56,7 @@
             $update->execute();
         ?>
         <div class="alert success">
-            <img src="../img/animation_200_l9gcc9fz.gif">
+            <img src="../img/animacao_gato.gif">
             <i class="far fa-check-circle"></i>
             <p class="lead">Gato adotado com sucesso</p> 
         </div>

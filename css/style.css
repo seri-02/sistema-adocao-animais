@@ -13,6 +13,7 @@
 }
 
 body, html {
+    background-color: var(--secondary);
     font-family: "Roboto", sans-serif;
     color: #777;
     height: 100%;
@@ -62,6 +63,8 @@ footer {
     color: var(--light);
     padding: 1rem 0 1rem 5rem;
     padding-left: 5rem;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
 }
 
 footer p {

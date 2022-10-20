@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="10; url=../adocoes.php">
+    <meta http-equiv="refresh" content="5; url=../adocoes.php">
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">
@@ -56,6 +56,7 @@
             $update->execute();
         ?>
         <div class="alert success">
+            <img src="../img/animation_200_l9gcc9fz.gif">
             <i class="far fa-check-circle"></i>
             <p class="lead">Gato adotado com sucesso</p> 
         </div>

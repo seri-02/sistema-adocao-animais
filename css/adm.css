@@ -118,12 +118,18 @@
     -o-border-radius: 10px;
 }
 
+.alert img {
+    margin-bottom: 1rem;
+    display: block;
+    margin: auto;
+}
+
 .danger {
     background-color: rgba(215, 49, 49, 0.668);
 }
 
 .success {
-    background-color: rgba(29, 109, 29, 0.668);
+    background-color: #1D6D1D;
 }
 
 #bem-vindo {

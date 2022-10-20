@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    $("body").scroll(() => {
-        $(".back-to-top").css("display", "block");
-        if($(this).scrollTop() > 0){
+    $(".back-to-top").css("display", "none");
+    $(window).scroll(() => {
+        if($(this).scrollTop() > 20){
             $(".back-to-top").css("display", "block");
         } 
         else {
@@ -9,6 +9,6 @@ $(document).ready(function () {
         }
     });
     $(".back-to-top").click(function() {
-        $("html, body").animate({scrollTop: 0}, 800);
+        $("html").animate({scrollTop: 0}, 800);
     });
 });

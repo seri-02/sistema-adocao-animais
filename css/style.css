@@ -2,6 +2,10 @@
 @import url(adm.css);
 @import url(main.css);
 
+::-webkit-scrollbar {
+    width: 0px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -312,6 +316,11 @@ legend {
         letter-spacing: 0;
     }
 
+    #doe-body #titulo{
+        font-size: 20px;
+        letter-spacing: 0;
+    }
+
     #motivos-body #titulo {
         font-size: 15px;
         letter-spacing: 0;
@@ -554,9 +563,23 @@ legend {
         display: grid;
         grid-template-columns: auto;
     } 
+
     .card {
         margin: 2rem 0;
     }
+
+    #qrcode {
+        margin-left: -2rem;
+        padding: 1rem;
+        width: 20rem;
+    }
+    
+    #qrcode img {
+        margin: auto;
+        width: 200px;
+        height: 200px;
+        margin-bottom: 1rem;
+    }    
 }
 
 @media all and (min-width: 576px) and (max-width: 767.98px) {
@@ -779,11 +802,24 @@ legend {
     .row-card {
         display: grid;
         grid-template-columns: auto auto;
-    } 
+    }
+
     .card {
         margin: 2rem 0;
         margin-right: 0.5rem;
     }
+
+    #qrcode {
+        padding: 2rem;
+        width: 30rem;
+    }
+    
+    #qrcode img {
+        margin: auto;
+        width: 200px;
+        height: 200px;
+        margin-bottom: 1rem;
+    }  
 }
 
 @media all and (min-width: 768px) and (max-width: 991.98px) {
@@ -993,14 +1029,23 @@ legend {
        justify-content: space-between;
     }
 
-    
     .row-card {
         display: grid;
         grid-template-columns: auto auto;
     } 
+
     .card {
         margin: 2rem;
     }
+
+    #qrcode {
+        padding: 2rem;
+        width: 40rem;
+    }
+    
+    #qrcode img {
+        margin-bottom: 1rem;
+    }  
 }
 
 @media all and (min-width: 992px) and (max-width: 1399.98px) {
@@ -1059,8 +1104,6 @@ legend {
     #btn-mobile img {
         margin-left: 2rem;
     }
-
-    /* Conteudo principal */
     
     .conteudo-titulo {
         top: 55%;
@@ -1159,7 +1202,17 @@ legend {
         display: grid;
         grid-template-columns: auto auto auto;
     } 
+
     .card {
         margin: 2rem;
     }
+
+    #qrcode {
+        padding: 2rem;
+        width: 50rem;
+    }
+    
+    #qrcode img {
+        margin-bottom: 1rem;
+    } 
 }

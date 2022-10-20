@@ -36,6 +36,8 @@
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3662.909458514996!2d-47.86517398505356!3d-233552945847855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c5d91e95230b29%3A0xbe294eb61ccc2c13!2sR%20Onze%20de%20Agosto%2C%20Tatu%C3%AD%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1660135287473!5m2!1spt-BR!2sbr" width="600" height="450"style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </main>
+
+    <button class="back-to-top" href="#"><i class=" fa-solid fa-chevron-up"></i></button>
     
     <footer>
         <div id="conteudo-footer">
@@ -57,18 +59,18 @@
                 <h3>Endereço</h3>
                 <div class="conteudos-footer">
                     <div id="rua">
-                        <span class="fas fa-map-marker"></span>
-                        <span class="texto">Rua Onze de agosto</span>
+                        <span class="fas fa-solid fa-location-dot"></span>
+                        <span class="texto">Santa Rita, Tatuí - SP</span>
                     </div>
 
                     <div id="telefone">
                         <span class="fas fas fa-phone-alt"></span>
-						<span class="texto">+55 61 9999-9999</span>
+						<span class="texto">+55 015 99633-5800</span>
                     </div>
                     
                     <div id="email">
                         <span class="fas fa-envelope"></span>
-						<span class="texto">exemplo@exemplo.com</span>
+						<span class="texto">abrigodosgatos@gmail.com</span>
                     </div>
                 </div>
             </div>
@@ -105,4 +107,5 @@
 </body>
 <script src="js/btn_menu.js"></script>
 <script src="js/maquina_escrever.js"></script>
+<script src="js/back_to_top.js"></script>
 </html>

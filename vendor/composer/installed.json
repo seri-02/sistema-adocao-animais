@@ -2,26 +2,26 @@
     "packages": [
         {
             "name": "coffeecode/uploader",
-            "version": "2.0.3",
-            "version_normalized": "2.0.3.0",
+            "version": "1.0.11",
+            "version_normalized": "1.0.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robsonvleite/uploader.git",
-                "reference": "9046734a4b6b4c6c792ed43e314a9077f63517ea"
+                "reference": "182682c029ff23d28aa8f5d7db2db4c060fc3ae4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robsonvleite/uploader/zipball/9046734a4b6b4c6c792ed43e314a9077f63517ea",
-                "reference": "9046734a4b6b4c6c792ed43e314a9077f63517ea",
+                "url": "https://api.github.com/repos/robsonvleite/uploader/zipball/182682c029ff23d28aa8f5d7db2db4c060fc3ae4",
+                "reference": "182682c029ff23d28aa8f5d7db2db4c060fc3ae4",
                 "shasum": ""
             },
             "require": {
                 "ext-exif": "*",
                 "ext-gd": "*",
                 "ext-mbstring": "*",
-                "php": ">=8.0"
+                "php": ">=7.2"
             },
-            "time": "2022-04-11T19:50:48+00:00",
+            "time": "2021-03-21T18:57:41+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -57,7 +57,7 @@
             ],
             "support": {
                 "issues": "https://github.com/robsonvleite/uploader/issues",
-                "source": "https://github.com/robsonvleite/uploader/tree/2.0.3"
+                "source": "https://github.com/robsonvleite/uploader/tree/1.0.11"
             },
             "install-path": "../coffeecode/uploader"
         },

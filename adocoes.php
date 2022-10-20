@@ -111,18 +111,18 @@
                 <h3>Endereço</h3>
                 <div class="conteudos-footer">
                     <div id="rua">
-                        <span class="fas fa-map-marker"></span>
-                        <span class="texto">Rua Onze de agosto</span>
+                        <span class="fas fa-solid fa-location-dot"></span>
+                        <span class="texto">Santa Rita, Tatuí - SP</span>
                     </div>
 
                     <div id="telefone">
                         <span class="fas fas fa-phone-alt"></span>
-						<span class="texto">+55 61 9999-9999</span>
+						<span class="texto">+55 015 99633-5800</span>
                     </div>
                     
                     <div id="email">
                         <span class="fas fa-envelope"></span>
-						<span class="texto">exemplo@exemplo.com</span>
+						<span class="texto">abrigodosgatos@gmail.com</span>
                     </div>
                 </div>
             </div>

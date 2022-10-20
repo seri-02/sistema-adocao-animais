@@ -118,7 +118,7 @@
     -ms-transform: scale(1);
 }
 
-.index-header, .localizacao-header, .seja-voluntario-header, .beneficios-header, .motivos-header, .dentro-de-casa-header, .felv-header, .adote-header, .causa, .fazemos-o-impossivel{
+.index-header, .localizacao-header, .seja-voluntario-header, .beneficios-header, .motivos-header, .dentro-de-casa-header, .felv-header, .adote-header, .causa, .fazemos-o-impossivel, .doe-header {
     position: relative;
     height: 100%;
     opacity: 0.7;
@@ -158,6 +158,10 @@
 
 .adote-header {
     background-image: url('../img/gato3.jpg');
+}
+
+.doe-header {
+    background-image: url('../img/gato_dinheiro.jpg');
 }
 
 .fazemos-o-impossivel {
@@ -544,4 +548,30 @@
     right: 22px;
     width: 40px;
     z-index: 3;
+}
+
+#qrcode {
+    background-color: var(--dark);
+    width: 50%;
+    margin: 0 auto;
+    padding: 5rem;
+    text-align: center;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+#qrcode img {
+    margin-bottom: 1rem;
+}
+
+#qrcode p {
+    font-weight: 100;
+}
+
+#qrcode h3 {
+    margin-bottom: 1rem;
+    font-weight: 400;
 }

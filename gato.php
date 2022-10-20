@@ -20,7 +20,7 @@
         <span>
             <a href="index.php">Abrigo dos gatos</a> 
         </span>
-        <a href="adocoes.php"><button><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
+        <a href="adocoes.php"><button class="sair"><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
     </header>
     
     <main class="gatos">

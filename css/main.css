@@ -530,10 +530,15 @@
 
 .card h3 {
     font-size: 1rem;
+    color: var(--dark);
 }
 
 .card h5 {
+    font-weight: 100;
+    text-align: justify;
     font-size: 1rem;
+    margin: 0;
+    width: 15rem;
 }
 
 .back-to-top {

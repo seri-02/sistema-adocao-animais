@@ -63,7 +63,7 @@
             ?>
                 <a href="gato.php?id=<?= $gato->id_gato ?>">
                     <div class="card">
-                        <img src="image/<?= $gato->img ?>">
+                        <img    >
                         <h3><?= $gato->nome ?></h1>
                         <h5><?= $gato->descricao ?></h5>
                     </div>

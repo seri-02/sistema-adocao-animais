@@ -102,12 +102,30 @@
         <p>Acompanhe-nos!</p>
         <div id="atualizacoes">
             <span class="conteudo-atualizacoes-numero">
-                <p class="numero">11</p>
+                <p class="numero">
+                    <?php
+                        require_once 'lib/conn.php';
+                        $sql = "SELECT COUNT(id_gato) AS qtd_no_abrigo FROM gato WHERE adotado = 0";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+                        echo $results['qtd_no_abrigo'];
+                    ?> 
+                </p>
                 <p>Adotados</p>
             </span>
             <span id="borda"></span>
-            <span class="conteudo-atualizacoes-numero">
-                <p class="numero">40</p>
+            <span class="conteudo-atualizacoes-numero">     
+                <p class="numero">
+                    <?php
+                        require_once 'lib/conn.php';
+                        $sql = "SELECT COUNT(id_gato) AS qtd_no_abrigo FROM gato WHERE adotado = 1";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+                        echo $results['qtd_no_abrigo'];
+                    ?> 
+                </p>
                 <p>no abrigo</p>
             </span>
         </div>

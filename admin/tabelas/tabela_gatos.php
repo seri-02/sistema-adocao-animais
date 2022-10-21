@@ -36,7 +36,7 @@
                 <tr>
                     <th class="opcao">#</th>
                     <th>Nome gato</th>
-                    <th>Idade</th>
+                    <th>Descrição</th>
                     <th>Adotado</th>  
                 </tr>
             </thead>

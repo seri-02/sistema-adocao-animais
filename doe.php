@@ -51,7 +51,7 @@
     <main class="conteudo">
         <div id="qrcode">
             <h3>Use o QR Code do Pix para doar</h3>
-            <p>Abra o app em que vai fazer a transferência, escaneie a imagem ou cole o código do QR Code</p>
+            <p><strong> Abra o app</strong> em que vai fazer a transferência, escaneie a imagem ou cole o código do QR Code</p>
             <img src="img/qrcode.png" alt="">
             <p>Ou use a <strong>Chave Pix:</strong> 15996335800</p>
             <p><strong>Nome:</strong> Gabriela Xavier</p>
@@ -63,12 +63,30 @@
         <p>Acompanhe-nos!</p>
         <div id="atualizacoes">
             <span class="conteudo-atualizacoes-numero">
-                <p class="numero">11</p>
+                <p class="numero">
+                    <?php
+                        require_once 'lib/conn.php';
+                        $sql = "SELECT COUNT(id_gato) AS qtd_no_abrigo FROM gato WHERE adotado = 0";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+                        echo $results['qtd_no_abrigo'];
+                    ?> 
+                </p>
                 <p>Adotados</p>
             </span>
             <span id="borda"></span>
-            <span class="conteudo-atualizacoes-numero">
-                <p class="numero">40</p>
+            <span class="conteudo-atualizacoes-numero">     
+                <p class="numero">
+                    <?php
+                        require_once 'lib/conn.php';
+                        $sql = "SELECT COUNT(id_gato) AS qtd_no_abrigo FROM gato WHERE adotado = 1";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+                        echo $results['qtd_no_abrigo'];
+                    ?> 
+                </p>
                 <p>no abrigo</p>
             </span>
         </div>

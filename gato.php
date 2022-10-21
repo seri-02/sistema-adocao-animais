@@ -23,7 +23,7 @@
         <a href="adocoes.php"><button class="sair"><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
     </header>
     
-    <main class="gatos">
+    <section class="gatos">
         <?php
             require_once "lib/conn.php";
             session_start();
@@ -39,31 +39,43 @@
             $stmt->execute();
             $gato = $stmt->fetch(PDO::FETCH_OBJ);
         ?>
-        <h1 class="display-4 text-center"><?= $gato->nome ?></h1>
-        <div id="img-adocao">
-            <img src="image/<?= $gato->img ?>" style="height: 50vh; object-fit = cover;">
+        <h1 class="nome-gato"><?= $gato->nome ?></h1>
+        <div class="row-gato">
+            <div class="img-adocao">
+                <img src="image/<?= $gato->img ?>" style="height: 50vh; object-fit = cover;">
+            </div>
+
+            <form action="function/func_adotar.php" method="post" id="form-adotante">
+                <div class="campo">
+                    <input type="text" id="nome_adotante" name="nome_adotante" required>
+                    <span>Nome</sp>
+                </div>
+
+                <div class="campo">
+                    <input type="email" id="email_adotante" name="email_adotante" required>
+                    <span>Email</span>
+                </div>
+
+                <div class="campo"> 
+                    <input type="tel" id="telefone" name="telefone" required>
+                    <span>Telefone</span>
+                </div>
+
+                <div>
+                    <button type="submit" class="adotar">Adotar</button>
+                </div>
+            </form>
         </div>
+       
+    </section>
 
-        <form action="function/func_adotar.php" method="post">
-            <div>
-                <label for="nome_adotante">Nome do Adotante</label>
-                <input type="text" id="nome_adotante" name="nome_adotante">
-            </div>
-
-            <div>
-                <label for="email_adotante">Email do Adotante</label>
-                <input type="email" id="email_adotante" name="email_adotante">
-            </div>
-
-            <div>
-                <label for="telefone">Telefone do Adotante</label>
-                <input type="tel" id="telefone" name="telefone">
-            </div>
-
-            <div>
-                <button type="submit">Adotar</button>
-            </div>
-        </form>
-    </main>
+    <footer>
+        <div id="baixo">
+			<div class="centro">
+				<span class="credito">&copy; Abrigo dos gatos |</span>
+				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+			</div>
+		</div>
+    </footer>
 </body>
 </html>

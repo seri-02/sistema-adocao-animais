@@ -85,6 +85,8 @@
             </div>
         </div>
     </main>
+
+    <div id="load" class="load"></div>
     
     <div class="conteudo-atualizacoes">
         <h3>Atualizações do Abrigo</h3>

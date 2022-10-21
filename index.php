@@ -173,7 +173,7 @@
         </div>
     </main>
 
-    <div id="load" style="display: none;"></div>
+    <div id="load" class="load"></div>
     
     <div class="conteudo-atualizacoes">
         <h3>Atualizações do Abrigo</h3>

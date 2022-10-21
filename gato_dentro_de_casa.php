@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <link rel="stylesheet" href="css/style.css">
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;700&display=swap" rel="stylesheet">
@@ -76,7 +76,8 @@
                 <p>Para a segurança do seu bichano, o ideal é um ambiente telado, sem acesso à rua, permitindo visão do mundo externo e deliciodos banhos de sol. Você ainda pode enriquecer sua casa com prateleiras, arranhadores e brinquedinhos, garantindo a diversão do seu pet.</p>
             </div>
     </main>
-    
+
+    <div id="load" class="load"></div>
     
     <div class="conteudo-atualizacoes">
         <h3>Atualizações do Abrigo</h3>

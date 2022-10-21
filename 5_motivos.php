@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
     <link rel="stylesheet" href="css/style.css">
+    
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,6 +97,7 @@
         </div>
     </main>
     
+    <div id="load" class="load"></div>
     
     <div class="conteudo-atualizacoes">
         <h3>Atualizações do Abrigo</h3>

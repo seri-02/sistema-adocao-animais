@@ -511,35 +511,6 @@
     align-items: center;
 }
 
-.row-card {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-}
-
-.card {
-    margin: 2rem;
-    width: 300px;
-    height: 300px;
-    align-items: center;
-}
-
-.card img {
-    width: 15rem;
-    height: 15rem;
-}
-
-.card h3 {
-    font-size: 1rem;
-    color: var(--dark);
-}
-
-.card h5 {
-    font-weight: 100;
-    text-align: justify;
-    font-size: 1rem;
-    margin: 0;
-    width: 15rem;
-}
 
 .back-to-top {
     background-color: #38322e;

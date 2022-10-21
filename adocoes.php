@@ -9,6 +9,7 @@
 <head>
 <link rel="stylesheet" href="css/style.css">
 
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;700&display=swap" rel="stylesheet">
@@ -53,26 +54,28 @@
         <span id="titulo">Adote</span>
     </div>
 
-    <main class="conteudo">
-        <div class="row-card">
-            <?php
-                require_once 'lib/conn.php';
-                $sql = "SELECT * FROM gato";
-                $stmt = $conn->query($sql);
-                foreach($gatos as $gato) {
-            ?>
-                <a href="gato.php?id=<?= $gato->id_gato ?>">
-                    <div class="card">
-                        <img src="image/<?= $gato->img ?>">
-                        <h3><?= $gato->nome ?></h1>
-                        <h5><?= $gato->descricao ?></h5>
-                    </div>
-                </a>
-            <?php
-                }
-            ?>
-        </div>
-    </main>
+    <div class="container">
+        <?php
+                    require_once 'lib/conn.php';
+                    $sql = "SELECT * FROM gato";
+                    $stmt = $conn->query($sql);
+                    foreach($gatos as $gato) {
+                ?>
+            <div class="card">
+                <img src="image/<?= $gato->img ?>" height="398" width="395">
+                <div class="content">
+                    <h2><3</h2>
+                    <h3><?= $gato->nome ?></h1>
+                    <p><?= $gato->descricao ?></p>
+                    <a href="gato.php?id=<?= $gato->id_gato ?>">ADOTAR</a>
+                </div>
+            </div>
+                <?php
+                    }
+                ?>     
+    </div>
+
+    <div id="load" class="load"></div>
 
     <div class="conteudo-atualizacoes">
         <h3>Atualizações do Abrigo</h3>

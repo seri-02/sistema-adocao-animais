@@ -51,7 +51,7 @@
     <main class="conteudo">
         <div id="qrcode">
             <h3>Use o QR Code do Pix para doar</h3>
-            <p>Abra o app em que vai fazer a transferência, escaneie a imagem ou cole o código do QR Code</p>
+            <p><strong>Abra o app</strong> em que vai fazer a transferência, escaneie a imagem ou cole o código do QR Code</p>
             <img src="img/qrcode.png" alt="">
             <p>Ou use a <strong>Chave Pix:</strong> 15996335800</p>
             <p><strong>Nome:</strong> Gabriela Xavier</p>

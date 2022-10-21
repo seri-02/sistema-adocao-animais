@@ -173,7 +173,7 @@
         </div>
     </main>
 
-    <div id="load" class="load"></div>
+    <div id="load" style="display: none;"></div>
     
     <div class="conteudo-atualizacoes">
         <h3>Atualizações do Abrigo</h3>
@@ -277,4 +277,5 @@
 <script src="js/btn_menu.js"></script>
 <script src="js/maquina_escrever.js"></script>
 <script src="js/back_to_top.js"></script>
+<!-- <script src="js/load.js"></script> -->
 </html>

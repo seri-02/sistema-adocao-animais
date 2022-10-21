@@ -34,22 +34,29 @@
 
     $mail = new PHPMailer(true);
     try {
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $mail->isSMTP();
         $mail->Host ='smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'analauraalmeidaventura@gmail.com';
         $mail->Password = 'ckkbtsvnybntmawp';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;    
         $mail->Port = 465;
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+             )
+            );
 
         $mail->setFrom('analauraalmeidaventura@gmail.com', 'Ana Laura'); 
         $mail->addAddress('analauraalmeidaventura@gmail.com', 'Abrigo para Gatos'); 
         $mail->addReplyTo($email, $msg);
 
         $mail->isHTML(true);
+        $mail->CharSet = 'UTF-8';
         $mail->Subject = "Mensagem de $email";
-        $mail->Body = "Conteúdo da mensagem $msg";
+        $mail->Body = "Conteudo da mensagem: <br> $msg";
 
         $mail->send();
     ?>

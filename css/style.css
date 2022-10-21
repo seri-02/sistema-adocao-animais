@@ -1,6 +1,7 @@
 @import url(variable.css);
-@import url(adm.css);
 @import url(main.css);
+@import url(header.css);
+@import url(adm.css);
 @import url(gato.css);
 @import url(animacoes.css);
 
@@ -592,6 +593,10 @@ legend {
         grid-template-columns: auto;
         justify-content: center ;
     }
+
+    #form-adotante .campo input{
+        width: 15rem;
+    }
 }
 
 @media all and (min-width: 576px) and (max-width: 767.98px) {
@@ -846,6 +851,10 @@ legend {
     .row-gato {
         grid-template-columns: auto;
         justify-content: center;
+    }
+
+    #form-adotante .campo input{
+        width: 20rem;
     }
 }
 

@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <link rel="stylesheet" href="css/style.css">
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;700&display=swap" rel="stylesheet">
@@ -51,12 +51,14 @@
     <main class="conteudo">
         <div id="qrcode">
             <h3>Use o QR Code do Pix para doar</h3>
-            <p><strong> Abra o app</strong> em que vai fazer a transferência, escaneie a imagem ou cole o código do QR Code</p>
+            <p><strong>Abra o app</strong> em que vai fazer a transferência, escaneie a imagem ou cole o código do QR Code</p>
             <img src="img/qrcode.png" alt="">
             <p>Ou use a <strong>Chave Pix:</strong> 15996335800</p>
             <p><strong>Nome:</strong> Gabriela Xavier</p>
         </div>
     </main>
+
+    <div id="load" class="load"></div>
     
     <div class="conteudo-atualizacoes">
         <h3>Atualizações do Abrigo</h3>

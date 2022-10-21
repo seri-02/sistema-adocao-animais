@@ -36,8 +36,9 @@
                 <tr>
                     <th class="opcao">#</th>
                     <th>Nome gato</th>
-                    <th>Descrição</th>
+                    <th>Idade</th>
                     <th>Adotado</th>  
+                    <th>Editar</th>  
                 </tr>
             </thead>
             
@@ -66,6 +67,7 @@
                                 }
                             ?>
                         </td>
+                        <td><a href="../editar_gato.php"><i class="fa-solid fa-user-pen"></i></a></td>
                     </tr>
                 <?php
                     }

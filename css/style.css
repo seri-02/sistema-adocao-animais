@@ -1,8 +1,9 @@
 @import url(variable.css);
-@import url(adm.css);
 @import url(main.css);
-@import url(animacoes.css);
+@import url(header.css);
+@import url(adm.css);
 @import url(gato.css);
+@import url(animacoes.css);
 
 ::-webkit-scrollbar {
     width: 0px;
@@ -150,10 +151,6 @@ footer p {
     font-size: 1rem;
     font-weight: 400;
     padding-left: 10px;
-}
-
-#telefone {
-    margin: 10px 0;
 }
 
 footer .campo input,
@@ -565,6 +562,15 @@ legend {
         justify-content: center;
     }
 
+    .row-card {
+        display: grid;
+        grid-template-columns: auto;
+    }
+
+    .card {
+        margin: 2rem 0;
+    }
+
     #qrcode {
         margin-left: -2rem;
         padding: 1rem;
@@ -576,6 +582,20 @@ legend {
         width: 200px;
         height: 200px;
         margin-bottom: 1rem;
+    }
+
+    section {
+        width: 20rem;
+        padding: 1rem;          
+    }
+
+    .row-gato {
+        grid-template-columns: auto;
+        justify-content: center ;
+    }
+
+    #form-adotante .campo input{
+        width: 15rem;
     }
 }
 
@@ -796,6 +816,16 @@ legend {
         padding: 2rem 0;
     }
 
+    .row-card {
+        grid-template-columns: auto;
+        justify-content: center;
+    }
+
+    .card {
+        margin: 2rem 0;
+        margin-right: 0.5rem;
+    }
+
     #qrcode {
         padding: 2rem;
         width: 30rem;
@@ -806,6 +836,25 @@ legend {
         width: 200px;
         height: 200px;
         margin-bottom: 1rem;
+    }
+
+    .campo input, .campo textarea{
+        width: 20rem;
+    }
+
+    section {
+        width: 20rem;
+        margin: 0 auto;
+        padding: 1rem;          
+    }
+
+    .row-gato {
+        grid-template-columns: auto;
+        justify-content: center;
+    }
+
+    #form-adotante .campo input{
+        width: 20rem;
     }
 }
 
@@ -979,6 +1028,18 @@ legend {
         padding: 1rem 0 1rem 3rem;
     }
 
+            .email.campo input {
+                width: 10rem !important;
+            }
+
+            .mensagem.campo textarea {
+                width: 10rem !important;
+            }
+
+            .caixa.direita {
+                width: 5rem;
+            }
+
     #conteudo-footer .caixa {
         margin: 5px 0;
     }
@@ -1016,6 +1077,16 @@ legend {
         justify-content: space-between;
     }
 
+    .row-card {
+        display: grid;
+        grid-template-columns: auto;
+        justify-content: center;
+    }
+
+    .card {
+        margin: 2rem;
+    }
+
     #qrcode {
         padding: 2rem;
         width: 40rem;
@@ -1023,6 +1094,21 @@ legend {
 
     #qrcode img {
         margin-bottom: 1rem;
+    }
+
+    .campo input, .campo textarea{
+        width: 20rem;
+    }
+
+    section {
+        width: 20rem;
+        margin: 0 auto;
+        padding: 1rem;          
+    }
+
+    .row-gato {
+        grid-template-columns: auto;
+        justify-content: center;
     }
 }
 
@@ -1174,6 +1260,16 @@ legend {
 
     #seja-voluntario-body .row {
         padding: 0 0 0 9rem;
+    }
+
+    .row-card {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: center;
+    }
+
+    .card {
+        margin: 2rem;
     }
 
     #qrcode {

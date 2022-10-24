@@ -5,10 +5,6 @@
 @import url(gato.css);
 @import url(animacoes.css);
 
-::-webkit-scrollbar {
-    width: 0px;
-}
-
 * {
     margin: 0;
     padding: 0;

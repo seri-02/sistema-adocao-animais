@@ -54,13 +54,24 @@
         <span id="titulo">Adote</span>
     </div>
 
+    <div class="filtrar"> 
+        <i class="filter fa-solid fa-filter"></i>
+        <div class="campo">
+            <select name="filtrar" id="filtrar">
+                <option disabled selected>Filtrar</option>
+                <option value="macho">Macho</option>
+                <option value="femea">Fêmea</option>
+            </select>
+        </div>
+    </div>
+
     <div class="container">
         <?php
-                    require_once 'lib/conn.php';
-                    $sql = "SELECT * FROM gato";
-                    $stmt = $conn->query($sql);
-                    foreach($gatos as $gato) {
-                ?>
+            require_once 'lib/conn.php';
+            $sql = "SELECT * FROM gato";
+            $stmt = $conn->query($sql);
+            foreach($gatos as $gato) {
+        ?>
             <div class="card">
                 <img src="image/<?= $gato->img ?>" height="398" width="395">
                 <div class="content">

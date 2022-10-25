@@ -220,7 +220,7 @@
     margin-bottom: 1.5em;
 }
 
-.campo input, .campo textarea{
+.campo input, .campo textarea, .campo select {
     width: 32rem;
     padding: 0.65rem;   
     border: 0.5px solid rgba(32, 32, 32, 0.851);
@@ -246,7 +246,9 @@
 .campo input:valid ~ span,
 .campo input:focus ~ span,
 .campo textarea:valid ~ span,
-.campo textarea:focus ~ span {
+.campo textarea:focus ~ span,
+.campo select:valid ~ span,
+.campo select:focus ~ span {
     color: black;
     font-size: 0.65em;
     padding: 0 10px;
@@ -327,4 +329,20 @@
 #qrcode h3 {
     margin-bottom: 1rem;
     font-weight: 400;
+}
+
+.filtrar {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin: 2rem;
+    margin-left: 4rem;
+}
+
+
+.filter {
+    color: black;
+    margin: 0.5rem;
+    margin-right: 2rem;
+    font-size: 2rem;
 }

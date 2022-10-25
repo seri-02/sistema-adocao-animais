@@ -11,22 +11,22 @@ namespace CoffeeCode\Uploader;
 abstract class Uploader
 {
     /** @var string */
-    protected string $path;
+    protected $path;
 
     /** @var resource */
     protected $file;
 
     /** @var string */
-    protected string $name;
+    protected $name;
 
     /** @var string */
-    protected string $ext;
+    protected $ext;
 
     /** @var array */
-    protected static array $allowTypes = [];
+    protected static $allowTypes = [];
 
     /** @var array */
-    protected static array $extensions = [];
+    protected static $extensions = [];
 
     /**
      * @param string $uploadDir
@@ -67,14 +67,11 @@ abstract class Uploader
      */
     protected function name(string $name): string
     {
-        $name = filter_var(mb_strtolower($name), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $name = filter_var(mb_strtolower($name), FILTER_SANITIZE_STRIPPED);
         $formats = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜüÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿRr"!@#$%&*()_-+={[}]/?;:.,\\\'<>°ºª';
-        $replace = 'aaaaaaaceeeeiiiidnoooooouuuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyrr                                 ';
-        $name = str_replace(
-            ["-----", "----", "---", "--"],
-            "-",
-            str_replace(" ", "-", trim(strtr(utf8_decode($name), utf8_decode($formats), $replace)))
-        );
+        $replace = 'aaaaaaaceeeeiiiidnoooooouuuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr                                 ';
+        $name = str_replace(["-----", "----", "---", "--"], "-",
+            str_replace(" ", "-", trim(strtr(utf8_decode($name), utf8_decode($formats), $replace))));
 
         $this->name = "{$name}." . $this->ext;
 
@@ -105,14 +102,6 @@ abstract class Uploader
         $this->dir("{$path}/{$yearPath}");
         $this->dir("{$path}/{$yearPath}/{$mothPath}");
         $this->path = "{$path}/{$yearPath}/{$mothPath}";
-    }
-
-    /**
-     * @param array $file
-     */
-    protected function ext(array $file): void
-    {
-        $this->ext = mb_strtolower(pathinfo($file['name'])['extension']);
     }
 
     /**

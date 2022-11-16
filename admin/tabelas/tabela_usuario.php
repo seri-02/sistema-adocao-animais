@@ -53,8 +53,8 @@
                             <td class="id"><?= $usuario->id_user ?></td>
                             <td><?= $usuario->name ?></td>
                             <td><?= $usuario->email ?></td>
-                            <td><a href=""><i class="fa-solid fa-trash"></i></a></td>
-                        </tr>
+                            <td><a href="../../function/delete/usuario.php?id=<?= $usuario->id_user ?>"><i class="fa-solid fa-trash"></i></a></td>
+                        </tr>   
                     <?php
                         }
                     ?>

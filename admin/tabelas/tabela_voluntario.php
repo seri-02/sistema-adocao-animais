@@ -56,8 +56,11 @@
                         <td><?= $voluntario->nome ?></td>
                         <td><?= $voluntario->email ?></td>
                         <td><?= $voluntario->dia_disponivel ?></td>
-                        <td><a href=""><i class="fa-solid fa-trash"></i></a></td>
-                        <td><a href=""><i class="fa-solid fa-user-pen"></i></a></td>
+                        <td>
+                            <a href="../../function/delete/voluntario.php?id=<?= $voluntario->id_voluntario?>">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </td>
                     </tr>
                 <?php
                     }

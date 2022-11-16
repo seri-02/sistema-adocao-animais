@@ -39,7 +39,7 @@
         ?>
         <div class="alert success">
             <i class="far fa-check-circle"></i>
-            <p class="lead">Usuário cadastrado com sucesso!</p> 
+            <p class="lead">Voluntário cadastrado com sucesso!</p> 
         </div>
     </main>
 

@@ -29,7 +29,7 @@
 
             $id = (int)$_GET['id'];
 
-            $sql = "DELETE FROM usuario WHERE id_voluntario = :id_voluntario ";
+            $sql = "DELETE FROM voluntario WHERE id_voluntario = :id_voluntario ";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue(':id_voluntario',$id);
             $stmt->execute();

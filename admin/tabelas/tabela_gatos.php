@@ -67,7 +67,8 @@
                                 }
                             ?>
                         </td>
-                        <td><a href="../editar_gato.php"><i class="fa-solid fa-user-pen"></i></a></td>
+                        <td><a href="../../function/delete/gato.php?id=<?= $gato->id_gato?>"><i class="fa-solid fa-trash"></i></a></td>
+                        <td><a href="../editar/gato.php?id=<?= $gato->id_gato?>"><i class="fa-solid fa-user-pen"></i></a></td>
                     </tr>
                 <?php
                     }

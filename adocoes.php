@@ -54,17 +54,6 @@
         <span id="titulo">Adote</span>
     </div>
 
-    <div class="filtrar"> 
-        <i class="filter fa-solid fa-filter"></i>
-        <div class="campo">
-            <select name="filtrar" id="filtrar">
-                <option disabled selected>Filtrar</option>
-                <option value="macho">Macho</option>
-                <option value="femea">Fêmea</option>
-            </select>
-        </div>
-    </div>
-
     <div class="container">
         <?php
             require_once 'lib/conn.php';

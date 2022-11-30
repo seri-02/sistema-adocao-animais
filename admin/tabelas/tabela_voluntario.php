@@ -61,6 +61,12 @@
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>
+                        
+                        <td>
+                            <a href="../editar/voluntario.php?id=<?= $voluntario->id_voluntario?>">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </a>
+                        </td>
                     </tr>
                 <?php
                     }

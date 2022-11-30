@@ -36,17 +36,7 @@
                 <input type="text" name="name" id="name" required>
                 <span>Nome do gato</span>
             </div>
-
-            <div>
-                <input type="radio" name="sexo" id="macho" value="macho">
-                <label for="macho">Macho</label>
-            </div>
-
-            <div>
-                <input type="radio" name="sexo" id="femea" value="femea">
-                <label for="femea">Fêmea</label>
-            </div>
-
+            
             <div class="campo">
                 <textarea name="descricao" id="descricao" cols="30" rows="10" maxlength="100"required></textarea>
                 <span>Descrição</span>

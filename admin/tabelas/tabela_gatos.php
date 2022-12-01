@@ -38,6 +38,7 @@
                     <th>Nome gato</th>
                     <th>Idade</th>
                     <th>Adotado</th>  
+                    <th>Excluir</th>  
                     <th>Editar</th>  
                 </tr>
             </thead>

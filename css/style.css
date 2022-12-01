@@ -593,6 +593,25 @@ legend {
     #form-adotante .campo input{
         width: 15rem;
     }
+
+    table {
+        display: block;
+        width: 100%;
+    }
+
+    thead, tbody, thead th {
+        display: block;
+    }
+
+    thead th:last-child {
+        border-bottom: none;
+    }
+
+    thead {
+        width: auto;
+        position: relative;
+        overflow-x: auto;
+    }
 }
 
 @media all and (min-width: 576px) and (max-width: 767.98px) {

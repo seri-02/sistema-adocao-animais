@@ -62,7 +62,7 @@
             foreach($gatos as $gato) {
         ?>
             <div class="card">
-                <img src="image/<?= $gato->img ?>" height="398" width="395">
+                <img src="image/<?= strtolower($gato->img) ?>.jpg" height="398" width="395">
                 <div class="content">
                     <h2><3</h2>
                     <h3><?= $gato->nome ?></h1>

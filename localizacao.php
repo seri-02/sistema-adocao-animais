@@ -33,8 +33,8 @@
     <main class="conteudo-titulo">
         <span id="titulo">Localização</span>
         <div class="conteudo-localizacao">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3662.909458514996!2d-47.86517398505356!3d-233552945847855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c5d91e95230b29%3A0xbe294eb61ccc2c13!2sR%20Onze%20de%20Agosto%2C%20Tatu%C3%AD%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1660135287473!5m2!1spt-BR!2sbr" width="600" height="450"style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14648.679285090437!2d-47.85586412018794!3d-23.382073006353394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c5dbff539dd809%3A0x7f2178d851f2eb54!2sJardim%20Santa%20Rita%20de%20Cassia%2C%20Tatu%C3%AD%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1670416132897!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
     </main>
     
     <footer>

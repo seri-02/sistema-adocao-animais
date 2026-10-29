@@ -1,8 +1,7 @@
 <?php
-    session_start();
-    if(!isset($_SESSION['id_user'])) {
-        header('Location: ../../index.php');
-    }
+    require_once __DIR__ . '/../../lib/auth.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    exigir_login();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -51,10 +50,10 @@
                         foreach ($gatos as $gato) {
                             ?>
                         <tr>
-                            <td class="id"><?= $gato->id_adocao ?></td>
-                            <td><?= $gato->nome ?></td>
-                            <td><?= $gato->nome_adotante ?></td>
-                            <td><?= $gato->telefone ?></td>
+                            <td class="id"><?= e($gato->id_adocao) ?></td>
+                            <td><?= e($gato->nome) ?></td>
+                            <td><?= e($gato->nome_adotante) ?></td>
+                            <td><?= e($gato->telefone) ?></td>
                         </tr>
                     <?php
                         }

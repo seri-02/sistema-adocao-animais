@@ -1,8 +1,6 @@
 <?php
-    session_start();
-    if(!isset($_SESSION['id_user'])) {
-        header('Location: ../index.php');
-    }
+    require_once __DIR__ . '/../lib/auth.php';
+    exigir_login();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

@@ -1,8 +1,7 @@
 <?php
-    session_start();
-    if(!isset($_SESSION['id_user'])) {
-        header('Location: ../index.php');
-    }
+    require_once __DIR__ . '/../../lib/auth.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    exigir_login();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -50,10 +49,10 @@
                         foreach ($usuarios as $usuario) {
                             ?>
                         <tr>
-                            <td class="id"><?= $usuario->id_user ?></td>
-                            <td><?= $usuario->name ?></td>
-                            <td><?= $usuario->email ?></td>
-                            <td><a href="../../function/delete/usuario.php?id=<?= $usuario->id_user ?>"><i class="fa-solid fa-trash"></i></a></td>
+                            <td class="id"><?= e($usuario->id_user) ?></td>
+                            <td><?= e($usuario->name) ?></td>
+                            <td><?= e($usuario->email) ?></td>
+                            <td><a href="../../function/delete/usuario.php?id=<?= e($usuario->id_user) ?>"><i class="fa-solid fa-trash"></i></a></td>
                         </tr>   
                     <?php
                         }

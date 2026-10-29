@@ -1,3 +1,7 @@
+<?php
+    require_once __DIR__ . '/../../lib/auth.php';
+    exigir_login();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>

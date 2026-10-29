@@ -1,8 +1,7 @@
 <?php
-    session_start();
-    if(!isset($_SESSION['id_user'])) {
-        header('Location: ../index.php');
-    }
+    require_once __DIR__ . '/../../lib/auth.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    exigir_login();
 
     require_once '../../lib/conn.php';
     $id = (int)$_GET['id'];
@@ -40,21 +39,21 @@
     <main class="form-cadastros">
         <span>Editar Voluntário</span>
         <form action="../../function/update/func_editar_voluntario.php" method="post">
-            <input type="hidden" id="id_voluntario" name="id_voluntario" value="<?= $voluntario->id_voluntario ?>">
+            <input type="hidden" id="id_voluntario" name="id_voluntario" value="<?= e($voluntario->id_voluntario) ?>">
                 <div class="campo">
-                    <input type="text" name="nome" id="nome" required value="<?= $voluntario->nome ?>">
+                    <input type="text" name="nome" id="nome" required value="<?= e($voluntario->nome) ?>">
                     <span>Nome</span>
                 </div>
                 <div class="campo">
-                    <input type="email" name="email" id="email" required value="<?= $voluntario->email ?>">
+                    <input type="email" name="email" id="email" required value="<?= e($voluntario->email) ?>">
                     <span>Email</span>
                 </div>
                 <div class="campo">
-                    <input type="number" name="idade" id="idade" required value="<?= $voluntario->idade ?>">
+                    <input type="number" name="idade" id="idade" required value="<?= e($voluntario->idade) ?>">
                     <span>Idade</span>
                 </div>
                 <div class="campo">
-                    <input type="text" name="dia_disponivel" id="dia_disponivel" required value="<?= $voluntario->dia_disponivel ?>">
+                    <input type="text" name="dia_disponivel" id="dia_disponivel" required value="<?= e($voluntario->dia_disponivel) ?>">
                     <span>Dias disponível</span>
                 </div>
                 <button type="submit">Atualizar</button>

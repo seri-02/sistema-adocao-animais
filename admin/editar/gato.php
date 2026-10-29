@@ -1,8 +1,7 @@
 <?php
-    session_start();
-    if(!isset($_SESSION['id_user'])) {
-        header('Location: ../index.php');
-    }
+    require_once __DIR__ . '/../../lib/auth.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    exigir_login();
 
     require_once '../../lib/conn.php';
 
@@ -41,14 +40,14 @@
     <main class="form-cadastros">
         <span>Editar gato</span>
         <form action="../../function/update/func_editar_gato.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="id_gato" value="<?= $gato->id_gato ?>">
+            <input type="hidden" name="id_gato" value="<?= e($gato->id_gato) ?>">
             <div class="campo">  
-                <input type="text" name="name" id="name" required value="<?= $gato->nome ?>">
+                <input type="text" name="name" id="name" required value="<?= e($gato->nome) ?>">
                 <span>Nome do gato</span>
             </div>
 
             <div class="campo">
-                <textarea name="descricao" id="descricao" cols="30" rows="10" maxlength="100" required><?= $gato->descricao ?></textarea>
+                <textarea name="descricao" id="descricao" cols="30" rows="10" maxlength="100" required><?= e($gato->descricao) ?></textarea>
                 <span>Descrição</span>
             </div>      
 

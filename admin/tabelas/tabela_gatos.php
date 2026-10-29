@@ -1,8 +1,7 @@
 <?php
-    session_start();
-    if(!isset($_SESSION['id_user'])) {
-        header('Location: ../../index.php');
-    }
+    require_once __DIR__ . '/../../lib/auth.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    exigir_login();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -52,9 +51,9 @@
                     foreach ($gatos as $gato) {
                         ?>
                     <tr>
-                        <td class="id"><?= $gato->id_gato ?></td>
-                        <td><?= $gato->nome ?></td>
-                        <td><?= $gato->descricao ?></td>
+                        <td class="id"><?= e($gato->id_gato) ?></td>
+                        <td><?= e($gato->nome) ?></td>
+                        <td><?= e($gato->descricao) ?></td>
                         <td>
                             <?php 
                                 if($gato->adotado == 0) {
@@ -68,8 +67,8 @@
                                 }
                             ?>
                         </td>
-                        <td><a href="../../function/delete/gato.php?id=<?= $gato->id_gato?>"><i class="fa-solid fa-trash"></i></a></td>
-                        <td><a href="../editar/gato.php?id=<?= $gato->id_gato?>"><i class="fa-solid fa-user-pen"></i></a></td>
+                        <td><a href="../../function/delete/gato.php?id=<?= e($gato->id_gato) ?>"><i class="fa-solid fa-trash"></i></a></td>
+                        <td><a href="../editar/gato.php?id=<?= e($gato->id_gato) ?>"><i class="fa-solid fa-user-pen"></i></a></td>
                     </tr>
                 <?php
                     }

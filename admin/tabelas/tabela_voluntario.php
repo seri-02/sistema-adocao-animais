@@ -1,8 +1,7 @@
 <?php
-    session_start();
-    if(!isset($_SESSION['id_user'])) {
-        header('Location: ../../index.php');
-    }
+    require_once __DIR__ . '/../../lib/auth.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    exigir_login();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -52,18 +51,18 @@
                     foreach ($voluntarios as $voluntario) {
                         ?>
                     <tr>
-                        <td class="id"><?= $voluntario->id_voluntario ?></td>
-                        <td><?= $voluntario->nome ?></td>
-                        <td><?= $voluntario->email ?></td>
-                        <td><?= $voluntario->dia_disponivel ?></td>
+                        <td class="id"><?= e($voluntario->id_voluntario) ?></td>
+                        <td><?= e($voluntario->nome) ?></td>
+                        <td><?= e($voluntario->email) ?></td>
+                        <td><?= e($voluntario->dia_disponivel) ?></td>
                         <td>
-                            <a href="../../function/delete/voluntario.php?id=<?= $voluntario->id_voluntario?>">
+                            <a href="../../function/delete/voluntario.php?id=<?= e($voluntario->id_voluntario) ?>">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>
                         
                         <td>
-                            <a href="../editar/voluntario.php?id=<?= $voluntario->id_voluntario?>">
+                            <a href="../editar/voluntario.php?id=<?= e($voluntario->id_voluntario) ?>">
                                 <i class="fa-solid fa-user-pen"></i>
                             </a>
                         </td>

@@ -4,6 +4,12 @@
 .env.*
 !.env.example
 
+# Configuração local com segredos (o modelo config.example.php é versionado)
+/config/config.php
+
+# Dumps do banco: contêm dados pessoais, nunca versionar
+/backups/
+
 *.log
 /logs/
 

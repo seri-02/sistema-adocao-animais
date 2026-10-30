@@ -26,6 +26,7 @@
     <main>
     <?php
     require_once '../vendor/autoload.php';
+    require_once __DIR__ . '/../lib/config.php';
     extract($_POST);
 
     use PHPMailer\PHPMailer\PHPMailer;
@@ -34,23 +35,24 @@
 
     $mail = new PHPMailer(true);
     try {
-        $mail->isSMTP();
-        $mail->Host ='smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'analauraalmeidaventura@gmail.com';
-        $mail->Password = 'ckkbtsvnybntmawp';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;    
-        $mail->Port = 465;
-        $mail->SMTPOptions = array(
-            'ssl' => array(
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true
-             )
-            );
+        // Sem configuração completa não há tentativa de conexão; o usuário vê só a mensagem genérica
+        $configuracoes_smtp = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_SECURE', 'SMTP_USER', 'SMTP_PASS', 'MAIL_FROM', 'MAIL_FROM_NAME', 'MAIL_TO'];
+        foreach ($configuracoes_smtp as $chave) {
+            if (!defined($chave) || constant($chave) === '') {
+                throw new Exception('SMTP não configurado em config/config.php');
+            }
+        }
 
-        $mail->setFrom('analauraalmeidaventura@gmail.com', 'Ana Laura'); 
-        $mail->addAddress('analauraalmeidaventura@gmail.com', 'Abrigo para Gatos'); 
+        $mail->isSMTP();
+        $mail->Host = SMTP_HOST;
+        $mail->SMTPAuth = true;
+        $mail->Username = SMTP_USER;
+        $mail->Password = SMTP_PASS;
+        $mail->SMTPSecure = SMTP_SECURE;
+        $mail->Port = SMTP_PORT;
+
+        $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
+        $mail->addAddress(MAIL_TO, 'Abrigo para Gatos');
         $mail->addReplyTo($email, $msg);
 
         $mail->isHTML(true);

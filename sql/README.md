@@ -22,6 +22,7 @@ sql/
 | 2 | `002_reparar_encoding_legado` | Corrige os 4 textos com dupla codificação herdados do legado (ex.: `FÃªmea` → `Fêmea`). Só altera valores com os bytes exatos do defeito; em banco vazio não faz nada |
 | 3 | `003_gato_para_animal` | Renomeia `gato` para `animal` preservando IDs; adiciona espécie, sexo, nascimento estimado, porte, castrado, vacinado, saúde, comportamento, `status`, `criado_em`, `atualizado_em`; converte `adotado` em `status` e `img` no nome real do arquivo (`imagem`) |
 | 4 | `004_adocoes_fk_animal` | `adocoes.fk_id_gato` (varchar) vira `id_animal` (int) com FK para `animal` (`ON DELETE/UPDATE RESTRICT`) |
+| 5 | `005_usuario_perfis_autenticacao` | `usuario` ganha `id_usuario`, `nome`, `telefone`, `perfil` (ADOTANTE/FUNCIONARIO/ADMIN), `ativo`, timestamps, `senha` varchar(255) e `UNIQUE(email)`; contas existentes viram ADMIN ativas; hashes SHA-1 preservados (modernizados no próximo login) |
 
 Cada `up` registra sua versão em `schema_migrations` **como último comando**. Cada `down` remove o registro.
 Para saber o que já foi aplicado:
@@ -54,26 +55,33 @@ C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-sour
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/002_reparar_encoding_legado.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/003_gato_para_animal.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.up.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/005_usuario_perfis_autenticacao.up.sql"
 ```
 
-#### Administrador local (provisório)
+#### Administrador local
 
 A baseline não tem dados, então o banco nasce sem usuários e não existe credencial padrão.
-Para criar o primeiro acesso à área administrativa **no seu ambiente local**:
+Para criar o primeiro administrador **no seu ambiente local**:
 
-```sql
-INSERT INTO usuario (email, senha, name)
-VALUES (
-    'SEU_EMAIL_LOCAL',
-    SHA1('DEFINA_UMA_SENHA_LOCAL'),
-    'Administrador Local'
-);
-```
+1. Gere o hash da senha escolhida com `password_hash` (o mesmo algoritmo usado pela aplicação):
 
-- **Substitua `SEU_EMAIL_LOCAL` e `DEFINA_UMA_SENHA_LOCAL` antes de executar.** Não execute com os placeholders.
-- É um procedimento **provisório**, porque o login ainda usa SHA-1. Na fase de perfis de usuário (F2a)
-  ele será substituído pelo novo modelo de autenticação.
-- Nenhuma senha real deve ser versionada: não registre a senha escolhida em arquivos do projeto.
+   ```bash
+   php -r "echo password_hash('DEFINA_UMA_SENHA_LOCAL', PASSWORD_DEFAULT), PHP_EOL;"
+   ```
+
+2. Insira o administrador usando o hash gerado:
+
+   ```sql
+   INSERT INTO usuario (nome, email, senha, perfil, ativo)
+   VALUES ('Administrador Local', 'SEU_EMAIL_LOCAL', 'COLE_AQUI_O_HASH_GERADO', 'ADMIN', 1);
+   ```
+
+- **Substitua `DEFINA_UMA_SENHA_LOCAL`, `SEU_EMAIL_LOCAL` e `COLE_AQUI_O_HASH_GERADO` antes de executar.**
+  A senha precisa ter pelo menos 8 caracteres.
+- Nunca use SHA-1 nem grave senha em texto puro: a coluna `senha` guarda só o hash do `password_hash`.
+- Nenhuma senha real deve ser versionada. O comando do passo 1 fica no histórico do terminal: use uma senha
+  apenas local ou limpe o histórico depois.
+- Os demais usuários da equipe (FUNCIONARIO/ADMIN) são criados pela tela **Usuários** do painel.
 
 ### Banco existente (já em uso)
 
@@ -107,6 +115,7 @@ C:/xampp/mysql/bin/mysql.exe -uroot -e "DROP DATABASE abrigo_restore_teste"
 Execute os `down` **em ordem inversa** (o mais recente primeiro):
 
 ```bash
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/005_usuario_perfis_autenticacao.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/003_gato_para_animal.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/002_reparar_encoding_legado.down.sql"
@@ -134,6 +143,11 @@ Limitações que devem ser conhecidas antes de depender do rollback:
   estruturados, novos status), o rollback seguro é restaurar o backup feito antes da migração**, não o `down`.
 - As migrações 003 e 004 têm pré-checks que abortam **antes** de qualquer DDL: a 003 se existir registro de
   `gato` fora do mapeamento de imagens conferido; a 004 se existir adoção órfã. Nada é corrigido automaticamente.
+- O `down` da 005 também é **conservador** e aborta antes de qualquer alteração se algum usuário não couber no
+  formato legado: nome, e-mail ou senha com mais de 50 caracteres, perfil diferente de `ADMIN`, telefone
+  preenchido ou conta inativa. Um hash de `password_hash` tem mais de 50 caracteres: **depois que qualquer senha
+  for modernizada (o que acontece no primeiro login válido), o `down` da 005 é recusado de propósito** — hashes
+  modernos nunca são convertidos de volta para SHA-1. Nesse caso, o rollback seguro é restaurar o backup pré-F2a.
 - Rollback de migração não desfaz dados criados pela aplicação depois dela: para isso, só o backup.
 
 ## SQL mode

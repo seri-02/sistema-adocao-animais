@@ -1,3 +1,27 @@
+<?php
+    require_once __DIR__ . '/../lib/auth.php';
+    require_once __DIR__ . '/../lib/conn.php';
+
+    $email = trim((string) ($_POST['email'] ?? ''));
+    $senha = (string) ($_POST['senha'] ?? '');
+
+    $usuario = null;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $email !== '' && $senha !== '') {
+        try {
+            $usuario = autenticar($conn, $email, $senha);
+        } catch (PDOException $e) {
+            error_log('Falha no login: ' . $e->getMessage());
+        }
+    }
+
+    if ($usuario !== null) {
+        iniciar_sessao_autenticada($usuario);
+        // Adotante ainda não tem área própria (F2b): volta para o site público, já autenticado
+        $destino = in_array($usuario['perfil'], PERFIS_EQUIPE, true) ? '../admin/painel.php' : '../index.php';
+        header('Location: ' . $destino);
+        exit;
+    }
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -24,30 +48,11 @@
     </header>
     
     <main>
-        <?php
-            require_once '../lib/conn.php';
-
-            $sql = "SELECT * FROM usuario WHERE email = :email AND senha = :senha";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':email', $_POST['email']);
-            $stmt->bindValue(':senha', sha1($_POST['senha']));
-            $stmt->execute();
-
-            if($stmt->rowCount() === 1) {
-                $usuario = $stmt->fetch(PDO::FETCH_OBJ);
-                session_start();
-                $_SESSION['id_user'] = $usuario->id_user;
-                $_SESSION['name'] = $usuario->name;
-                header('Location: ../admin/painel.php');
-            } else {
-        ?>  
-                <div class="alert danger">
-                    <i class="fas fa-times"></i>
-                    <p class="lead">Email e/ou senha incorretos</p> 
-                </div>
-        <?php
-            }
-        ?>
+        <!-- Mesma mensagem para e-mail inexistente, senha incorreta e conta inativa -->
+        <div class="alert danger">
+            <i class="fas fa-times"></i>
+            <p class="lead">Email e/ou senha incorretos</p>
+        </div>
     </main>
 
     <footer>

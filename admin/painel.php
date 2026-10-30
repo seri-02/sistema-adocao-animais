@@ -1,6 +1,6 @@
 <?php
     require_once __DIR__ . '/../lib/auth.php';
-    exigir_login();
+    $usuario_logado = exigir_perfis(PERFIS_EQUIPE);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -36,7 +36,9 @@
         <span>
             <a href="tabelas/tabela_adocoes.php"><button class="btn-opcao">Adoções</button></a> 
             <a href="tabelas/tabela_gatos.php"><button class="btn-opcao">Animais</button></a>
+            <?php if (eh_admin()) { ?>
             <a href="tabelas/tabela_usuario.php"><button id="btn-usuario">Usuário</button></a>
+            <?php } ?>
             <a href="tabelas/tabela_voluntario.php"><button id="btn-voluntario">Voluntário</button></a>
         </span>
     </main>
@@ -47,7 +49,9 @@
             <button class="dropbtn">Cadastre <i class="fa-solid fa-arrow-down"></i></button>
             <div class="dropdown-content">
                 <a href="gato.php">Animal</a>
+                <?php if (eh_admin()) { ?>
                 <a href="usuario.php">Usuário</a>
+                <?php } ?>
             </div>
         </div>
     </div>

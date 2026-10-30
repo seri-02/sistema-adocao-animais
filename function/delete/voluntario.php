@@ -1,6 +1,6 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
-    exigir_login();
+    $usuario_logado = exigir_perfis([PERFIL_ADMIN]);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

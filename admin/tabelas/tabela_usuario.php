@@ -1,7 +1,8 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
     require_once __DIR__ . '/../../lib/escape.php';
-    exigir_login();
+    require_once __DIR__ . '/../../lib/usuario.php';
+    $usuario_logado = exigir_perfis([PERFIL_ADMIN]);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -35,7 +36,11 @@
                     <tr>
                         <th class="opcao">#</th>
                         <th>Nome</th>
-                        <th>Email</th>  
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Perfil</th>
+                        <th>Situação</th>
+                        <th>Editar</th>
                         <th>Excluir</th>
                     </tr>
                 </thead>
@@ -43,16 +48,24 @@
                 <tbody>
                     <?php
                         require_once '../../lib/conn.php';
-                        $sql = "SELECT * FROM usuario ORDER BY id_user ASC";
+                        $sql = "SELECT id_usuario, nome, email, telefone, perfil, ativo FROM usuario ORDER BY id_usuario ASC";
                         $stmt = $conn->query($sql);
                         $usuarios = $stmt->fetchAll(PDO::FETCH_OBJ);
                         foreach ($usuarios as $usuario) {
                             ?>
                         <tr>
-                            <td class="id"><?= e($usuario->id_user) ?></td>
-                            <td><?= e($usuario->name) ?></td>
+                            <td class="id"><?= e($usuario->id_usuario) ?></td>
+                            <td><?= e($usuario->nome) ?></td>
                             <td><?= e($usuario->email) ?></td>
-                            <td><a href="../../function/delete/usuario.php?id=<?= e($usuario->id_user) ?>"><i class="fa-solid fa-trash"></i></a></td>
+                            <td><?= e($usuario->telefone ?? '') ?></td>
+                            <td><?= e(PERFIS[$usuario->perfil] ?? $usuario->perfil) ?></td>
+                            <td><?= (int) $usuario->ativo === 1 ? 'Ativo' : 'Inativo' ?></td>
+                            <td><a href="../editar/usuario.php?id=<?= e($usuario->id_usuario) ?>"><i class="fa-solid fa-user-pen"></i></a></td>
+                            <?php if ((int) $usuario->id_usuario !== (int) $usuario_logado['id_usuario']) { ?>
+                            <td><a href="../../function/delete/usuario.php?id=<?= e($usuario->id_usuario) ?>"><i class="fa-solid fa-trash"></i></a></td>
+                            <?php } else { ?>
+                            <td></td>
+                            <?php } ?>
                         </tr>   
                     <?php
                         }

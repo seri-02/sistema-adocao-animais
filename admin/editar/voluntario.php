@@ -1,7 +1,7 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
     require_once __DIR__ . '/../../lib/escape.php';
-    exigir_login();
+    $usuario_logado = exigir_perfis(PERFIS_EQUIPE);
 
     require_once '../../lib/conn.php';
     $id = (int)$_GET['id'];

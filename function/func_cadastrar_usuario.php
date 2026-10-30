@@ -1,6 +1,34 @@
 <?php
   require_once __DIR__ . '/../lib/auth.php';
-  exigir_login();
+  $usuario_logado = exigir_perfis([PERFIL_ADMIN]);
+
+  require_once __DIR__ . '/../lib/conn.php';
+  require_once __DIR__ . '/../lib/escape.php';
+  require_once __DIR__ . '/../lib/usuario.php';
+
+  // Cadastro administrativo: somente FUNCIONARIO ou ADMIN (adotante se cadastra pelo site, F2b)
+  [$dados, $erros] = ler_formulario_usuario($_POST, PERFIS_CADASTRO_ADMIN, true);
+
+  if (!$erros) {
+      try {
+          $sql = "INSERT INTO usuario (nome, email, senha, telefone, perfil, ativo)
+                  VALUES (:nome, :email, :senha, :telefone, :perfil, 1)";
+          $insert = $conn->prepare($sql);
+          $insert->bindValue(':nome', $dados['nome']);
+          $insert->bindValue(':email', $dados['email']);
+          $insert->bindValue(':senha', password_hash($dados['senha'], PASSWORD_DEFAULT));
+          $insert->bindValue(':telefone', $dados['telefone'], $dados['telefone'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+          $insert->bindValue(':perfil', $dados['perfil']);
+          $insert->execute();
+      } catch (PDOException $e) {
+          if (eh_email_duplicado($e)) {
+              $erros[] = MSG_EMAIL_DUPLICADO;
+          } else {
+              error_log('Falha ao cadastrar usuário: ' . $e->getMessage());
+              $erros[] = 'Não foi possível cadastrar o usuário. Verifique os dados informados.';
+          }
+      }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -17,67 +45,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php if (!$erros) { ?>
     <meta http-equiv="refresh" content="2; url=../admin/usuario.php">
+    <?php } ?>
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="../index.php">Abrigo dos gatos</a> 
+            <a href="../index.php">Abrigo dos gatos</a>
         </span>
     </header>
-    
+
     <main>
-        <?php
-            require_once '../lib/conn.php';
-
-            $verifica = "SELECT * FROM usuario WHERE email = :email";
-            $stmt = $conn->prepare($verifica);
-            $stmt->bindValue(":email", $_POST['email']);
-            $stmt->execute(); 
-
-            if($stmt->rowCount() === 0) {
-                extract($_POST);
-                $sql = "INSERT INTO usuario VALUES(0, :email, :senha, :name)";
-                $insert = $conn->prepare($sql);
-                $insert->bindValue(":email", $email);
-                $insert->bindValue(":senha", sha1($senha));
-                $insert->bindValue(":name", $name);
-                try {
-                    $insert->execute();
-                    $sucesso = true;
-                } catch (PDOException $e) {
-                    // Com STRICT_TRANS_TABLES o banco recusa dado inválido (ex.: nome ou e-mail longo demais)
-                    error_log('Falha ao cadastrar usuário: ' . $e->getMessage());
-                    $sucesso = false;
-                }
-                if ($sucesso) {
-        ?>
-                <div class="alert success">
-                    <i class="far fa-check-circle"></i>
-                    <p class="lead">Usuário cadastrado com sucesso!</p>
-                </div>
-        <?php
-                } else {
-        ?>
-                <div class="alert danger">
-                    <i class="fas fa-times"></i>
-                    <p class="lead">Não foi possível cadastrar o usuário. Verifique os dados informados.</p>
-                </div>
-        <?php
-                }
-        ?>
-
-        <?php
-            } else {
-        ?>
-                <div class="alert danger">
-                    <i class="fas fa-times"></i>
-                    <p class="lead">Email já existente!</p> 
-                </div>
-        <?php
-            }
-        ?>
+        <?php if (!$erros) { ?>
+        <div class="alert success">
+            <i class="far fa-check-circle"></i>
+            <p class="lead">Usuário cadastrado com sucesso!</p>
+        </div>
+        <?php } else { ?>
+        <div class="alert danger">
+            <i class="fas fa-times"></i>
+            <?php foreach ($erros as $erro) { ?>
+                <p class="lead"><?= e($erro) ?></p>
+            <?php } ?>
+            <p><a href="javascript:history.back()">Voltar ao formulário</a></p>
+        </div>
+        <?php } ?>
     </main>
 
     <footer>

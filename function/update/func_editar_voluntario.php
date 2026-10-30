@@ -38,13 +38,27 @@
             $stmt->bindValue(':email', $email);
             $stmt->bindValue(':idade', $idade);
             $stmt->bindValue(':dia_disponivel', $dia_disponivel);
-            $stmt->bindValue(':id_voluntario', $id_voluntario); 
-            $stmt->execute();
+            $stmt->bindValue(':id_voluntario', $id_voluntario);
+            try {
+                $stmt->execute();
+                $sucesso = true;
+            } catch (PDOException $e) {
+                // Com STRICT_TRANS_TABLES o banco recusa dado inválido (ex.: idade não numérica, texto longo)
+                error_log('Falha ao atualizar voluntário: ' . $e->getMessage());
+                $sucesso = false;
+            }
         ?>
+        <?php if ($sucesso) { ?>
         <div class="alert success">
             <i class="far fa-check-circle"></i>
-            <p class="lead">Voluntário atualizado com sucesso!</p> 
+            <p class="lead">Voluntário atualizado com sucesso!</p>
         </div>
+        <?php } else { ?>
+        <div class="alert danger">
+            <i class="fas fa-times"></i>
+            <p class="lead">Não foi possível atualizar o voluntário. Verifique os dados informados.</p>
+        </div>
+        <?php } ?>
     </main>
 
     <footer>

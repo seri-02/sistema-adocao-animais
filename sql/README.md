@@ -120,8 +120,9 @@ Limitações que devem ser conhecidas antes de depender do rollback:
   novo. O caminho seguro de recuperação é **restaurar o backup**.
 - O `down` da 002 só devolve um valor ao estado antigo se ele ainda estiver exatamente como a 002 deixou;
   registros editados depois não são tocados.
-- O `down` da 001 volta as tabelas para utf8 de 3 bytes. Se depois da 001 alguém gravar caracteres de
-  4 bytes (ex.: emoji), o `ALTER` falha (modo estrito) em vez de perder dados; nesse caso restaure o backup.
+- O `down` da 001 volta as tabelas para utf8 de 3 bytes, que não comporta caracteres de 4 bytes (ex.: emoji).
+  Se algum texto tiver esse tipo de caractere, ele **aborta antes de qualquer alteração**; nesse caso restaure o
+  backup. Como segunda camada, ativa `STRICT_TRANS_TABLES` na própria sessão (ver "SQL mode" abaixo).
 - O `down` da 001 devolve o padrão do banco para `utf8` / `utf8_swedish_ci`, que era o valor do banco legado.
 - O `down` da 003 é **deliberadamente conservador**: serve para rollback técnico **logo após** a migração.
   Ele só converte `animal` → `gato` se cada registro ainda for exatamente representável no legado e aborta,
@@ -134,6 +135,17 @@ Limitações que devem ser conhecidas antes de depender do rollback:
 - As migrações 003 e 004 têm pré-checks que abortam **antes** de qualquer DDL: a 003 se existir registro de
   `gato` fora do mapeamento de imagens conferido; a 004 se existir adoção órfã. Nada é corrigido automaticamente.
 - Rollback de migração não desfaz dados criados pela aplicação depois dela: para isso, só o backup.
+
+## SQL mode
+
+- O MariaDB/MySQL do XAMPP local pode **não** ter `STRICT_TRANS_TABLES` no `sql_mode` global. Sem ele, valores
+  inválidos são truncados ou convertidos em silêncio (texto longo cortado, ENUM inválido vira `''`, emoji vira `?`).
+- **A aplicação ativa `STRICT_TRANS_TABLES` em cada conexão PDO** (`lib/conn.php`), mantendo os demais modos do
+  servidor. Se não conseguir ativá-lo, a aplicação não conecta (mensagem genérica na tela, detalhe no log).
+- **Migrações não passam por `lib/conn.php`.** Uma migração cuja segurança dependa de modo estrito deve ativá-lo
+  na própria sessão e restaurar o modo anterior ao final (como o `down` da 001), ou, de preferência, usar
+  pré-checks que abortem antes de qualquer DDL (como as migrações 001 `down`, 003 e 004).
+- Não é necessário alterar o `sql_mode` global do servidor (`my.ini`/`my.cnf`) nem executar `SET GLOBAL`.
 
 ## Criando uma nova migração
 

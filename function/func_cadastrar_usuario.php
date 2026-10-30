@@ -43,13 +43,31 @@
                 $insert->bindValue(":email", $email);
                 $insert->bindValue(":senha", sha1($senha));
                 $insert->bindValue(":name", $name);
-                $insert->execute();
+                try {
+                    $insert->execute();
+                    $sucesso = true;
+                } catch (PDOException $e) {
+                    // Com STRICT_TRANS_TABLES o banco recusa dado inválido (ex.: nome ou e-mail longo demais)
+                    error_log('Falha ao cadastrar usuário: ' . $e->getMessage());
+                    $sucesso = false;
+                }
+                if ($sucesso) {
         ?>
                 <div class="alert success">
                     <i class="far fa-check-circle"></i>
-                    <p class="lead">Usuário cadastrado com sucesso!</p> 
+                    <p class="lead">Usuário cadastrado com sucesso!</p>
                 </div>
-            
+        <?php
+                } else {
+        ?>
+                <div class="alert danger">
+                    <i class="fas fa-times"></i>
+                    <p class="lead">Não foi possível cadastrar o usuário. Verifique os dados informados.</p>
+                </div>
+        <?php
+                }
+        ?>
+
         <?php
             } else {
         ?>

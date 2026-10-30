@@ -72,12 +72,13 @@ C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-sour
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/002_reparar_encoding_legado.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/003_gato_para_animal.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.up.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/005_usuario_perfis_autenticacao.up.sql"
 ```
 
 - A baseline (`sql/baseline/`) contém apenas a estrutura; os dados reais ficam em backups locais, fora do Git.
-- **Instalação nova não tem administrador nem credencial padrão.** Crie um administrador local com valores
-  definidos por você, seguindo [Administrador local](sql/README.md#administrador-local-provisório)
-  (procedimento provisório enquanto o login usa SHA-1; será substituído na F2a).
+- **Instalação nova não tem administrador nem credencial padrão.** Crie o primeiro administrador com valores
+  definidos por você (senha gerada com `password_hash`), seguindo
+  [Administrador local](sql/README.md#administrador-local). Os demais usuários são criados pelo painel.
 - **Banco já existente:** faça um backup e aplique somente as migrações que ainda não estão em
   `schema_migrations` (passo a passo em [`sql/README.md`](sql/README.md)).
 - O dump do projeto original foi removido da árvore e não deve ser usado para instalação

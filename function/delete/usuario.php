@@ -1,6 +1,47 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
-    exigir_login();
+    $usuario_logado = exigir_perfis([PERFIL_ADMIN]);
+
+    require_once __DIR__ . '/../../lib/conn.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    require_once __DIR__ . '/../../lib/usuario.php';
+
+    $id_alvo = (int) ($_GET['id'] ?? 0);
+    $id_ator = (int) $usuario_logado['id_usuario'];
+    $sucesso = false;
+
+    if ($id_alvo === $id_ator) {
+        $mensagem = 'Você não pode excluir a própria conta.';
+    } else {
+        try {
+            $conn->beginTransaction();
+            [$linhas, $admins_ativos] = travar_usuarios_para_alteracao($conn, $id_alvo, $id_ator);
+            $alvo = $linhas[$id_alvo] ?? null;
+
+            if ($alvo === null) {
+                $mensagem = 'Usuário não encontrado.';
+            } elseif (!eh_admin_ativo($linhas[$id_ator] ?? null)) {
+                $mensagem = 'Acesso negado.';
+            } elseif (eh_admin_ativo($alvo) && $admins_ativos <= 1) {
+                $mensagem = 'O sistema precisa de pelo menos um administrador ativo.';
+            } else {
+                $stmt = $conn->prepare('DELETE FROM usuario WHERE id_usuario = :id_usuario');
+                $stmt->bindValue(':id_usuario', $id_alvo, PDO::PARAM_INT);
+                $stmt->execute();
+                $sucesso = true;
+                $mensagem = 'Usuário deletado com sucesso!';
+            }
+
+            $sucesso ? $conn->commit() : $conn->rollBack();
+        } catch (PDOException $e) {
+            if ($conn->inTransaction()) {
+                $conn->rollBack();
+            }
+            error_log('Falha ao excluir usuário: ' . $e->getMessage());
+            $sucesso = false;
+            $mensagem = 'Não foi possível excluir o usuário.';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -28,19 +69,9 @@
     </header>
     
     <main>
-        <?php
-            require_once '../../lib/conn.php';
-
-            $id = (int)$_GET['id'];
-
-            $sql = "DELETE FROM usuario WHERE id_user = :id_user ";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':id_user',$id);
-            $stmt->execute();
-        ?>
-        <div class="alert success">
-                    <i class="far fa-check-circle"></i>
-                    <p class="lead">Usuário deletado com sucesso!</p> 
+        <div class="alert <?= $sucesso ? 'success' : 'danger' ?>">
+                    <i class="<?= $sucesso ? 'far fa-check-circle' : 'fas fa-times' ?>"></i>
+                    <p class="lead"><?= e($mensagem) ?></p>
                 </div>
     </main>
 

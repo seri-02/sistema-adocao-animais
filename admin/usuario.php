@@ -1,6 +1,8 @@
 <?php
     require_once __DIR__ . '/../lib/auth.php';
-    exigir_login();
+    require_once __DIR__ . '/../lib/escape.php';
+    require_once __DIR__ . '/../lib/usuario.php';
+    $usuario_logado = exigir_perfis([PERFIL_ADMIN]);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -28,19 +30,31 @@
     </header>
     
     <main class="form-cadastros">
-        <span>Cadastre-se</span>
+        <span>Cadastro de usuário da equipe</span>
         <form action="../function/func_cadastrar_usuario.php" method="post">
             <div class="campo">
-                <input type="text" name="name" id="name" required>
-                <span>Digite seu nome</span>
+                <input type="text" name="nome" id="nome" maxlength="100" required>
+                <span>Nome</span>
             </div>
             <div class="campo">
-                <input type="email" name="email" id="email" required>
-                <span>Digite seu email</span>
+                <input type="email" name="email" id="email" maxlength="150" required>
+                <span>Email</span>
             </div>
             <div class="campo">
-                <input type="password" name="senha" id="senha" required>
-                <span>Digite a sua senha</span>
+                <input type="tel" name="telefone" id="telefone" maxlength="20">
+                <span>Telefone</span>
+            </div>
+            <div class="campo">
+                <select name="perfil" id="perfil" required>
+                    <?php foreach (PERFIS_CADASTRO_ADMIN as $perfil) { ?>
+                        <option value="<?= e($perfil) ?>"><?= e(PERFIS[$perfil]) ?></option>
+                    <?php } ?>
+                </select>
+                <span>Perfil</span>
+            </div>
+            <div class="campo">
+                <input type="password" name="senha" id="senha" minlength="<?= e(SENHA_TAMANHO_MINIMO) ?>" autocomplete="new-password" required>
+                <span>Senha (mínimo <?= e(SENHA_TAMANHO_MINIMO) ?> caracteres)</span>
             </div>
             <button type="submit">
                 Cadastrar

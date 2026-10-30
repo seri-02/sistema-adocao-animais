@@ -1,6 +1,17 @@
 <?php
-    // Controle de acesso da área administrativa.
-    // Nesta fase existe apenas: autenticado ou não autenticado.
+    // Autenticação e autorização por perfil (ADMIN, FUNCIONARIO, ADOTANTE).
+    // A autorização sempre usa o estado ATUAL do usuário no banco, não só o que
+    // foi gravado na sessão no login: desativar ou trocar o perfil vale na hora.
+
+    const PERFIL_ADMIN = 'ADMIN';
+    const PERFIL_FUNCIONARIO = 'FUNCIONARIO';
+    const PERFIL_ADOTANTE = 'ADOTANTE';
+    // Quem acessa a área administrativa
+    const PERFIS_EQUIPE = [PERFIL_ADMIN, PERFIL_FUNCIONARIO];
+
+    // Hash bcrypt de um texto descartável: usado para gastar o mesmo tempo quando
+    // o e-mail não existe (evita descobrir contas pelo tempo de resposta)
+    const HASH_FICTICIO = '$2y$10$WBes09NF8IEot9p2qAnuhOrQKNd3lgvtBt5lFNNYML4C1NWnKkJR.';
 
     function iniciar_sessao(): void
     {
@@ -9,35 +20,175 @@
         }
     }
 
-    function usuario_autenticado(): bool
+    function conexao_auth(): PDO
     {
-        iniciar_sessao();
-        return isset($_SESSION['id_user']);
+        global $conn;
+        require_once __DIR__ . '/conn.php';
+        return $conn;
     }
 
-    // Caminho relativo da página atual até a tela de login (admin/admin.php).
+    // Usuário autenticado e ativo (com dados atuais do banco) ou null.
+    // Se o registro sumiu ou foi desativado, a sessão é encerrada.
+    function usuario_atual(): ?array
+    {
+        static $usuario = false;
+        if ($usuario !== false) {
+            return $usuario;
+        }
+
+        iniciar_sessao();
+        $id = (int) ($_SESSION['id_usuario'] ?? 0);
+        if ($id <= 0) {
+            return $usuario = null;
+        }
+
+        $stmt = conexao_auth()->prepare(
+            'SELECT id_usuario, nome, email, perfil, ativo FROM usuario WHERE id_usuario = :id'
+        );
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $registro = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$registro || (int) $registro['ativo'] !== 1) {
+            encerrar_sessao();
+            return $usuario = null;
+        }
+
+        unset($registro['ativo']);
+        $_SESSION['nome'] = $registro['nome'];
+        $_SESSION['email'] = $registro['email'];
+        $_SESSION['perfil'] = $registro['perfil'];
+        return $usuario = $registro;
+    }
+
+    function usuario_autenticado(): bool
+    {
+        return usuario_atual() !== null;
+    }
+
+    function tem_perfil(string ...$perfis): bool
+    {
+        $usuario = usuario_atual();
+        return $usuario !== null && in_array($usuario['perfil'], $perfis, true);
+    }
+
+    function eh_admin(): bool
+    {
+        return tem_perfil(PERFIL_ADMIN);
+    }
+
+    // Caminho relativo da página atual até um arquivo a partir da raiz do projeto.
     // Relativo para funcionar tanto com `php -S` na raiz quanto em subpasta do Apache.
-    function url_login(): string
+    function url_projeto(string $arquivo): string
     {
         $raiz = str_replace('\\', '/', (string) realpath(dirname(__DIR__)));
         $pasta = str_replace('\\', '/', (string) realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
 
         if ($raiz === '' || strpos($pasta, $raiz) !== 0) {
-            return '/admin/admin.php';
+            return '/' . $arquivo;
         }
 
         $relativo = trim(substr($pasta, strlen($raiz)), '/');
         $niveis = $relativo === '' ? 0 : count(explode('/', $relativo));
 
-        return str_repeat('../', $niveis) . 'admin/admin.php';
+        return str_repeat('../', $niveis) . $arquivo;
     }
 
-    // Deve ser chamada antes de qualquer saída HTML.
-    // Encerra a execução para que nenhum conteúdo protegido seja enviado.
-    function exigir_login(): void
+    function url_login(): string
     {
-        if (!usuario_autenticado()) {
+        return url_projeto('admin/admin.php');
+    }
+
+    // Exigem ser chamadas antes de qualquer saída HTML e encerram a execução
+    // para que nenhum conteúdo protegido seja enviado.
+    function exigir_login(): array
+    {
+        $usuario = usuario_atual();
+        if ($usuario === null) {
             header('Location: ' . url_login());
             exit;
         }
+        return $usuario;
+    }
+
+    function exigir_perfis(array $perfis): array
+    {
+        $usuario = exigir_login();
+        if (!in_array($usuario['perfil'], $perfis, true)) {
+            negar_acesso();
+        }
+        return $usuario;
+    }
+
+    function negar_acesso(): void
+    {
+        http_response_code(403);
+        echo '<!DOCTYPE html><html lang="pt-br"><head><meta charset="UTF-8"><title>Acesso negado</title></head>',
+             '<body><h1>Acesso negado</h1><p>Você não tem permissão para acessar esta página.</p>',
+             '<p><a href="', htmlspecialchars(url_projeto('index.php'), ENT_QUOTES, 'UTF-8'), '">Voltar ao início</a></p></body></html>';
+        exit;
+    }
+
+    // Confere e-mail e senha. Aceita o hash moderno (password_hash) e, temporariamente,
+    // o SHA-1 legado; neste caso refaz o hash com password_hash após o login válido.
+    // Retorna o usuário (sem a senha) ou null — o motivo da falha nunca é exposto.
+    function autenticar(PDO $conn, string $email, string $senha): ?array
+    {
+        $stmt = $conn->prepare(
+            'SELECT id_usuario, nome, email, senha, perfil, ativo FROM usuario WHERE email = :email'
+        );
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$usuario) {
+            password_verify($senha, HASH_FICTICIO);
+            return null;
+        }
+
+        $hash = $usuario['senha'];
+        $legado = preg_match('/^[0-9a-f]{40}$/i', $hash) === 1;
+        $senha_correta = $legado
+            ? hash_equals(strtolower($hash), sha1($senha))   // SHA-1 legado: somente verificação, nunca gravação
+            : password_verify($senha, $hash);
+
+        if (!$senha_correta || (int) $usuario['ativo'] !== 1) {
+            return null;
+        }
+
+        if ($legado || password_needs_rehash($hash, PASSWORD_DEFAULT)) {
+            // Só troca se o hash ainda for o lido agora (evita sobrescrever alteração concorrente)
+            $update = $conn->prepare('UPDATE usuario SET senha = :nova WHERE id_usuario = :id AND senha = :atual');
+            $update->bindValue(':nova', password_hash($senha, PASSWORD_DEFAULT));
+            $update->bindValue(':id', (int) $usuario['id_usuario'], PDO::PARAM_INT);
+            $update->bindValue(':atual', $hash);
+            $update->execute();
+        }
+
+        unset($usuario['senha'], $usuario['ativo']);
+        return $usuario;
+    }
+
+    function iniciar_sessao_autenticada(array $usuario): void
+    {
+        iniciar_sessao();
+        session_regenerate_id(true);
+        $_SESSION = [
+            'id_usuario' => (int) $usuario['id_usuario'],
+            'nome' => $usuario['nome'],
+            'email' => $usuario['email'],
+            'perfil' => $usuario['perfil'],
+        ];
+    }
+
+    function encerrar_sessao(): void
+    {
+        iniciar_sessao();
+        $_SESSION = [];
+        if (ini_get('session.use_cookies')) {
+            $parametros = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000, $parametros['path'], $parametros['domain'],
+                $parametros['secure'], $parametros['httponly']);
+        }
+        session_destroy();
     }

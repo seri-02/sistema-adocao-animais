@@ -1,7 +1,7 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
     require_once __DIR__ . '/../../lib/escape.php';
-    exigir_login();
+    $usuario_logado = exigir_perfis(PERFIS_EQUIPE);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -37,7 +37,7 @@
                     <th>Nome</th>
                     <th>Email</th>  
                     <th>Dia disponível</th>
-                    <th>Excluir</th>
+                    <?php if (eh_admin()) { ?><th>Excluir</th><?php } ?>
                     <th>Editar</th>
                 </tr>
             </thead>
@@ -55,11 +55,13 @@
                         <td><?= e($voluntario->nome) ?></td>
                         <td><?= e($voluntario->email) ?></td>
                         <td><?= e($voluntario->dia_disponivel) ?></td>
+                        <?php if (eh_admin()) { ?>
                         <td>
                             <a href="../../function/delete/voluntario.php?id=<?= e($voluntario->id_voluntario) ?>">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>
+                        <?php } ?>
                         
                         <td>
                             <a href="../editar/voluntario.php?id=<?= e($voluntario->id_voluntario) ?>">

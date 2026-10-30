@@ -1,47 +1,105 @@
 # Como executar o projeto localmente
 
-## Uso normal do projeto
+## Requisitos
 
-### 1. Iniciar o banco de dados
+- **XAMPP** com PHP 8.x e MySQL/MariaDB (testado com PHP 8.2.12 e MariaDB 10.4.32).
+- **Composer**, para instalar as dependências PHP (`vendor/`).
+- **MySQL é obrigatório.** O Apache é **opcional** para a aplicação quando ela roda com `php -S`;
+  ele só é necessário se você quiser usar o phpMyAdmin.
 
-Abra o **XAMPP Control Panel** e inicie:
-
-- MySQL
-- Apache — necessário principalmente caso queira acessar o phpMyAdmin.
-
-> Para executar o projeto com `php -S`, o Apache não é obrigatório. O MySQL é.
-
-### 2. Abrir a pasta raiz do projeto
-
-A pasta correta é aquela onde estão arquivos como:
+A pasta raiz do projeto é aquela onde estão arquivos como:
 
 ```text
 composer.json
-composer.lock
 index.php
-.gitignore
 admin/
+config/
 function/
 lib/
+sql/
 ```
 
 Abra um PowerShell, Terminal ou Git Bash nessa pasta.
 
-### 3. Atualizar o projeto
+---
 
-Caso esteja trabalhando com o GitHub, confirme que está na `main`:
+## Primeira configuração
+
+Faça uma vez, ao clonar o projeto (ou quando algum item mudar).
+
+### 1. Dependências
+
+```bash
+composer install
+```
+
+Repita quando o `composer.lock` mudar ou se a pasta `vendor/` não existir.
+A pasta `vendor/` não fica no GitHub e é reconstruída pelo Composer.
+
+### 2. Configuração local
+
+Copie o modelo:
+
+```text
+config/config.example.php  →  config/config.php
+```
+
+```bash
+cp config/config.example.php config/config.php
+```
+
+(no PowerShell: `Copy-Item config/config.example.php config/config.php`)
+
+Edite `config/config.php` com os dados do seu ambiente:
+
+- **Banco** (`DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`): no XAMPP padrão é `localhost`, `abrigo_dos_gatos`, `root` e senha vazia.
+- **SMTP do formulário de contato** (`SMTP_*`, `MAIL_FROM`, `MAIL_FROM_NAME`, `MAIL_TO`): para Gmail use uma
+  *senha de app*, nunca a senha da conta. Sem SMTP configurado o site funciona normalmente; apenas o formulário
+  de contato responde que a mensagem não pôde ser entregue.
+
+> **Segredos nunca vão para o Git.** `config/config.php` e a pasta `backups/` estão no `.gitignore`.
+> O `config.example.php` é versionado e deve conter **somente valores fictícios**.
+
+### 3. Banco de dados
+
+Com o MySQL iniciado no XAMPP, crie o banco pela **baseline + migrações**, conforme
+[`sql/README.md`](sql/README.md):
+
+```bash
+C:/xampp/mysql/bin/mysql.exe -uroot -e "CREATE DATABASE abrigo_dos_gatos CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/baseline/000_schema_legado.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/001_innodb_utf8mb4.up.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/002_reparar_encoding_legado.up.sql"
+```
+
+- A baseline (`sql/baseline/`) contém apenas a estrutura; os dados reais ficam em backups locais, fora do Git.
+- **Instalação nova não tem administrador nem credencial padrão.** Crie um administrador local com valores
+  definidos por você, seguindo [Administrador local](sql/README.md#administrador-local-provisório)
+  (procedimento provisório enquanto o login usa SHA-1; será substituído na F2a).
+- **Banco já existente:** faça um backup e aplique somente as migrações que ainda não estão em
+  `schema_migrations` (passo a passo em [`sql/README.md`](sql/README.md)).
+- O dump do projeto original foi removido da árvore e não deve ser usado para instalação
+  (ver [`sql/legacy/README.md`](sql/legacy/README.md)).
+
+---
+
+## Uso no dia a dia
+
+### 1. Iniciar o banco de dados
+
+Abra o **XAMPP Control Panel** e inicie o **MySQL**
+(o Apache só é necessário se for usar o phpMyAdmin).
+
+### 2. Atualizar o projeto
 
 ```bash
 git switch main
-```
-
-Depois atualize:
-
-```bash
 git pull
 ```
 
-### 4. Iniciar o servidor PHP
+Se o `git pull` trouxer novas migrações em `sql/migrations/`, faça backup e aplique-as antes de usar o sistema.
+
+### 3. Iniciar o servidor PHP
 
 Na raiz do projeto:
 
@@ -51,95 +109,23 @@ php -S localhost:8000
 
 O terminal deverá permanecer aberto enquanto estiver usando o sistema.
 
-### 5. Abrir o sistema
-
-No navegador:
+### 4. Abrir o sistema
 
 ```text
 http://localhost:8000
 ```
 
-Pronto. O projeto estará executando localmente.
-
----
-
-## Quando usar `composer install`
-
-Não é necessário executar toda vez que abrir o projeto.
-
-Use:
-
-```bash
-composer install
-```
-
-quando:
-
-- estiver configurando o projeto pela primeira vez;
-- baixar/clonar o projeto novamente;
-- houver alteração no `composer.lock`;
-- a pasta `vendor/` não existir.
-
-A pasta `vendor/` não fica no GitHub e é reconstruída pelo Composer.
-
----
-
-## Banco de dados
-
-O projeto utiliza:
-
-```text
-Banco: abrigo_dos_gatos
-Host: localhost
-Usuário: root
-Senha: vazia
-```
-
-A configuração fica em:
-
-```text
-lib/conn.php
-```
-
-O banco só precisa ser importado uma vez.
-
-Caso precise recriá-lo:
-
-1. Inicie Apache e MySQL no XAMPP.
-2. Acesse:
-
-```text
-http://localhost/phpmyadmin
-```
-
-3. Crie/selecione o banco:
-
-```text
-abrigo_dos_gatos
-```
-
-4. Importe:
-
-```text
-sql/abrigo_dos_gatos.sql
-```
+Para encerrar o servidor PHP, volte ao terminal onde ele está executando e pressione `Ctrl + C`.
 
 ---
 
 ## Resumo para o dia a dia
 
 ```text
-1. Abrir XAMPP
-2. Iniciar MySQL
-3. Abrir terminal na raiz do projeto
-4. git switch main
-5. git pull
-6. php -S localhost:8000
-7. Abrir http://localhost:8000
-```
-
-Para encerrar o servidor PHP, volte ao terminal onde ele está executando e pressione:
-
-```text
-Ctrl + C
+1. Abrir XAMPP e iniciar o MySQL
+2. Abrir terminal na raiz do projeto
+3. git switch main
+4. git pull  (aplicar migrações novas, se houver)
+5. php -S localhost:8000
+6. Abrir http://localhost:8000
 ```

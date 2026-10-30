@@ -101,23 +101,49 @@
 
     // Exigem ser chamadas antes de qualquer saída HTML e encerram a execução
     // para que nenhum conteúdo protegido seja enviado.
-    function exigir_login(): array
+    // $pagina_login: para onde vai quem não está autenticado (área administrativa por padrão).
+    function exigir_login(string $pagina_login = 'admin/admin.php'): array
     {
         $usuario = usuario_atual();
         if ($usuario === null) {
-            header('Location: ' . url_login());
+            header('Location: ' . url_projeto($pagina_login));
             exit;
         }
         return $usuario;
     }
 
-    function exigir_perfis(array $perfis): array
+    function exigir_perfis(array $perfis, string $pagina_login = 'admin/admin.php'): array
     {
-        $usuario = exigir_login();
+        $usuario = exigir_login($pagina_login);
         if (!in_array($usuario['perfil'], $perfis, true)) {
             negar_acesso();
         }
         return $usuario;
+    }
+
+    // Usuário logado para exibir no menu público, sem criar sessão para visitante anônimo
+    function usuario_logado_opcional(): ?array
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE && empty($_COOKIE[session_name()])) {
+            return null;
+        }
+        return usuario_atual();
+    }
+
+    // Página inicial de cada perfil após o login
+    function destino_pos_login(string $perfil): string
+    {
+        return url_projeto(in_array($perfil, PERFIS_EQUIPE, true) ? 'admin/painel.php' : 'minha_conta.php');
+    }
+
+    // Login e cadastro não fazem sentido com uma sessão válida: leva à área do perfil atual
+    function redirecionar_se_autenticado(): void
+    {
+        $usuario = usuario_logado_opcional();
+        if ($usuario !== null) {
+            header('Location: ' . destino_pos_login($usuario['perfil']));
+            exit;
+        }
     }
 
     function negar_acesso(): void
@@ -127,6 +153,20 @@
              '<body><h1>Acesso negado</h1><p>Você não tem permissão para acessar esta página.</p>',
              '<p><a href="', htmlspecialchars(url_projeto('index.php'), ENT_QUOTES, 'UTF-8'), '">Voltar ao início</a></p></body></html>';
         exit;
+    }
+
+    function eh_hash_legado(string $hash): bool
+    {
+        return preg_match('/^[0-9a-f]{40}$/i', $hash) === 1;
+    }
+
+    // Única verificação de senha do sistema (login e confirmação de senha atual).
+    // Aceita o hash moderno e, temporariamente, o SHA-1 legado.
+    function senha_confere(string $senha, string $hash): bool
+    {
+        return eh_hash_legado($hash)
+            ? hash_equals(strtolower($hash), sha1($senha))   // SHA-1 legado: somente verificação, nunca gravação
+            : password_verify($senha, $hash);
     }
 
     // Confere e-mail e senha. Aceita o hash moderno (password_hash) e, temporariamente,
@@ -147,16 +187,11 @@
         }
 
         $hash = $usuario['senha'];
-        $legado = preg_match('/^[0-9a-f]{40}$/i', $hash) === 1;
-        $senha_correta = $legado
-            ? hash_equals(strtolower($hash), sha1($senha))   // SHA-1 legado: somente verificação, nunca gravação
-            : password_verify($senha, $hash);
-
-        if (!$senha_correta || (int) $usuario['ativo'] !== 1) {
+        if (!senha_confere($senha, $hash) || (int) $usuario['ativo'] !== 1) {
             return null;
         }
 
-        if ($legado || password_needs_rehash($hash, PASSWORD_DEFAULT)) {
+        if (eh_hash_legado($hash) || password_needs_rehash($hash, PASSWORD_DEFAULT)) {
             // Só troca se o hash ainda for o lido agora (evita sobrescrever alteração concorrente)
             $update = $conn->prepare('UPDATE usuario SET senha = :nova WHERE id_usuario = :id AND senha = :atual');
             $update->bindValue(':nova', password_hash($senha, PASSWORD_DEFAULT));

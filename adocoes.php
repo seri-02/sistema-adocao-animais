@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/lib/auth.php'; $usuario_menu = usuario_logado_opcional(); ?>
 <?php
     require_once 'lib/conn.php';
     require_once 'lib/escape.php';
@@ -37,6 +38,7 @@
                 <li><a href="index.php">Home</a></li>
                 <li><a href="adocoes.php">Adoções</a></li>
                 <li><a href="localizacao.php">Localização</a></li>                
+                <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
             </ul>
         </nav>
         <ul class="social">

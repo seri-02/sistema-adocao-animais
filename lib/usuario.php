@@ -11,6 +11,8 @@
     const PERFIS_CADASTRO_ADMIN = [PERFIL_FUNCIONARIO, PERFIL_ADMIN];
     const SENHA_TAMANHO_MINIMO = 8;
     const MSG_EMAIL_DUPLICADO = 'Já existe um usuário cadastrado com este e-mail.';
+    // Mesma situação, no vocabulário da área pública (cadastro e Minha conta)
+    const MSG_EMAIL_CONTA_DUPLICADA = 'Já existe uma conta cadastrada com este e-mail.';
 
     // Lê e valida nome, e-mail, telefone, perfil e senha.
     // Senha vazia só é aceita quando $senha_obrigatoria = false (edição: mantém a atual).
@@ -47,6 +49,43 @@
         }
 
         return [$dados, $erros];
+    }
+
+    // Dados da conta do adotante (cadastro público e Minha conta). Reaproveita as regras
+    // de nome/e-mail/telefone/senha acima com o perfil fixado no servidor e acrescenta:
+    // e-mail em minúsculas, caracteres permitidos no telefone e confirmação da senha.
+    // $campo_senha: 'senha' no cadastro (obrigatória); null na edição (senha tratada à parte).
+    function ler_formulario_adotante(array $entrada, ?string $campo_senha): array
+    {
+        $base = [
+            'nome' => $entrada['nome'] ?? '',
+            'email' => $entrada['email'] ?? '',
+            'telefone' => $entrada['telefone'] ?? '',
+            'perfil' => PERFIL_ADOTANTE,
+            'senha' => $campo_senha !== null ? (string) ($entrada[$campo_senha] ?? '') : '',
+        ];
+        [$dados, $erros] = ler_formulario_usuario($base, [PERFIL_ADOTANTE], $campo_senha !== null);
+
+        $dados['email'] = mb_strtolower($dados['email']);
+        if ($dados['telefone'] !== null && !preg_match('/^[0-9 ()+\-]+$/', $dados['telefone'])) {
+            $erros[] = 'O telefone pode conter apenas números, espaços, parênteses, "+" e "-".';
+        }
+        if ($campo_senha !== null && (string) ($entrada['confirmacao_senha'] ?? '') !== $dados['senha']) {
+            $erros[] = 'A confirmação da senha não confere.';
+        }
+
+        unset($dados['perfil']);
+        return [$dados, $erros];
+    }
+
+    // E-mail já usado por outra conta (verificação amigável; a garantia final é o UNIQUE)
+    function email_em_uso(PDO $conn, string $email, int $exceto_id = 0): bool
+    {
+        $stmt = $conn->prepare('SELECT COUNT(*) FROM usuario WHERE email = :email AND id_usuario <> :id');
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':id', $exceto_id, PDO::PARAM_INT);
+        $stmt->execute();
+        return (int) $stmt->fetchColumn() > 0;
     }
 
     // Dentro de uma transação: trava o usuário alvo, o usuário que executa a ação e

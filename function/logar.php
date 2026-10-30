@@ -16,9 +16,14 @@
 
     if ($usuario !== null) {
         iniciar_sessao_autenticada($usuario);
-        // Adotante ainda não tem área própria (F2b): volta para o site público, já autenticado
-        $destino = in_array($usuario['perfil'], PERFIS_EQUIPE, true) ? '../admin/painel.php' : '../index.php';
-        header('Location: ' . $destino);
+        // O destino depende do perfil autenticado, nunca da tela de origem
+        header('Location: ' . destino_pos_login($usuario['perfil']));
+        exit;
+    }
+
+    // Falha: quem entrou pela tela pública volta para ela com a mesma mensagem genérica
+    if (($_POST['origem'] ?? '') === 'publico') {
+        header('Location: ../login.php?erro=1', true, 303);
         exit;
     }
 ?>

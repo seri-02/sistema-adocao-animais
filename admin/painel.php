@@ -35,7 +35,7 @@
         <h4>Listagens</h4>
         <span>
             <a href="tabelas/tabela_adocoes.php"><button class="btn-opcao">Adoções</button></a> 
-            <a href="tabelas/tabela_gatos.php"><button class="btn-opcao">Gatos</button></a> 
+            <a href="tabelas/tabela_gatos.php"><button class="btn-opcao">Animais</button></a>
             <a href="tabelas/tabela_usuario.php"><button id="btn-usuario">Usuário</button></a>
             <a href="tabelas/tabela_voluntario.php"><button id="btn-voluntario">Voluntário</button></a>
         </span>
@@ -46,7 +46,7 @@
         <div class="dropdown">
             <button class="dropbtn">Cadastre <i class="fa-solid fa-arrow-down"></i></button>
             <div class="dropdown-content">
-                <a href="gato.php">Gato</a>
+                <a href="gato.php">Animal</a>
                 <a href="usuario.php">Usuário</a>
             </div>
         </div>

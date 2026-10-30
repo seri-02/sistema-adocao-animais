@@ -1,6 +1,7 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
     require_once __DIR__ . '/../../lib/escape.php';
+    require_once __DIR__ . '/../../lib/animal.php';
     exigir_login();
 ?>
 <!DOCTYPE html>
@@ -29,46 +30,40 @@
     </header>
 
     <div class="tabela">
-        <h3>Lista de Gatos</h3>
+        <h3>Lista de Animais</h3>
         <table>
             <thead>
                 <tr>
                     <th class="opcao">#</th>
-                    <th>Nome gato</th>
+                    <th>Nome</th>
+                    <th>Espécie</th>
+                    <th>Sexo</th>
                     <th>Idade</th>
-                    <th>Adotado</th>  
-                    <th>Excluir</th>  
-                    <th>Editar</th>  
+                    <th>Porte</th>
+                    <th>Status</th>
+                    <th>Excluir</th>
+                    <th>Editar</th>
                 </tr>
             </thead>
-            
+
             <tbody>
                 <?php
                     require_once '../../lib/conn.php';
-                    $sql = "SELECT * FROM gato ORDER BY id_gato ASC";     
+                    $sql = "SELECT * FROM animal ORDER BY id_animal ASC";
                     $stmt = $conn->query($sql);
-                    $gatos = $stmt->fetchAll(PDO::FETCH_OBJ);
-                    foreach ($gatos as $gato) {
+                    $animais = $stmt->fetchAll(PDO::FETCH_OBJ);
+                    foreach ($animais as $animal) {
                         ?>
                     <tr>
-                        <td class="id"><?= e($gato->id_gato) ?></td>
-                        <td><?= e($gato->nome) ?></td>
-                        <td><?= e($gato->descricao) ?></td>
-                        <td>
-                            <?php 
-                                if($gato->adotado == 0) {
-                            ?>
-                                <p>Sim</p>  
-                            <?php 
-                                } else {
-                            ?> 
-                                <p>Não</p> 
-                            <?php
-                                }
-                            ?>
-                        </td>
-                        <td><a href="../../function/delete/gato.php?id=<?= e($gato->id_gato) ?>"><i class="fa-solid fa-trash"></i></a></td>
-                        <td><a href="../editar/gato.php?id=<?= e($gato->id_gato) ?>"><i class="fa-solid fa-user-pen"></i></a></td>
+                        <td class="id"><?= e($animal->id_animal) ?></td>
+                        <td><?= e($animal->nome) ?></td>
+                        <td><?= e(rotulo(ESPECIES, $animal->especie)) ?></td>
+                        <td><?= e(rotulo(SEXOS, $animal->sexo)) ?></td>
+                        <td><?= e(calcular_idade($animal->data_nascimento_estimada)) ?></td>
+                        <td><?= e(rotulo(PORTES, $animal->porte)) ?></td>
+                        <td><?= e(rotulo(STATUS_ANIMAL, $animal->status)) ?></td>
+                        <td><a href="../../function/delete/gato.php?id=<?= e($animal->id_animal) ?>"><i class="fa-solid fa-trash"></i></a></td>
+                        <td><a href="../editar/gato.php?id=<?= e($animal->id_animal) ?>"><i class="fa-solid fa-user-pen"></i></a></td>
                     </tr>
                 <?php
                     }

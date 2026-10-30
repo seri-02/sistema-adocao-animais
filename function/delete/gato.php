@@ -1,6 +1,28 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
     exigir_login();
+
+    require_once __DIR__ . '/../../lib/conn.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+
+    $id = (int) ($_GET['id'] ?? 0);
+    $sucesso = false;
+
+    try {
+        $stmt = $conn->prepare("DELETE FROM animal WHERE id_animal = :id_animal");
+        $stmt->bindValue(':id_animal', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $sucesso = $stmt->rowCount() > 0;
+        $mensagem = $sucesso ? 'Animal excluído com sucesso!' : 'Animal não encontrado.';
+    } catch (PDOException $e) {
+        // 1451: o animal é referenciado por adocoes (FK ON DELETE RESTRICT)
+        if ((int) ($e->errorInfo[1] ?? 0) === 1451) {
+            $mensagem = 'Este animal possui histórico de adoção e não pode ser excluído.';
+        } else {
+            error_log('Falha ao excluir animal: ' . $e->getMessage());
+            $mensagem = 'Não foi possível excluir o animal.';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -28,19 +50,9 @@
     </header>
     
     <main>
-        <?php
-            require_once '../../lib/conn.php';
-
-            $id = (int)$_GET['id'];
-
-            $sql = "DELETE FROM gato WHERE id_gato = :id_gato ";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':id_gato',$id);
-            $stmt->execute();
-        ?>
-        <div class="alert success">
-                    <i class="far fa-check-circle"></i>
-                    <p class="lead">Gato deletado com sucesso!</p> 
+        <div class="alert <?= $sucesso ? 'success' : 'danger' ?>">
+                    <i class="<?= $sucesso ? 'far fa-check-circle' : 'fas fa-times' ?>"></i>
+                    <p class="lead"><?= e($mensagem) ?></p>
                 </div>
     </main>
 

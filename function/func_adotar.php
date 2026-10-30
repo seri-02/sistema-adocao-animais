@@ -1,3 +1,68 @@
+<?php
+    // Fluxo LEGADO de adoção imediata (temporário até o workflow de solicitação da F3)
+    require_once __DIR__ . '/../lib/auth.php';
+    require_once __DIR__ . '/../lib/conn.php';
+    require_once __DIR__ . '/../lib/escape.php';
+
+    iniciar_sessao();
+    if (isset($_GET['id'])) {
+        $_SESSION['id_animal'] = (int) $_GET['id'];
+    }
+    $id_animal = (int) ($_SESSION['id_animal'] ?? 0);
+
+    $nome_adotante = trim((string) ($_POST['nome_adotante'] ?? ''));
+    $email_adotante = trim((string) ($_POST['email_adotante'] ?? ''));
+    $telefone = trim((string) ($_POST['telefone'] ?? ''));
+
+    $sucesso = false;
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST' || $id_animal <= 0) {
+        $mensagem = 'Escolha um animal no catálogo para adotar.';
+    } elseif ($nome_adotante === '' || mb_strlen($nome_adotante) > 50
+        || !filter_var($email_adotante, FILTER_VALIDATE_EMAIL) || mb_strlen($email_adotante) > 100
+        || $telefone === '' || mb_strlen($telefone) > 20) {
+        $mensagem = 'Preencha nome, e-mail e telefone válidos.';
+    } else {
+        try {
+            $conn->beginTransaction();
+
+            // A sessão só indica o animal escolhido: a disponibilidade é conferida aqui, com a linha travada
+            $stmt = $conn->prepare('SELECT status FROM animal WHERE id_animal = :id_animal FOR UPDATE');
+            $stmt->bindValue(':id_animal', $id_animal, PDO::PARAM_INT);
+            $stmt->execute();
+            $status = $stmt->fetchColumn();
+
+            if ($status === false) {
+                $conn->rollBack();
+                $mensagem = 'Animal não encontrado.';
+            } elseif ($status !== 'DISPONIVEL') {
+                $conn->rollBack();
+                $mensagem = 'Este animal não está disponível para adoção.';
+            } else {
+                $stmt = $conn->prepare('INSERT INTO adocoes (id_animal, nome_adotante, email_adotante, telefone)
+                                        VALUES (:id_animal, :nome_adotante, :email_adotante, :telefone)');
+                $stmt->bindValue(':id_animal', $id_animal, PDO::PARAM_INT);
+                $stmt->bindValue(':nome_adotante', $nome_adotante);
+                $stmt->bindValue(':email_adotante', $email_adotante);
+                $stmt->bindValue(':telefone', $telefone);
+                $stmt->execute();
+
+                $stmt = $conn->prepare("UPDATE animal SET status = 'ADOTADO' WHERE id_animal = :id_animal");
+                $stmt->bindValue(':id_animal', $id_animal, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $conn->commit();
+                $sucesso = true;
+                $mensagem = 'Animal adotado com sucesso!';
+            }
+        } catch (Throwable $e) {
+            if ($conn->inTransaction()) {
+                $conn->rollBack();
+            }
+            error_log('Falha na adoção: ' . $e->getMessage());
+            $mensagem = 'Não foi possível registrar a adoção. Tente novamente.';
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -24,42 +89,18 @@
     </header>
     
     <main>
-        <?php
-            require_once '../lib/conn.php';
-            extract($_POST);
-
-            session_start();
-            if(isset($_GET['id'])){
-                $id_gato = $_SESSION['id_gato'] = (int)$_GET['id'];
-            } 
-            else {
-                $id_gato = $_SESSION['id_gato'];
-            }
-
-            $sql_gato = "SELECT * FROM gato WHERE id_gato = :id";
-            $stmt = $conn->prepare($sql_gato);
-            $stmt->bindParam(":id",$id);
-            $stmt->execute();
-            $gato = $stmt->fetch(PDO::FETCH_OBJ);
-
-            $sql = "INSERT INTO adocoes VALUES(0, :fk_id_gato, :nome_adotante, :email_adotante, :telefone)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':fk_id_gato', $id_gato);
-            $stmt->bindValue(':nome_adotante', $nome_adotante);
-            $stmt->bindValue(':email_adotante', $email_adotante);
-            $stmt->bindValue(':telefone', $telefone);
-            $stmt->execute();
-
-            $updateGato = "UPDATE gato SET adotado = 0 WHERE id_gato = :id_gato";
-            $update = $conn->prepare($updateGato);
-            $update->bindValue(':id_gato', $id_gato);
-            $update->execute();
-        ?>
+        <?php if ($sucesso) { ?>
         <div class="alert success">
             <img src="../img/animation_200_l9is3tof.gif" alt="">
             <i class="far fa-check-circle"></i>
-            <p class="lead">Gato adotado com sucesso</p> 
+            <p class="lead"><?= e($mensagem) ?></p>
         </div>
+        <?php } else { ?>
+        <div class="alert danger">
+            <i class="fas fa-times"></i>
+            <p class="lead"><?= e($mensagem) ?></p>
+        </div>
+        <?php } ?>
     </main>
 
     <footer>

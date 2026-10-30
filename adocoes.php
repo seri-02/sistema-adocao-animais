@@ -1,8 +1,10 @@
 <?php
     require_once 'lib/conn.php';
-    $sqlBuscaGato = 'SELECT * FROM gato WHERE adotado = 1';
-    $buscaGato = $conn->query($sqlBuscaGato);
-    $gatos = $buscaGato->fetchAll(PDO::FETCH_OBJ);
+    require_once 'lib/escape.php';
+    require_once 'lib/animal.php';
+    $sqlBuscaAnimais = "SELECT * FROM animal WHERE status = 'DISPONIVEL' ORDER BY id_animal";
+    $buscaAnimais = $conn->query($sqlBuscaAnimais);
+    $animais = $buscaAnimais->fetchAll(PDO::FETCH_OBJ);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -56,18 +58,24 @@
 
     <div class="container">
         <?php
-            require_once 'lib/conn.php';
-            $sql = "SELECT * FROM gato";
-            $stmt = $conn->query($sql);
-            foreach($gatos as $gato) {
+            foreach($animais as $animal) {
+                $resumo = [
+                    rotulo(ESPECIES, $animal->especie),
+                    $animal->sexo === 'NAO_INFORMADO' ? 'Sexo não informado' : rotulo(SEXOS, $animal->sexo),
+                    calcular_idade($animal->data_nascimento_estimada),
+                    $animal->porte === null ? 'Porte não informado' : 'Porte ' . mb_strtolower(rotulo(PORTES, $animal->porte)),
+                ];
         ?>
             <div class="card">
-                <img src="image/<?= strtolower($gato->img) ?>.jpg" height="398" width="395">
+                <?php if ($animal->imagem) { ?>
+                <img src="image/<?= e($animal->imagem) ?>" alt="<?= e($animal->nome) ?>" height="398" width="395">
+                <?php } ?>
                 <div class="content">
                     <h2><3</h2>
-                    <h3><?= $gato->nome ?></h1>
-                    <p><?= $gato->descricao ?></p>
-                    <a href="gato.php?id=<?= $gato->id_gato ?>">ADOTAR</a>
+                    <h3><?= e($animal->nome) ?></h3>
+                    <p><?= e(implode(' · ', $resumo)) ?></p>
+                    <p><?= e(mb_strimwidth((string) $animal->descricao, 0, 120, '…')) ?></p>
+                    <a href="gato.php?id=<?= e($animal->id_animal) ?>">ADOTAR</a>
                 </div>
             </div>
                 <?php
@@ -85,11 +93,8 @@
                 <p class="numero">
                     <?php
                         require_once 'lib/conn.php';
-                        $sql = "SELECT COUNT(id_gato) AS qtd_no_abrigo FROM gato WHERE adotado = 0";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute();
-                        $results = $stmt->fetch(PDO::FETCH_ASSOC);
-                        echo $results['qtd_no_abrigo'];
+                        require_once 'lib/animal.php';
+                        echo contar_animais_por_status($conn, 'ADOTADO');
                     ?> 
                 </p>
                 <p>Adotados</p>
@@ -99,14 +104,11 @@
                 <p class="numero">
                     <?php
                         require_once 'lib/conn.php';
-                        $sql = "SELECT COUNT(id_gato) AS qtd_no_abrigo FROM gato WHERE adotado = 1";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute();
-                        $results = $stmt->fetch(PDO::FETCH_ASSOC);
-                        echo $results['qtd_no_abrigo'];
+                        require_once 'lib/animal.php';
+                        echo contar_animais_por_status($conn, 'DISPONIVEL');
                     ?> 
                 </p>
-                <p>no abrigo</p>
+                <p>Disponíveis</p>
             </span>
         </div>
     </div>

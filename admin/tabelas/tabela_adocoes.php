@@ -34,7 +34,7 @@
                 <thead>
                     <tr>
                         <th class="opcao">#</th>
-                        <th>Nome gato</th>
+                        <th>Animal</th>
                         <th>Nome Adotante</th>
                         <th>Telefone</th>  
                     </tr>
@@ -44,16 +44,19 @@
                     <?php
                         require_once '../../lib/conn.php';
 
-                        $sql = "SELECT adocoes.id_adocao, gato.nome, adocoes.nome_adotante, adocoes.telefone FROM adocoes, gato WHERE adocoes.fk_id_gato = gato.id_gato ORDER BY adocoes.id_adocao ASC";     
+                        $sql = "SELECT adocoes.id_adocao, animal.nome, adocoes.nome_adotante, adocoes.telefone
+                                  FROM adocoes
+                                  JOIN animal ON animal.id_animal = adocoes.id_animal
+                                 ORDER BY adocoes.id_adocao ASC";
                         $stmt = $conn->query($sql);
-                        $gatos = $stmt->fetchAll(PDO::FETCH_OBJ);
-                        foreach ($gatos as $gato) {
+                        $adocoes = $stmt->fetchAll(PDO::FETCH_OBJ);
+                        foreach ($adocoes as $adocao) {
                             ?>
                         <tr>
-                            <td class="id"><?= e($gato->id_adocao) ?></td>
-                            <td><?= e($gato->nome) ?></td>
-                            <td><?= e($gato->nome_adotante) ?></td>
-                            <td><?= e($gato->telefone) ?></td>
+                            <td class="id"><?= e($adocao->id_adocao) ?></td>
+                            <td><?= e($adocao->nome) ?></td>
+                            <td><?= e($adocao->nome_adotante) ?></td>
+                            <td><?= e($adocao->telefone) ?></td>
                         </tr>
                     <?php
                         }

@@ -1,6 +1,10 @@
 <?php
     require_once __DIR__ . '/../lib/auth.php';
+    require_once __DIR__ . '/../lib/escape.php';
+    require_once __DIR__ . '/../lib/animal.php';
     exigir_login();
+
+    $animal = null;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -28,21 +32,9 @@
     </header>
     
     <main class="form-cadastros">
-        <span>Cadastro do gato</span>
+        <span>Cadastro de animal</span>
         <form action="../function/func_cadastrar_gato.php" method="post" enctype="multipart/form-data">
-            <div class="campo">
-                <input type="text" name="name" id="name" required>
-                <span>Nome do gato</span>
-            </div>
-            
-            <div class="campo">
-                <textarea name="descricao" id="descricao" cols="30" rows="10" maxlength="100"required></textarea>
-                <span>Descrição</span>
-            </div>
-
-            <div class="campo">
-                <input type="file" name="img" id="img" class="form-control" required>
-            </div>
+            <?php require __DIR__ . '/parciais/campos_animal.php'; ?>
 
             <button type="submit">
                 Cadastrar

@@ -183,11 +183,8 @@
                 <p class="numero">
                     <?php
                         require_once 'lib/conn.php';
-                        $sql = "SELECT COUNT(id_gato) AS qtd_no_abrigo FROM gato WHERE adotado = 0";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute();
-                        $results = $stmt->fetch(PDO::FETCH_ASSOC);
-                        echo $results['qtd_no_abrigo'];
+                        require_once 'lib/animal.php';
+                        echo contar_animais_por_status($conn, 'ADOTADO');
                     ?> 
                 </p>
                 <p>Adotados</p>
@@ -197,14 +194,11 @@
                 <p class="numero">
                     <?php
                         require_once 'lib/conn.php';
-                        $sql = "SELECT COUNT(id_gato) AS qtd_no_abrigo FROM gato WHERE adotado = 1";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute();
-                        $results = $stmt->fetch(PDO::FETCH_ASSOC);
-                        echo $results['qtd_no_abrigo'];
+                        require_once 'lib/animal.php';
+                        echo contar_animais_por_status($conn, 'DISPONIVEL');
                     ?> 
                 </p>
-                <p>no abrigo</p>
+                <p>Disponíveis</p>
             </span>
         </div>
     </div>

@@ -20,6 +20,8 @@ sql/
 |---|---|---|
 | 1 | `001_innodb_utf8mb4` | Cria `schema_migrations`; converte `gato`, `adocoes`, `usuario` e `voluntario` para InnoDB e `utf8mb4_unicode_ci`; muda o padrão do banco para utf8mb4 |
 | 2 | `002_reparar_encoding_legado` | Corrige os 4 textos com dupla codificação herdados do legado (ex.: `FÃªmea` → `Fêmea`). Só altera valores com os bytes exatos do defeito; em banco vazio não faz nada |
+| 3 | `003_gato_para_animal` | Renomeia `gato` para `animal` preservando IDs; adiciona espécie, sexo, nascimento estimado, porte, castrado, vacinado, saúde, comportamento, `status`, `criado_em`, `atualizado_em`; converte `adotado` em `status` e `img` no nome real do arquivo (`imagem`) |
+| 4 | `004_adocoes_fk_animal` | `adocoes.fk_id_gato` (varchar) vira `id_animal` (int) com FK para `animal` (`ON DELETE/UPDATE RESTRICT`) |
 
 Cada `up` registra sua versão em `schema_migrations` **como último comando**. Cada `down` remove o registro.
 Para saber o que já foi aplicado:
@@ -50,6 +52,8 @@ C:/xampp/mysql/bin/mysql.exe -uroot -e "CREATE DATABASE abrigo_dos_gatos CHARACT
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/baseline/000_schema_legado.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/001_innodb_utf8mb4.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/002_reparar_encoding_legado.up.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/003_gato_para_animal.up.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.up.sql"
 ```
 
 #### Administrador local (provisório)
@@ -92,15 +96,19 @@ Use `--result-file` em vez de `>`: no PowerShell 5.1 o `>` grava o arquivo em UT
 ```bash
 C:/xampp/mysql/bin/mysql.exe -uroot -e "CREATE DATABASE abrigo_restore_teste"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_restore_teste -e "source backups/antes_da_migracao_AAAA-MM-DD.sql"
-C:/xampp/mysql/bin/mysql.exe -uroot abrigo_restore_teste -e "SELECT COUNT(*) FROM gato; SELECT COUNT(*) FROM adocoes; SELECT COUNT(*) FROM usuario; SELECT COUNT(*) FROM voluntario"
+C:/xampp/mysql/bin/mysql.exe -uroot abrigo_restore_teste -e "SELECT COUNT(*) FROM animal; SELECT COUNT(*) FROM adocoes; SELECT COUNT(*) FROM usuario; SELECT COUNT(*) FROM voluntario"
 C:/xampp/mysql/bin/mysql.exe -uroot -e "DROP DATABASE abrigo_restore_teste"
 ```
+
+(Em backups anteriores à migração 003, a tabela `animal` ainda se chama `gato`.)
 
 ## Rollback
 
 Execute os `down` **em ordem inversa** (o mais recente primeiro):
 
 ```bash
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.down.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/003_gato_para_animal.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/002_reparar_encoding_legado.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/001_innodb_utf8mb4.down.sql"
 ```
@@ -115,6 +123,16 @@ Limitações que devem ser conhecidas antes de depender do rollback:
 - O `down` da 001 volta as tabelas para utf8 de 3 bytes. Se depois da 001 alguém gravar caracteres de
   4 bytes (ex.: emoji), o `ALTER` falha (modo estrito) em vez de perder dados; nesse caso restaure o backup.
 - O `down` da 001 devolve o padrão do banco para `utf8` / `utf8_swedish_ci`, que era o valor do banco legado.
+- O `down` da 003 é **deliberadamente conservador**: serve para rollback técnico **logo após** a migração.
+  Ele só converte `animal` → `gato` se cada registro ainda for exatamente representável no legado e aborta,
+  **antes de qualquer alteração**, se: a 004 ainda estiver aplicada; algum nome passar de 50 caracteres; existir
+  espécie diferente de `GATO`; existir status diferente de `DISPONIVEL`/`ADOTADO`; houver sexo, nascimento,
+  porte, castrado, vacinado, condição de saúde ou comportamento preenchidos; ou existir animal além dos 6
+  migrados ou com imagem trocada. Nada é descartado nem inventado.
+- **Depois que o sistema já produziu dados do novo domínio (animais novos, outras espécies, campos
+  estruturados, novos status), o rollback seguro é restaurar o backup feito antes da migração**, não o `down`.
+- As migrações 003 e 004 têm pré-checks que abortam **antes** de qualquer DDL: a 003 se existir registro de
+  `gato` fora do mapeamento de imagens conferido; a 004 se existir adoção órfã. Nada é corrigido automaticamente.
 - Rollback de migração não desfaz dados criados pela aplicação depois dela: para isso, só o backup.
 
 ## Criando uma nova migração

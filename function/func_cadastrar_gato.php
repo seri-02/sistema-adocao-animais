@@ -1,6 +1,38 @@
 <?php
     require_once __DIR__ . '/../lib/auth.php';
     exigir_login();
+
+    require_once __DIR__ . '/../lib/conn.php';
+    require_once __DIR__ . '/../lib/escape.php';
+    require_once __DIR__ . '/../lib/animal.php';
+
+    [$dados, $erros] = ler_formulario_animal($_POST);
+
+    $imagem = null;
+    if (!$erros) {
+        try {
+            $imagem = enviar_imagem_animal($_FILES['imagem'] ?? [], $dados['nome']);
+        } catch (Throwable $e) {
+            $erros[] = 'Imagem inválida: envie um arquivo JPG, PNG ou GIF.';
+        }
+    }
+
+    if (!$erros) {
+        try {
+            $sql = "INSERT INTO animal (nome, especie, sexo, data_nascimento_estimada, porte, castrado, vacinado,
+                                        condicao_saude, comportamento, descricao, imagem, status)
+                    VALUES (:nome, :especie, :sexo, :data_nascimento_estimada, :porte, :castrado, :vacinado,
+                            :condicao_saude, :comportamento, :descricao, :imagem, 'DISPONIVEL')";
+            $stmt = $conn->prepare($sql);
+            vincular_campos_animal($stmt, $dados);
+            $stmt->bindValue(':imagem', $imagem);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Falha ao cadastrar animal: ' . $e->getMessage());
+            remover_imagem_sem_uso($conn, $imagem);
+            $erros[] = 'Não foi possível cadastrar o animal.';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -17,7 +49,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php if (!$erros) { ?>
     <meta http-equiv="refresh" content="2; url=../admin/gato.php">
+    <?php } ?>
     <title>Abrigo dos Gatos</title>
 </head>
 <body id="adm">
@@ -28,42 +62,20 @@
     </header>
     
     <main>
-    <?php
-        require_once '../lib/conn.php';
-        require __DIR__ . "/../src/Uploader.php";
-        require __DIR__ . "/../src/Image.php";
-
-        $image = new CoffeeCode\Uploader\Image("../image", false, false);
-        $upload = $image->upload($_FILES['img'], $_POST['name']);
-
-        if ($_FILES) {
-            extract($_POST);
-            try {
-                $novo_nome = $_POST['name'];
-                $sql = "INSERT INTO gato VALUES(0, :nome, :descricao, 1, :nomeimagem)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindValue(':nome', $name);
-                $stmt->bindValue(':descricao', $descricao);
-                $stmt->bindValue(':nomeimagem', $novo_nome);
-                $stmt->execute();
-        ?>
-
+        <?php if (!$erros) { ?>
         <div class="alert success">
             <i class="far fa-check-circle"></i>
-            <p class="lead">Gato cadastrado com sucesso!</p> 
+            <p class="lead">Animal cadastrado com sucesso!</p>
         </div>
-
-        <?php
-                } catch (Exception $e) {
-                    ?>
-                    <div class="alert danger">
-                        <i class="fas fa-times"></i>
-                        <p class="lead">Extenção de imagem inválida</p> 
-                    </div>
-                    <?php
-                }
-            }
-        ?>
+        <?php } else { ?>
+        <div class="alert danger">
+            <i class="fas fa-times"></i>
+            <?php foreach ($erros as $erro) { ?>
+                <p class="lead"><?= e($erro) ?></p>
+            <?php } ?>
+            <p><a href="javascript:history.back()">Voltar ao formulário</a></p>
+        </div>
+        <?php } ?>
     </main>
 
     <footer>

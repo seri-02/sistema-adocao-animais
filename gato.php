@@ -1,3 +1,20 @@
+<?php
+    require_once 'lib/auth.php';
+    require_once 'lib/conn.php';
+    require_once 'lib/escape.php';
+    require_once 'lib/animal.php';
+
+    iniciar_sessao();
+    if (isset($_GET['id'])) {
+        $_SESSION['id_animal'] = (int) $_GET['id'];
+    }
+    $id = (int) ($_SESSION['id_animal'] ?? 0);
+
+    $stmt = $conn->prepare("SELECT * FROM animal WHERE id_animal = :id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $animal = $stmt->fetch(PDO::FETCH_OBJ) ?: null;
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -24,27 +41,31 @@
     </header>
     
     <section class="gatos">
-        <?php
-            require_once "lib/conn.php";
-            session_start();
-            if(isset($_GET['id'])){
-                $id = $_SESSION['id_gato'] = (int)$_GET['id'];
-            } 
-            else {
-                $id = $_SESSION['id_gato'];
-            }
-            $sql_gatos = "SELECT * FROM gato WHERE id_gato = :id";
-            $stmt = $conn->prepare($sql_gatos);
-            $stmt->bindParam(":id",$id);
-            $stmt->execute();
-            $gato = $stmt->fetch(PDO::FETCH_OBJ);
-        ?>
-        <h1 class="nome-gato"><?= $gato->nome ?></h1>
+        <?php if ($animal === null) { ?>
+        <h1 class="nome-gato">Animal não encontrado</h1>
+        <?php } else { ?>
+        <h1 class="nome-gato"><?= e($animal->nome) ?></h1>
         <div class="row-gato">
             <div class="img-adocao">
-                <img src="image/<?= $gato->img ?>" style="height: 50vh; object-fit = cover;">
+                <?php if ($animal->imagem) { ?>
+                <img src="image/<?= e($animal->imagem) ?>" alt="<?= e($animal->nome) ?>" style="height: 50vh; object-fit = cover;">
+                <?php } ?>
+                <ul class="dados-animal">
+                    <li><strong>Espécie:</strong> <?= e(rotulo(ESPECIES, $animal->especie)) ?></li>
+                    <li><strong>Sexo:</strong> <?= e(rotulo(SEXOS, $animal->sexo)) ?></li>
+                    <li><strong>Idade:</strong> <?= e(calcular_idade($animal->data_nascimento_estimada)) ?></li>
+                    <li><strong>Porte:</strong> <?= e(rotulo(PORTES, $animal->porte)) ?></li>
+                    <li><strong>Castrado:</strong> <?= e(rotulo_sim_nao($animal->castrado)) ?></li>
+                    <li><strong>Vacinado:</strong> <?= e(rotulo_sim_nao($animal->vacinado)) ?></li>
+                    <li><strong>Condição de saúde:</strong> <?= e($animal->condicao_saude ?? NAO_INFORMADO) ?></li>
+                    <li><strong>Comportamento:</strong> <?= e($animal->comportamento ?? NAO_INFORMADO) ?></li>
+                    <li><strong>Descrição:</strong> <?= e($animal->descricao ?? NAO_INFORMADO) ?></li>
+                </ul>
             </div>
 
+            <?php if ($animal->status !== 'DISPONIVEL') { ?>
+            <p>Este animal não está disponível para adoção no momento.</p>
+            <?php } else { ?>
             <form action="function/func_adotar.php" method="post" id="form-adotante">
                 <div class="campo">
                     <input type="text" id="nome_adotante" name="nome_adotante" required>
@@ -65,7 +86,9 @@
                     <button type="submit" class="adotar">Adotar</button>
                 </div>
             </form>
+            <?php } ?>
         </div>
+        <?php } ?>
        
     </section>
 

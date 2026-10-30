@@ -1,16 +1,17 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
     require_once __DIR__ . '/../../lib/escape.php';
+    require_once __DIR__ . '/../../lib/animal.php';
     exigir_login();
 
     require_once '../../lib/conn.php';
 
-    $id = (int)$_GET['id'];
-    $sql = "SELECT * FROM gato WHERE id_gato = :id_gato";
+    $id = (int) ($_GET['id'] ?? 0);
+    $sql = "SELECT * FROM animal WHERE id_animal = :id_animal";
     $stmt = $conn->prepare($sql);
-    $stmt->bindValue(":id_gato", $id);
+    $stmt->bindValue(":id_animal", $id);
     $stmt->execute();
-    $gato = $stmt->fetch(PDO::FETCH_OBJ);
+    $animal = $stmt->fetch(PDO::FETCH_OBJ) ?: null;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -38,23 +39,22 @@
     </header>
     
     <main class="form-cadastros">
-        <span>Editar gato</span>
-        <form action="../../function/update/func_editar_gato.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="id_gato" value="<?= e($gato->id_gato) ?>">
-            <div class="campo">  
-                <input type="text" name="name" id="name" required value="<?= e($gato->nome) ?>">
-                <span>Nome do gato</span>
+        <span>Editar animal</span>
+        <?php if ($animal === null) { ?>
+            <div class="alert danger">
+                <i class="fas fa-times"></i>
+                <p class="lead">Animal não encontrado.</p>
             </div>
-
-            <div class="campo">
-                <textarea name="descricao" id="descricao" cols="30" rows="10" maxlength="100" required><?= e($gato->descricao) ?></textarea>
-                <span>Descrição</span>
-            </div>      
+        <?php } else { ?>
+        <form action="../../function/update/func_editar_gato.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id_animal" value="<?= e($animal->id_animal) ?>">
+            <?php require __DIR__ . '/../parciais/campos_animal.php'; ?>
 
             <button type="submit">
                 Editar
             </button>
         </form>
+        <?php } ?>
     </main>
 
     <footer>

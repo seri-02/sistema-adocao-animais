@@ -56,7 +56,7 @@
                     <th>Data da solicitação</th>
                     <th>Situação</th>
                     <th>Avaliador</th>
-                    <th>Data da decisão</th>
+                    <th>Data da decisão / cancelamento</th>
                     <th>Justificativa</th>
                     <th>Ação</th>
                 </tr>
@@ -71,7 +71,7 @@
                     <td><?= e(formatar_data_hora($solicitacao->data_solicitacao)) ?></td>
                     <?php $situacao = e(rotulo(STATUS_SOLICITACAO, $solicitacao->status)); ?>
                     <td><?= $solicitacao->status === 'PENDENTE' ? "<strong>{$situacao}</strong>" : $situacao ?></td>
-                    <td><?= e($solicitacao->avaliador_nome) ?></td>
+                    <td><?= $solicitacao->status === 'CANCELADA' ? 'Cancelada pelo adotante' : e($solicitacao->avaliador_nome) ?></td>
                     <td><?= e(formatar_data_hora($solicitacao->data_decisao)) ?></td>
                     <td><?= e(mb_strimwidth((string) $solicitacao->justificativa, 0, 80, '…')) ?></td>
                     <td>

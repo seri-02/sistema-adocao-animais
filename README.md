@@ -101,6 +101,12 @@ A equipe (ADMIN ou FUNCIONARIO) analisa em **Painel → Solicitações de adoç�
 Cada decisão registra quem decidiu, quando e a justificativa. Decisão concluída é histórica: não pode ser
 refeita nem excluída. O adotante vê o resultado, a data e a justificativa em **Minhas solicitações**.
 
+Enquanto a solicitação está **Pendente**, o próprio adotante pode desistir em **Minhas solicitações →
+Cancelar solicitação** (sem motivo). Ela passa a **Cancelada** e o animal volta a **Disponível** na mesma
+operação, podendo receber nova solicitação (inclusive do mesmo adotante). O cancelamento é definitivo e fica no
+histórico; solicitações aprovadas, reprovadas ou já canceladas não podem ser canceladas. A equipe não cancela em
+nome do adotante (ela reprova). Se a equipe decidir e o adotante cancelar ao mesmo tempo, só a primeira ação vale.
+
 A antiga adoção imediata (formulário com nome/e-mail/telefone) foi desativada: a tabela `adocoes` guarda só o
 histórico legado e não recebe novos registros.
 

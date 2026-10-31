@@ -89,7 +89,17 @@ C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-sour
 
 A adoção começa por uma **solicitação**: o adotante entra na conta, abre um animal **Disponível** e clica em
 **Solicitar adoção**. A solicitação fica **Pendente**, o animal passa a **Em processo de adoção** (sai do catálogo)
-e o adotante acompanha o pedido em **Minhas solicitações**. A análise pela equipe (aprovar/reprovar) é a próxima etapa.
+e o adotante acompanha o pedido em **Minhas solicitações**.
+
+A equipe (ADMIN ou FUNCIONARIO) analisa em **Painel → Solicitações de adoção** (pendentes primeiro):
+
+- **Aprovar** → solicitação **Aprovada** e animal **Adotado**. A observação é opcional. Só é possível se a conta
+  do adotante continuar ativa com perfil ADOTANTE.
+- **Reprovar** → solicitação **Reprovada** (justificativa obrigatória) e animal volta a **Disponível**, podendo
+  receber nova solicitação.
+
+Cada decisão registra quem decidiu, quando e a justificativa. Decisão concluída é histórica: não pode ser
+refeita nem excluída. O adotante vê o resultado, a data e a justificativa em **Minhas solicitações**.
 
 A antiga adoção imediata (formulário com nome/e-mail/telefone) foi desativada: a tabela `adocoes` guarda só o
 histórico legado e não recebe novos registros.

@@ -1,0 +1,615 @@
+/* Detalhe do animal "Patas & Lares". Carregado SOMENTE por gato.php:
+   não importa style.css, home.css nem catalogo.css. Header, footer e botões
+   repetem o visual da Home/catálogo para manter a identidade sem acoplar as páginas. */
+
+:root {
+    --fundo: #FAF8F4;
+    --superficie: #FFFFFF;
+    --borda: #E7E0D7;
+    --texto: #26332F;
+    --texto-suave: #4F5D58;
+    --verde: #2F5D50;
+    --verde-escuro: #244A40;
+    --verde-claro: #EAF1EE;
+    --terracota: #C86B4A;
+    --raio: 10px;
+    --largura: 1120px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+h1, h2, p, ul {
+    margin: 0;
+}
+
+h1, h2 {
+    line-height: 1.2;
+    color: var(--texto);
+}
+
+h1 {
+    font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+    font-weight: 750;
+    letter-spacing: -0.01em;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: var(--verde);
+}
+
+:focus-visible {
+    outline: 3px solid var(--terracota);
+    outline-offset: 2px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--largura);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.pular-conteudo {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    background: var(--verde);
+    color: #FFFFFF;
+    border-radius: 6px;
+}
+
+.pular-conteudo:focus {
+    top: 1rem;
+}
+
+/* ---------- Botões ---------- */
+
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.65rem 1.25rem;
+    border: 2px solid var(--verde);
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.botao-primario {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+.botao-primario:hover {
+    background: var(--verde-escuro);
+    border-color: var(--verde-escuro);
+}
+
+.botao-secundario {
+    background: transparent;
+    color: var(--verde);
+}
+
+.botao-secundario:hover {
+    background: var(--verde-claro);
+}
+
+/* ---------- Header (mesmo visual da Home) ---------- */
+
+.topo {
+    background: var(--superficie);
+    border-bottom: 1px solid var(--borda);
+}
+
+.topo-barra {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 72px;
+}
+
+.marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 750;
+    color: var(--verde);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.marca-icone {
+    width: 28px;
+    height: 28px;
+    fill: var(--terracota);
+}
+
+.menu-botao {
+    display: none;
+}
+
+.navegacao {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.nav-links,
+.nav-conta {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-conta {
+    margin-left: auto;
+    gap: 0.5rem;
+}
+
+.nav-links a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    color: var(--texto);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    background: var(--fundo);
+    color: var(--verde);
+}
+
+.nav-links a[aria-current="page"] {
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
+.nav-conta a {
+    display: block;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--verde);
+    border-radius: 6px;
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-conta a:hover {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+/* ---------- Conteúdo do detalhe ---------- */
+
+dl, dd {
+    margin: 0;
+}
+
+#conteudo {
+    padding-top: 1.5rem;
+    padding-bottom: 4rem;
+}
+
+.voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+    padding: 0.25rem 0;
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.voltar:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.cartao {
+    padding: 1.25rem 1.5rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+}
+
+.ausente {
+    color: var(--texto-suave);
+    font-style: italic;
+}
+
+/* Bloco principal: foto à esquerda, nome/status/ação à direita */
+
+.principal {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: start;
+    gap: 2.5rem;
+}
+
+.foto {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    max-height: 520px;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--borda);
+}
+
+/* Imagem fora do fluxo: a proporção do container nunca é alterada pela foto */
+.foto img,
+.sem-foto {
+    position: absolute;
+    inset: 0;
+}
+
+.foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.sem-foto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--texto-suave);
+}
+
+.principal-texto h1 {
+    overflow-wrap: anywhere;
+}
+
+/* O texto do status é o que informa; a cor só reforça */
+.badge-status {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.badge-disponivel {
+    background: var(--verde-claro);
+    color: var(--verde);
+}
+
+.badge-em_processo {
+    background: #FBEDE6;
+    color: #9E4A2C;
+}
+
+.badge-adotado {
+    background: #EEF0F5;
+    color: #3F4C6B;
+}
+
+.badge-indisponivel {
+    background: #F0EEEB;
+    color: #5B5650;
+}
+
+.resumo {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding: 0;
+    list-style: none;
+    font-size: 1.0625rem;
+}
+
+/* Separador no fim do item: numa quebra de linha o "·" não inicia a linha seguinte */
+.resumo li:not(:last-child)::after {
+    content: "·";
+    margin: 0 0.5rem;
+    color: var(--texto-suave);
+    font-style: normal;
+}
+
+.acao {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--borda);
+}
+
+.acao p {
+    color: var(--texto);
+}
+
+.acao-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.acao form .botao {
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.acao .acao-nota {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--texto-suave);
+}
+
+/* Seções de informação */
+
+.secao {
+    margin-top: 2.5rem;
+}
+
+.secao h2 {
+    margin-bottom: 1rem;
+    font-size: 1.375rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.dados {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.dado {
+    padding: 1rem 1.25rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+}
+
+.dado-largo {
+    grid-column: span 2;
+}
+
+.dado dt {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.dado dd {
+    margin-top: 0.25rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+}
+
+.dado dd.texto-livre {
+    font-weight: 400;
+}
+
+/* Texto livre do banco: preserva quebras de linha sem interpretar HTML */
+.texto-livre {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.nao-encontrado {
+    max-width: 36rem;
+}
+
+.nao-encontrado p {
+    margin: 0.5rem 0 1.5rem;
+    color: var(--texto-suave);
+}
+
+/* ---------- Footer (mesmo visual da Home) ---------- */
+
+.rodape {
+    background: var(--texto);
+    color: #D7DEDA;
+    padding-top: 3rem;
+}
+
+.rodape-grade {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.rodape-grade p + p {
+    margin-top: 0.25rem;
+}
+
+.rodape-marca {
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.rodape-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.rodape a {
+    color: #FFFFFF;
+    text-underline-offset: 3px;
+}
+
+.rodape a:hover {
+    color: var(--borda);
+}
+
+.rodape-base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.875rem;
+}
+
+/* ---------- Tablet e mobile ---------- */
+
+@media (max-width: 1023.98px) {
+    .topo-barra {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.75rem;
+        min-height: 64px;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .menu-botao {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-height: 40px;
+        padding: 0.4rem 0.75rem;
+        border: 1px solid var(--borda);
+        border-radius: 8px;
+        background: var(--superficie);
+        color: var(--texto);
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .menu-botao svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+    }
+
+    .navegacao {
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--borda);
+    }
+
+    /* Recolhido somente quando o JavaScript está ativo */
+    .js .navegacao {
+        display: none;
+    }
+
+    .js .navegacao.active {
+        display: flex;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .nav-links a {
+        padding: 0.65rem 0.5rem;
+    }
+
+    .nav-conta {
+        flex-wrap: wrap;
+        margin-left: 0;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--borda);
+    }
+
+    .principal {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 2rem;
+    }
+
+    .dados {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 599.98px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    #conteudo {
+        padding-top: 1rem;
+        padding-bottom: 3rem;
+    }
+
+    .principal {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .foto {
+        aspect-ratio: 4 / 3;
+    }
+
+    .acao-botoes .botao {
+        flex: 1 1 100%;
+    }
+
+    .dados {
+        gap: 0.75rem;
+    }
+
+    .dado-largo {
+        grid-column: 1 / -1;
+    }
+}

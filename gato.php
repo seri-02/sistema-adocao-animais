@@ -67,30 +67,23 @@
                 </ul>
             </div>
 
-            <?php if ($animal->status !== 'DISPONIVEL') { ?>
-            <p>Este animal não está disponível para adoção no momento.</p>
-            <?php } else { ?>
-            <form action="function/func_adotar.php" method="post" id="form-adotante">
-                <div class="campo">
-                    <input type="text" id="nome_adotante" name="nome_adotante" required>
-                    <span>Nome</sp>
-                </div>
-
-                <div class="campo">
-                    <input type="email" id="email_adotante" name="email_adotante" required>
-                    <span>Email</span>
-                </div>
-
-                <div class="campo"> 
-                    <input type="tel" id="telefone" name="telefone" required>
-                    <span>Telefone</span>
-                </div>
-
-                <div>
-                    <button type="submit" class="adotar">Adotar</button>
-                </div>
-            </form>
-            <?php } ?>
+            <div>
+                <p><strong>Situação:</strong> <?= e(rotulo(STATUS_ANIMAL, $animal->status)) ?></p>
+                <?php if ($animal->status === 'DISPONIVEL') { ?>
+                    <?php if ($usuario_menu === null) { ?>
+                    <p>Entre na sua conta para solicitar a adoção deste animal.</p>
+                    <p><a href="login.php">Entrar</a> | <a href="cadastro.php">Cadastrar</a></p>
+                    <?php } elseif ($usuario_menu['perfil'] === PERFIL_ADOTANTE) { ?>
+                    <!-- Os dados do adotante vêm da conta autenticada: só o animal é enviado -->
+                    <form action="function/func_solicitar_adocao.php" method="post" id="form-adotante">
+                        <input type="hidden" name="id_animal" value="<?= e($animal->id_animal) ?>">
+                        <button type="submit" class="adotar">Solicitar adoção</button>
+                    </form>
+                    <?php } ?>
+                <?php } elseif ($animal->status === 'INDISPONIVEL') { ?>
+                <p>Este animal está indisponível para adoção no momento.</p>
+                <?php } ?>
+            </div>
         </div>
         <?php } ?>
        

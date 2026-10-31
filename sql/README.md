@@ -23,6 +23,17 @@ sql/
 | 3 | `003_gato_para_animal` | Renomeia `gato` para `animal` preservando IDs; adiciona espécie, sexo, nascimento estimado, porte, castrado, vacinado, saúde, comportamento, `status`, `criado_em`, `atualizado_em`; converte `adotado` em `status` e `img` no nome real do arquivo (`imagem`) |
 | 4 | `004_adocoes_fk_animal` | `adocoes.fk_id_gato` (varchar) vira `id_animal` (int) com FK para `animal` (`ON DELETE/UPDATE RESTRICT`) |
 | 5 | `005_usuario_perfis_autenticacao` | `usuario` ganha `id_usuario`, `nome`, `telefone`, `perfil` (ADOTANTE/FUNCIONARIO/ADMIN), `ativo`, timestamps, `senha` varchar(255) e `UNIQUE(email)`; contas existentes viram ADMIN ativas; hashes SHA-1 preservados (modernizados no próximo login) |
+| 6 | `006_solicitacao_adocao` | Cria `solicitacao_adocao` (`id_animal`, `id_adotante`, `status` PENDENTE/APROVADA/REPROVADA, `id_avaliador`, `data_solicitacao`, `data_decisao`, `justificativa`) com FKs para `animal` e `usuario` (`ON DELETE/UPDATE RESTRICT`). Não migra `adocoes` |
+
+### Solicitação de adoção e `adocoes` legada
+
+- O fluxo atual de adoção é a **solicitação**: o ADOTANTE autenticado solicita um animal `DISPONIVEL`; numa
+  transação, o animal é travado (`SELECT ... FOR UPDATE`), a solicitação nasce `PENDENTE` e o animal vai para
+  `EM_PROCESSO`. Por isso um animal tem no máximo **uma** solicitação `PENDENTE` (garantia da aplicação, não de
+  constraint). `id_avaliador`, `data_decisao` e `justificativa` ficam `NULL` até a decisão da equipe.
+- A tabela `adocoes` é **somente histórico legado** (adoções anônimas anteriores ao workflow, sem vínculo com
+  `usuario`): não recebe novos registros e **não** foi convertida em solicitações.
+- Animal ou usuário com solicitações não pode ser excluído (FK `RESTRICT`); o histórico nunca é apagado em cascata.
 
 Cada `up` registra sua versão em `schema_migrations` **como último comando**. Cada `down` remove o registro.
 Para saber o que já foi aplicado:
@@ -56,6 +67,7 @@ C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-sour
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/003_gato_para_animal.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/005_usuario_perfis_autenticacao.up.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/006_solicitacao_adocao.up.sql"
 ```
 
 #### Administrador local
@@ -115,6 +127,7 @@ C:/xampp/mysql/bin/mysql.exe -uroot -e "DROP DATABASE abrigo_restore_teste"
 Execute os `down` **em ordem inversa** (o mais recente primeiro):
 
 ```bash
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/006_solicitacao_adocao.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/005_usuario_perfis_autenticacao.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/003_gato_para_animal.down.sql"
@@ -148,6 +161,10 @@ Limitações que devem ser conhecidas antes de depender do rollback:
   preenchido ou conta inativa. Um hash de `password_hash` tem mais de 50 caracteres: **depois que qualquer senha
   for modernizada (o que acontece no primeiro login válido), o `down` da 005 é recusado de propósito** — hashes
   modernos nunca são convertidos de volta para SHA-1. Nesse caso, o rollback seguro é restaurar o backup pré-F2a.
+- O `down` da 006 é **conservador**: só remove `solicitacao_adocao` se ela estiver **vazia** (rollback técnico logo
+  após a migração). Se existir qualquer solicitação, aborta **antes do `DROP TABLE`** — histórico de solicitações
+  nunca é descartado em silêncio. Depois que a aplicação registrar solicitações, o rollback seguro é restaurar o
+  backup pré-F3a.
 - Rollback de migração não desfaz dados criados pela aplicação depois dela: para isso, só o backup.
 
 ## SQL mode

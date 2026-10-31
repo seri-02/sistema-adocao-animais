@@ -8,7 +8,11 @@
     if ($usuario_menu === null) {
         $itens_conta = ['login.php' => 'Entrar', 'cadastro.php' => 'Cadastrar'];
     } elseif ($usuario_menu['perfil'] === 'ADOTANTE') {
-        $itens_conta = ['minha_conta.php' => 'Minha conta', 'function/sair.php' => 'Sair'];
+        $itens_conta = [
+            'minha_conta.php' => 'Minha conta',
+            'minhas_solicitacoes.php' => 'Minhas solicitações',
+            'function/sair.php' => 'Sair',
+        ];
     } else {
         $itens_conta = ['admin/painel.php' => 'Painel', 'function/sair.php' => 'Sair'];
     }

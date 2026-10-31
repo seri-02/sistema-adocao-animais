@@ -1,0 +1,591 @@
+/* Home "Patas & Lares". Carregado SOMENTE por index.php: não importa style.css
+   e não altera as demais telas. */
+
+:root {
+    --fundo: #FAF8F4;
+    --superficie: #FFFFFF;
+    --borda: #E7E0D7;
+    --texto: #26332F;
+    --texto-suave: #4F5D58;
+    --verde: #2F5D50;
+    --verde-escuro: #244A40;
+    --verde-claro: #EAF1EE;
+    --terracota: #C86B4A;
+    --terracota-texto: #9E4A2C;
+    --raio: 10px;
+    --largura: 1120px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+body {
+    margin: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+h1, h2, h3, p, ul, ol {
+    margin: 0;
+}
+
+h1, h2, h3 {
+    line-height: 1.2;
+    color: var(--texto);
+}
+
+h1 {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+    font-weight: 750;
+    letter-spacing: -0.01em;
+}
+
+h2 {
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    font-weight: 700;
+    margin-bottom: 1.75rem;
+}
+
+h3 {
+    font-size: 1.125rem;
+    font-weight: 650;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: var(--verde);
+}
+
+:focus-visible {
+    outline: 3px solid var(--terracota);
+    outline-offset: 2px;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--largura);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.pular-conteudo {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    background: var(--verde);
+    color: #FFFFFF;
+    border-radius: 6px;
+}
+
+.pular-conteudo:focus {
+    top: 1rem;
+}
+
+/* ---------- Botões ---------- */
+
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.65rem 1.25rem;
+    border: 2px solid var(--verde);
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.botao-primario {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+.botao-primario:hover {
+    background: var(--verde-escuro);
+    border-color: var(--verde-escuro);
+}
+
+.botao-secundario {
+    background: transparent;
+    color: var(--verde);
+}
+
+.botao-secundario:hover {
+    background: var(--verde-claro);
+}
+
+/* ---------- Header ---------- */
+
+.topo {
+    background: var(--superficie);
+    border-bottom: 1px solid var(--borda);
+}
+
+.topo-barra {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 72px;
+}
+
+.marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 750;
+    color: var(--verde);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.marca-icone {
+    width: 28px;
+    height: 28px;
+    fill: var(--terracota);
+}
+
+.menu-botao {
+    display: none;
+}
+
+.navegacao {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.nav-links,
+.nav-conta {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-conta {
+    margin-left: auto;
+    gap: 0.5rem;
+}
+
+.nav-links a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    color: var(--texto);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    background: var(--fundo);
+    color: var(--verde);
+}
+
+.nav-links a[aria-current="page"] {
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
+.nav-conta a {
+    display: block;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--verde);
+    border-radius: 6px;
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-conta a:hover {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+    padding: 3rem 0;
+}
+
+.hero-grade {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 3rem;
+}
+
+.hero-descricao {
+    margin-top: 1rem;
+    max-width: 34rem;
+    font-size: 1.125rem;
+    color: var(--texto-suave);
+}
+
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.hero-imagem {
+    height: clamp(300px, 56vh, 460px);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--borda);
+}
+
+.hero-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* ---------- Indicadores ---------- */
+
+.indicadores {
+    padding-bottom: 3rem;
+}
+
+.titulo-pequeno {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.indicadores-lista {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.indicador {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.5rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-left: 4px solid var(--verde);
+    border-radius: var(--raio);
+}
+
+.indicador-numero {
+    font-size: 2rem;
+    font-weight: 750;
+    line-height: 1.1;
+    color: var(--verde);
+}
+
+.indicador-rotulo {
+    color: var(--texto-suave);
+}
+
+/* ---------- Seções ---------- */
+
+.secao {
+    padding: 4rem 0;
+    scroll-margin-top: 1rem;
+}
+
+.secao-clara {
+    background: var(--superficie);
+    border-top: 1px solid var(--borda);
+    border-bottom: 1px solid var(--borda);
+}
+
+.cartao {
+    padding: 1.5rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+}
+
+.cartao p {
+    margin-top: 0.5rem;
+    color: var(--texto-suave);
+}
+
+/* Como funciona a adoção */
+
+.passos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.passo {
+    background: var(--fundo);
+}
+
+.passo-numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background: var(--terracota);
+    color: #FFFFFF;
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+/* Como você pode ajudar */
+
+.ajuda {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.ajuda-cartao {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.ajuda-cartao .botao {
+    margin-top: auto;
+}
+
+.ajuda-cartao p {
+    margin-bottom: 1.25rem;
+}
+
+/* Sobre o projeto */
+
+.sobre {
+    max-width: 52rem;
+}
+
+.sobre h2 {
+    margin-bottom: 1rem;
+}
+
+.sobre p + p {
+    margin-top: 1rem;
+}
+
+.sobre p {
+    color: var(--texto-suave);
+    font-size: 1.0625rem;
+}
+
+/* ---------- Footer ---------- */
+
+.rodape {
+    background: var(--texto);
+    color: #D7DEDA;
+    padding-top: 3rem;
+}
+
+.rodape-grade {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.rodape-grade p + p {
+    margin-top: 0.25rem;
+}
+
+.rodape-marca {
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.rodape-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.rodape a {
+    color: #FFFFFF;
+    text-underline-offset: 3px;
+}
+
+.rodape a:hover {
+    color: var(--borda);
+}
+
+.rodape-base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.875rem;
+}
+
+/* ---------- Tablet e mobile ---------- */
+
+@media (max-width: 1023.98px) {
+    .topo-barra {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.75rem;
+        min-height: 64px;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .menu-botao {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-height: 40px;
+        padding: 0.4rem 0.75rem;
+        border: 1px solid var(--borda);
+        border-radius: 8px;
+        background: var(--superficie);
+        color: var(--texto);
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .menu-botao svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+    }
+
+    .navegacao {
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--borda);
+    }
+
+    /* Recolhido somente quando o JavaScript está ativo */
+    .js .navegacao {
+        display: none;
+    }
+
+    .js .navegacao.active {
+        display: flex;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .nav-links a {
+        padding: 0.65rem 0.5rem;
+    }
+
+    .nav-conta {
+        flex-wrap: wrap;
+        margin-left: 0;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--borda);
+    }
+
+    .hero {
+        padding: 2rem 0;
+    }
+
+    .hero-grade {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .hero-imagem {
+        height: clamp(210px, 56vw, 380px);
+    }
+
+    .passos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ajuda {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 599.98px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .secao {
+        padding: 3rem 0;
+    }
+
+    .hero-descricao {
+        font-size: 1.0625rem;
+    }
+
+    .acoes .botao {
+        flex: 1 1 100%;
+    }
+
+    .indicadores-lista,
+    .passos {
+        grid-template-columns: 1fr;
+    }
+
+    .indicador {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+    }
+
+    .indicador-numero {
+        font-size: 1.75rem;
+    }
+}

@@ -1,276 +1,177 @@
-<?php require_once __DIR__ . '/lib/auth.php'; $usuario_menu = usuario_logado_opcional(); ?>
+<?php
+    require_once __DIR__ . '/lib/auth.php';
+    require_once __DIR__ . '/lib/escape.php';
+    $usuario_menu = usuario_logado_opcional();
+
+    require_once __DIR__ . '/lib/conn.php';
+    require_once __DIR__ . '/lib/animal.php';
+
+    // Indicadores da Home: contagens reais do banco por status do animal
+    $indicadores = [];
+    foreach (['DISPONIVEL' => 'Disponíveis', 'EM_PROCESSO' => 'Em processo de adoção', 'ADOTADO' => 'Adotados'] as $status => $rotulo) {
+        $indicadores[$rotulo] = contar_animais_por_status($conn, $status);
+    }
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <link rel="stylesheet" href="css/style.css">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <script src="js/jquery.js"></script>
-
-    <link rel="icon" href="">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrigo dos Gatos</title>
+    <title>Patas &amp; Lares - Adoção de animais</title>
+    <meta name="description" content="Sistema demonstrativo para gerenciamento de adoção de animais.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C86B4A'%3E%3Cellipse cx='12' cy='16' rx='5' ry='4.2'/%3E%3Ccircle cx='5.5' cy='10' r='2.2'/%3E%3Ccircle cx='9.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='14.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='18.5' cy='10' r='2.2'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="css/home.css">
+    <!-- Sem JavaScript o menu mobile permanece aberto; com JavaScript ele vira recolhível -->
+    <script>document.documentElement.classList.add('js')</script>
+    <script src="js/home.js" defer></script>
 </head>
-<body>
-    <header class="index-header">
-        <span id="span-logo">
-            <a href="index.php" id="logo">Abrigo dos Gatos</a>
-        </span>
-        <nav id="nav">
-            <button id="btn-mobile"><img src="img/menu.svg" alt=""></button>
-            <ul id="menu">
-                <li><a href="seja_voluntario.php">Seja voluntário</a></li>
-                <li><a href="adocoes.php">Adoções</a></li>
-                <li><a href="localizacao.php">Localização</a></li>
-                <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
-            </ul>
-        </nav>
-        <ul class="social">
-            <li>
-                <a href="https://www.facebook.com/gabrielaxavier.mendescoito" target="_blank"><i class="fab fa-facebook-f" aria-hidden="true"></i><div>Facebook</div></a>
-            </li>
-            <li>
-                <a href="https://api.whatsapp.com/send?phone=55996335800" target="_blank"><i class="fab fa-whatsapp" aria-hidden="true"></i><div>Whatsapp</div></a>
-            </li>
-            <li>
-                <a href="https://www.instagram.com/abrigo.dosgatos/" target="_blank"><i class="fab fa-instagram" aria-hidden="true"></i><div>Instagram</div></a>
-            </li>
-        </ul>
-    </header> 
+<body class="home">
+    <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
-    <div class="conteudo-titulo">
-        <span id="titulo">Adote uma vida</span>
-    </div>
-    
-    <main class="conteudo">
-        <div class="conteudo-light">
-            <h3>Adotar</h3>
+    <header class="topo">
+        <div class="container topo-barra">
+            <a href="index.php" class="marca">
+                <svg class="marca-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <ellipse cx="12" cy="16" rx="5" ry="4.2"/>
+                    <circle cx="5.5" cy="10" r="2.2"/>
+                    <circle cx="9.5" cy="5.8" r="2.2"/>
+                    <circle cx="14.5" cy="5.8" r="2.2"/>
+                    <circle cx="18.5" cy="10" r="2.2"/>
+                </svg>
+                Patas &amp; Lares
+            </a>
+
+            <button id="btn-mobile" class="menu-botao" type="button" aria-expanded="false" aria-controls="nav">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M4 7h16M4 12h16M4 17h16"/>
+                </svg>
+                Menu
+            </button>
+
+            <nav id="nav" class="navegacao" aria-label="Navegação principal">
+                <ul id="menu" class="nav-links">
+                    <li><a href="index.php" aria-current="page">Início</a></li>
+                    <li><a href="adocoes.php">Animais</a></li>
+                    <li><a href="#como-adotar">Como adotar</a></li>
+                    <li><a href="seja_voluntario.php">Voluntariado</a></li>
+                </ul>
+                <ul class="nav-conta">
+                    <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="conteudo">
+        <section class="hero">
+            <div class="container hero-grade">
+                <div class="hero-texto">
+                    <h1>Encontre um novo companheiro</h1>
+                    <p class="hero-descricao">Conheça os animais disponíveis e acompanhe todo o processo de adoção de forma simples e segura.</p>
+                    <div class="acoes">
+                        <a class="botao botao-primario" href="adocoes.php">Ver animais disponíveis</a>
+                        <a class="botao botao-secundario" href="#como-adotar">Como funciona</a>
+                    </div>
+                </div>
+                <div class="hero-imagem">
+                    <img src="img/gatos.jpg" width="1000" height="667"
+                         alt="Dois gatos deitados lado a lado olhando para a câmera: um preto e um tigrado com peito branco">
+                </div>
+            </div>
+        </section>
+
+        <section class="indicadores" aria-labelledby="titulo-indicadores">
+            <div class="container">
+                <h2 id="titulo-indicadores" class="titulo-pequeno">Situação atual dos animais</h2>
+                <ul class="indicadores-lista">
+                    <?php foreach ($indicadores as $rotulo => $total) { ?>
+                    <li class="indicador">
+                        <span class="indicador-numero"><?= e($total) ?></span>
+                        <span class="indicador-rotulo"><?= e($rotulo) ?></span>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </section>
+
+        <section id="como-adotar" class="secao secao-clara" aria-labelledby="titulo-como-adotar">
+            <div class="container">
+                <h2 id="titulo-como-adotar">Como funciona a adoção</h2>
+                <ol class="passos">
+                    <li class="cartao passo">
+                        <span class="passo-numero" aria-hidden="true">1</span>
+                        <h3>Encontre um animal</h3>
+                        <p>Conheça os animais disponíveis e veja suas principais características.</p>
+                    </li>
+                    <li class="cartao passo">
+                        <span class="passo-numero" aria-hidden="true">2</span>
+                        <h3>Crie sua conta</h3>
+                        <p>Cadastre-se para iniciar uma solicitação de adoção.</p>
+                    </li>
+                    <li class="cartao passo">
+                        <span class="passo-numero" aria-hidden="true">3</span>
+                        <h3>Envie sua solicitação</h3>
+                        <p>Escolha o animal e envie seu interesse para análise.</p>
+                    </li>
+                    <li class="cartao passo">
+                        <span class="passo-numero" aria-hidden="true">4</span>
+                        <h3>Acompanhe</h3>
+                        <p>Consulte pela sua conta se a solicitação está pendente, aprovada ou reprovada.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="como-ajudar" class="secao" aria-labelledby="titulo-como-ajudar">
+            <div class="container">
+                <h2 id="titulo-como-ajudar">Como você pode ajudar</h2>
+                <div class="ajuda">
+                    <article class="cartao ajuda-cartao">
+                        <h3>Adote</h3>
+                        <p>Dê a um animal a oportunidade de encontrar um novo lar.</p>
+                        <a class="botao botao-primario" href="adocoes.php">Ver animais</a>
+                    </article>
+                    <article class="cartao ajuda-cartao">
+                        <h3>Seja voluntário</h3>
+                        <p>Contribua com seu tempo apoiando atividades relacionadas ao cuidado dos animais.</p>
+                        <a class="botao botao-secundario" href="seja_voluntario.php">Quero ser voluntário</a>
+                    </article>
+                    <article class="cartao ajuda-cartao">
+                        <h3>Apoie a adoção responsável</h3>
+                        <p>Adotar é um compromisso para toda a vida do animal. Antes de solicitar, avalie sua rotina, seu espaço e os cuidados de que ele vai precisar.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre-projeto" class="secao secao-clara" aria-labelledby="titulo-sobre-projeto">
+            <div class="container sobre">
+                <h2 id="titulo-sobre-projeto">Sobre o projeto</h2>
+                <p>O Patas &amp; Lares é uma instituição fictícia, utilizada para demonstrar o funcionamento do sistema desenvolvido neste Trabalho de Graduação.</p>
+                <p>A aplicação foi criada para apoiar o gerenciamento de animais e do processo de adoção, centralizando as informações e facilitando o acompanhamento das solicitações.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="rodape">
+        <div class="container rodape-grade">
             <div>
-                <img src="img/gatinho.jpg" width="670" height="300">
-                <p>É sobre ter uma amizade verdadeira e leal, que nos ame com pureza e livre de julgamentos, mesmo nos momentos mais difíceis. Adotar um animal é 
-                adotar um amigo! Adotar é um gesto de amor! É dar a chance de um animalzinho ter uma família e a oportunidade de ser recompensado diariamente com muito amor!
-                Comprar animais alimenta um mercado muito nocivo à vida dos animais. Adotar é salvar vidas!</p> 
+                <p class="rodape-marca">Patas &amp; Lares</p>
+                <p>Sistema demonstrativo para gerenciamento de adoção de animais.</p>
+                <p>Tatuí - SP</p>
             </div>
-            <a href="adocoes.php"><button id="btn-adote">ADOTE</button></a>
+            <nav aria-label="Links do rodapé">
+                <ul class="rodape-links">
+                    <li><a href="adocoes.php">Animais</a></li>
+                    <li><a href="seja_voluntario.php">Voluntariado</a></li>
+                    <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
+                </ul>
+            </nav>
         </div>
-
-        <div id="fileira">
-            <div class="conteudos-fileira">
-                <h3>Benefícios da castração</h3>
-                <p>Confira as vantagens de castrar o seu gato e veja como a castração é um ato de amor, previnindo doenças e diminuindo os riscos</p>
-                <a href="beneficios_castracao.php"><button>Saiba mais</button></a>
-            </div>
-    
-            <div class="conteudos-fileira">
-                <h3 id="tamanho-h3-motivos">5 motivos para adotar um gato adulto</h3>
-                <p>Nosso abrigo contem 50 gatos adultos, confira algumas vantagens de adotar um deles!</p>
-                <a href="5_motivos.php"><button>Saiba mais</button></a> 
-            </div>
-
-            <div class="conteudos-fileira">
-                <h3>Lugar de gato é dentro casa</h3>
-                <p>Um gato doméstico vive em média 15 anos, um gato de rua vive 4 anos e um gato doméstico que foi abandonado, 3 meses.</p>
-                <a href="gato_dentro_de_casa.php"><button>Saiba mais</button></a> 
-            </div>
-
-            <div class="conteudos-fileira" id="conheca-felv">
-                <h3>Conheça a FelV</h3>
-                <p>A FelV é a leucemia felina, ou seja, ela é uma doença exclusiva dos gatos. Saiba os cuidados</p>
-                <a href="felv.php"><button>Saiba mais</button></a> 
-            </div>
+        <div class="container rodape-base">
+            <p>&copy; 2026 Patas &amp; Lares · Projeto acadêmico</p>
+            <p>Desenvolvido por Jonathas e Gloria</p>
         </div>
-
-        <div class="conteudo-light">
-            <h3>Arrecadação de ração</h3>
-            <div>
-                <img src="img/gato_comendo.jpg" width="670" height="300" id="gato-comendo">
-                <p> Com mais de 50 gatos, gastamos cerca de 25kg de ração por semana, totalizando um gasto de mil reais por mês, apenas com a ração, sem contar com as demais despesas! Sem a ajuda de vocês não conseguiremos, então bora ajudar?</p>  
-            </div>
-            <a href="doe.php"><button>DOE</button></a>
-        </div>
-
-    </main>
-    
-    <div class="fazemos-o-impossivel">
-        <div class="conteudo-titulo">
-            <span class="titulo">Fazemos o impossivel ser realidade</span>
-        </div>
-    </div>
-
-    <main class="conteudo">
-        <div class="conteudo-light">
-            <p id="texto-fazemos-o-impossivel">Lutamos contra o abandono de gatos domésticos. Não medimos esforços para ajudar e dar suporte quando necessário.</p>
-        </div>
-    </main>
-
-    <div class="causa">
-        <div class="conteudo-titulo">
-            <span class="titulo">Você também pode ajudar com essa causa</span>
-        </div>
-    </div>
-
-    <main class="conteudo">
-        <h3 class="titulo-h3">Como ?</h3>
-        <div class="row">
-            <div class="conteudo-numero">
-                <div>
-                    <i class="fa-solid fa-1"></i>
-                    <h3>Doe suprimentos</h3>
-                </div>
-                    <p>Abrigos se beneficiam de doações, como ração, produtos de limpeza, brinquedos, entre outros. Isso torna possível que o abrigo utilize seu orçamento em outras áreas</p>
-            </div>
-
-            <div class="conteudo-numero">
-                <div>
-                    <i class="fa-solid fa-2"></i>
-                    <h3>Doe dinheiro</h3>
-                </div>
-                    <p>Além de ajudar a manter as operaçoes diárias, seu dinheiro pode contribuir para a expansão do abrigo e assim, consequentemente, mais animais poderão ser ajudados.</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="conteudo-numero">
-                <div>
-                    <i class="fa-solid fa-3"></i>
-                    <h3>Adote</h3>
-                </div>
-                    <p>Quando você adota, você ganha um amigo para a vida, salva uma e também, abre espaço no abrigo para que outro pet possa ser escolhido.</p>
-            </div>
-
-            <div class="conteudo-numero">
-                <div>
-                    <i class="fa-solid fa-4"></i>
-                    <h3>Doe seus serviços</h3>
-                </div>
-                <p>Se você possui alguma habilidade ou especificação que ajude o abrigo, doe seu serviço</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="conteudo-numero">
-                <div>
-                    <i class="fa-solid fa-5"></i>
-                    <h3>Ofereça um lar temporário</h3>
-                </div>
-                    <p>Muitos abrigos têm serviços e recursos limitados e, infelizmente, não conseguem atender todos os pets que necessitam de carinho e cuidados. Você pode adotar algum pet por um tempo, té que ele ganhe um lar definitivo onde será amado, ou até que ele pssa voltar ao abrigo para receber os cuidados de que precisa.</p>
-            </div>
-
-            <div class="conteudo-numero">
-                <div>
-                    <i class="fa-solid fa-6"></i>
-                    <h3>Seja voluntário</h3>
-                </div>
-                    <p>As vezes o abrigo fica sobrecarregado pela quantidade de gatos, ser voluntário é poder ajudar a cuidar dos nossos gatinhos</p>
-                    <a href="seja_voluntario.php"><button>Seja voluntário</button></a> 
-            </div>
-        </div>
-    </main>
-
-    <div id="load" class="load"></div>
-    
-    <div class="conteudo-atualizacoes">
-        <h3>Atualizações do Abrigo</h3>
-        <p>Acompanhe-nos!</p>
-        <div id="atualizacoes">
-            <span class="conteudo-atualizacoes-numero">
-                <p class="numero">
-                    <?php
-                        require_once 'lib/conn.php';
-                        require_once 'lib/animal.php';
-                        echo contar_animais_por_status($conn, 'ADOTADO');
-                    ?> 
-                </p>
-                <p>Adotados</p>
-            </span>
-            <span id="borda"></span>
-            <span class="conteudo-atualizacoes-numero">     
-                <p class="numero">
-                    <?php
-                        require_once 'lib/conn.php';
-                        require_once 'lib/animal.php';
-                        echo contar_animais_por_status($conn, 'DISPONIVEL');
-                    ?> 
-                </p>
-                <p>Disponíveis</p>
-            </span>
-        </div>
-    </div>
-
-    <button class="back-to-top" href="#"><i class=" fa-solid fa-chevron-up"></i></button>
-
-    <footer>
-        <div id="conteudo-footer">
-            <div class="caixa esquerda">
-                <h3>Sobre nós</h3>
-                <div class="conteudos-footer">
-                    <p>Nosso Abrigo é particular, não temos nenhum vínculo com o município. Nosso abrigo é só de gatos. Nosso trabalho é 100% realizado por uma equipe de voluntários</p>
-                    <div class="social-footer">
-                        <a href="https://www.facebook.com/gabrielaxavier.mendescoito" target="_blank"><span class="fab fa-facebook-f"></span></a>
-                        <a  href="https://api.whatsapp.com/send?phone=55996335800" target="_blank"><span class="fab fa-whatsapp"></span></a>
-                        <a href="https://www.instagram.com/abrigo.dosgatos/" target="_blank"><span class="fab fa-instagram"></span></a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="caixa centro">
-                <h3>Endereço</h3>
-                <div class="conteudos-footer">
-                    <div id="rua">
-                        <span class="fas fa-solid fa-location-dot"></span>
-                        <span class="texto">Santa Rita, Tatuí - SP</span>
-                    </div>
-
-                    <div id="telefone">
-                        <span class="fas fas fa-phone-alt"></span>
-						<span class="texto">+55 015 99633-5800</span>
-                    </div>
-                    
-                    <div id="email">
-                        <span class="fas fa-envelope"></span>
-						<span class="texto">abrigodosgatos@gmail.com</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="caixa direita">
-				<h3>Contato</h3>
-				<div class="conteudos-footer">
-					<form action="function/enviar.php" method="post">
-						<div class="email campo">
-                            <input type="email" id="email" name="email" required>
-							<span class="texto">Email</span>
-						</div>
-						<div class="mensagem campo">
-                            <textarea rows="2" cols="25" id="msg" name="msg" required></textarea>
-							<span class="texto">Mensagem</span>
-						</div>
-						<div class="btn">
-							<button type="submit">Enviar</button>
-						</div>
-					</form>
-				</div>
-			</div>
-        </div>
-
-        <div id="baixo">
-			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
-			</div>
-		</div>
     </footer>
 </body>
-<script src="js/btn_menu.js"></script>
-<script src="js/maquina_escrever.js"></script>
-<script src="js/back_to_top.js"></script>
-<!-- <script src="js/load.js"></script> -->
 </html>

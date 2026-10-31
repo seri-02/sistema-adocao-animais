@@ -1,6 +1,54 @@
 <?php
+    // Edição de voluntário pela equipe (ADMIN/FUNCIONARIO). Somente POST.
+    // Só id_voluntario, nome, email, idade e dia_disponivel são lidos; qualquer outro campo
+    // enviado (inclusive algo como _SESSION[...]) é ignorado: nada do POST vira variável.
     require_once __DIR__ . '/../../lib/auth.php';
     $usuario_logado = exigir_perfis(PERFIS_EQUIPE);
+
+    require_once __DIR__ . '/../../lib/conn.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    require_once __DIR__ . '/../../lib/voluntario.php';
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: ../../admin/tabelas/tabela_voluntario.php');
+        exit;
+    }
+
+    $id_voluntario = ler_id_voluntario($_POST['id_voluntario'] ?? null);
+    $erros = [];
+
+    try {
+        $existe = false;
+        if ($id_voluntario !== false) {
+            $stmt = $conn->prepare('SELECT COUNT(*) FROM voluntario WHERE id_voluntario = :id_voluntario');
+            $stmt->bindValue(':id_voluntario', $id_voluntario, PDO::PARAM_INT);
+            $stmt->execute();
+            $existe = (int) $stmt->fetchColumn() === 1;
+        }
+
+        if (!$existe) {
+            $erros[] = 'Voluntário não encontrado.';
+        } else {
+            [$dados, $erros] = ler_formulario_voluntario($_POST);
+        }
+
+        if (!$erros) {
+            $stmt = $conn->prepare(
+                'UPDATE voluntario
+                    SET nome = :nome, email = :email, idade = :idade, dia_disponivel = :dia_disponivel
+                  WHERE id_voluntario = :id_voluntario'
+            );
+            $stmt->bindValue(':nome', $dados['nome']);
+            $stmt->bindValue(':email', $dados['email']);
+            $stmt->bindValue(':idade', $dados['idade'], PDO::PARAM_INT);
+            $stmt->bindValue(':dia_disponivel', $dados['dia_disponivel']);
+            $stmt->bindValue(':id_voluntario', $id_voluntario, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+    } catch (PDOException $e) {
+        error_log('Falha ao atualizar voluntário: ' . $e->getMessage());
+        $erros = ['Não foi possível atualizar o voluntário. Nenhuma alteração foi salva.'];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -17,46 +65,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php if (!$erros) { ?>
     <meta http-equiv="refresh" content="2; url=../../admin/tabelas/tabela_voluntario.php">
-    <title>Abrigo dos Gatos</title>
+    <?php } ?>
+    <title>Voluntário - Patas &amp; Lares</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="../index.php">Abrigo dos gatos</a> 
+            <a href="../../index.php">Patas &amp; Lares</a>
         </span>
     </header>
-    
-    <main>
-        <?php
-            extract($_POST);
-            require_once '../../lib/conn.php';
 
-            $sql = "UPDATE voluntario SET nome = :nome, email = :email, idade = :idade, dia_disponivel = :dia_disponivel WHERE id_voluntario = :id_voluntario";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':nome', $nome);
-            $stmt->bindValue(':email', $email);
-            $stmt->bindValue(':idade', $idade);
-            $stmt->bindValue(':dia_disponivel', $dia_disponivel);
-            $stmt->bindValue(':id_voluntario', $id_voluntario);
-            try {
-                $stmt->execute();
-                $sucesso = true;
-            } catch (PDOException $e) {
-                // Com STRICT_TRANS_TABLES o banco recusa dado inválido (ex.: idade não numérica, texto longo)
-                error_log('Falha ao atualizar voluntário: ' . $e->getMessage());
-                $sucesso = false;
-            }
-        ?>
-        <?php if ($sucesso) { ?>
+    <main>
+        <?php if (!$erros) { ?>
         <div class="alert success">
             <i class="far fa-check-circle"></i>
             <p class="lead">Voluntário atualizado com sucesso!</p>
+            <p><a href="../../admin/tabelas/tabela_voluntario.php">Voltar para voluntários</a></p>
         </div>
         <?php } else { ?>
         <div class="alert danger">
             <i class="fas fa-times"></i>
-            <p class="lead">Não foi possível atualizar o voluntário. Verifique os dados informados.</p>
+            <?php foreach ($erros as $erro) { ?>
+                <p class="lead"><?= e($erro) ?></p>
+            <?php } ?>
+            <p><a href="javascript:history.back()">Voltar ao formulário</a></p>
+            <p><a href="../../admin/tabelas/tabela_voluntario.php">Voltar para voluntários</a></p>
         </div>
         <?php } ?>
     </main>
@@ -64,8 +99,7 @@
     <footer>
         <div id="baixo">
 			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
 			</div>
 		</div>
     </footer>

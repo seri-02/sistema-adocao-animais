@@ -82,12 +82,12 @@
     <?php if (!$erros) { ?>
     <meta http-equiv="refresh" content="2; url=../../admin/tabelas/tabela_gatos.php">
     <?php } ?>
-    <title>Abrigo dos Gatos</title>
+    <title>Animal atualizado - Patas &amp; Lares</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="../index.php">Abrigo dos gatos</a> 
+            <a href="../../index.php">Patas &amp; Lares</a>
         </span>
     </header>
     
@@ -96,6 +96,7 @@
         <div class="alert success">
             <i class="far fa-check-circle"></i>
             <p class="lead">Animal atualizado com sucesso!</p>
+            <p><a href="../../admin/tabelas/tabela_gatos.php">Voltar para animais</a></p>
         </div>
         <?php } else { ?>
         <div class="alert danger">
@@ -104,6 +105,7 @@
                 <p class="lead"><?= e($erro) ?></p>
             <?php } ?>
             <p><a href="javascript:history.back()">Voltar ao formulário</a></p>
+            <p><a href="../../admin/tabelas/tabela_gatos.php">Voltar para animais</a></p>
         </div>
         <?php } ?>
     </main>
@@ -111,8 +113,7 @@
     <footer>
         <div id="baixo">
 			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
 			</div>
 		</div>
     </footer>

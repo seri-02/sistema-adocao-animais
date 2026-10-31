@@ -6,11 +6,17 @@
     require_once __DIR__ . '/../../lib/escape.php';
     require_once __DIR__ . '/../../lib/usuario.php';
 
-    $id_alvo = (int) ($_GET['id'] ?? 0);
+    // Só inteiro positivo: ausente, vazio, texto, decimal, array ou overflow nunca viram outro id
+    $id_recebido = $_GET['id'] ?? null;
+    $id_alvo = is_string($id_recebido)
+        ? filter_var($id_recebido, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])
+        : false;
     $id_ator = (int) $usuario_logado['id_usuario'];
     $sucesso = false;
 
-    if ($id_alvo === $id_ator) {
+    if ($id_alvo === false) {
+        $mensagem = 'Usuário não encontrado.';
+    } elseif ($id_alvo === $id_ator) {
         $mensagem = 'Você não pode excluir a própria conta.';
     } else {
         try {
@@ -64,12 +70,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="refresh" content="2; url=../../admin/tabelas/tabela_usuario.php">
-    <title>Abrigo dos Gatos</title>
+    <title>Usuários - Patas &amp; Lares</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="../index.php">Abrigo dos gatos</a> 
+            <a href="../../index.php">Patas &amp; Lares</a>
         </span>
     </header>
     
@@ -77,14 +83,14 @@
         <div class="alert <?= $sucesso ? 'success' : 'danger' ?>">
                     <i class="<?= $sucesso ? 'far fa-check-circle' : 'fas fa-times' ?>"></i>
                     <p class="lead"><?= e($mensagem) ?></p>
+                    <p><a href="../../admin/tabelas/tabela_usuario.php">Voltar para usuários</a></p>
                 </div>
     </main>
 
     <footer>
         <div id="baixo">
 			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
 			</div>
 		</div>
     </footer>

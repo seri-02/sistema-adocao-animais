@@ -1,3 +1,35 @@
+<?php
+    // Cadastro PÚBLICO de voluntário (seja_voluntario.php). Somente POST.
+    // Só nome/email/idade/dia_disponivel são lidos e validados (lib/voluntario.php);
+    // qualquer outro campo enviado é ignorado.
+    require_once __DIR__ . '/../lib/conn.php';
+    require_once __DIR__ . '/../lib/escape.php';
+    require_once __DIR__ . '/../lib/voluntario.php';
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: ../seja_voluntario.php');
+        exit;
+    }
+
+    [$dados, $erros] = ler_formulario_voluntario($_POST);
+
+    if (!$erros) {
+        try {
+            $stmt = $conn->prepare(
+                'INSERT INTO voluntario (nome, email, idade, dia_disponivel)
+                 VALUES (:nome, :email, :idade, :dia_disponivel)'
+            );
+            $stmt->bindValue(':nome', $dados['nome']);
+            $stmt->bindValue(':email', $dados['email']);
+            $stmt->bindValue(':idade', $dados['idade'], PDO::PARAM_INT);
+            $stmt->bindValue(':dia_disponivel', $dados['dia_disponivel']);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log('Falha ao cadastrar voluntário: ' . $e->getMessage());
+            $erros[] = 'Não foi possível concluir o cadastro. Verifique os dados informados.';
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -13,38 +45,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php if (!$erros) { ?>
     <meta http-equiv="refresh" content="2; url=../seja_voluntario.php">
-    <title>Abrigo dos Gatos</title>
+    <?php } ?>
+    <title>Seja voluntário - Patas &amp; Lares</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="index.php">Abrigo dos gatos</a> 
+            <a href="../index.php">Patas &amp; Lares</a>
         </span>
     </header>
-    
+
     <main>
-        <?php
-            require_once '../lib/conn.php';
-
-            extract($_POST);
-
-            $sql = 'INSERT INTO voluntario VALUES(0, :nome, :email, :idade, :dia_disponivel)';
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':nome', $nome);
-            $stmt->bindValue(':email', $email);
-            $stmt->bindValue(':idade', $idade);
-            $stmt->bindValue(':dia_disponivel', $dia_disponivel);
-            try {
-                $stmt->execute();
-                $sucesso = true;
-            } catch (PDOException $e) {
-                // Com STRICT_TRANS_TABLES o banco recusa dado inválido (ex.: idade não numérica, texto longo)
-                error_log('Falha ao cadastrar voluntário: ' . $e->getMessage());
-                $sucesso = false;
-            }
-        ?>
-        <?php if ($sucesso) { ?>
+        <?php if (!$erros) { ?>
         <div class="alert success">
             <i class="far fa-check-circle"></i>
             <p class="lead">Voluntário cadastrado com sucesso!</p>
@@ -52,7 +66,10 @@
         <?php } else { ?>
         <div class="alert danger">
             <i class="fas fa-times"></i>
-            <p class="lead">Não foi possível concluir o cadastro. Verifique os dados informados.</p>
+            <?php foreach ($erros as $erro) { ?>
+                <p class="lead"><?= e($erro) ?></p>
+            <?php } ?>
+            <p><a href="javascript:history.back()">Voltar ao formulário</a></p>
         </div>
         <?php } ?>
     </main>
@@ -60,8 +77,7 @@
     <footer>
         <div id="baixo">
 			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
 			</div>
 		</div>
     </footer>

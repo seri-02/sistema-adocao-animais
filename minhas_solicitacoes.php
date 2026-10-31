@@ -83,7 +83,7 @@
                             <p>Decisão em <?= e(formatar_data_hora($solicitacao->data_decisao)) ?></p>
                             <?php } ?>
                             <?php if ($solicitacao->justificativa !== null && $solicitacao->justificativa !== '') { ?>
-                            <p><?= nl2br(e($solicitacao->justificativa)) ?></p>
+                            <p><?= $solicitacao->status === 'REPROVADA' ? 'Motivo:' : 'Observação:' ?> <?= nl2br(e($solicitacao->justificativa)) ?></p>
                             <?php } ?>
                         <?php } ?>
                     </td>

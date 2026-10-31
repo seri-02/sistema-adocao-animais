@@ -29,7 +29,8 @@
     </header>
 
         <div class="tabela">
-            <h3>Lista de Adoções</h3>
+            <h3>Adoções legadas</h3>
+            <p>Histórico anterior ao fluxo de solicitações. As adoções atuais estão em <a href="../solicitacoes.php">Solicitações de adoção</a>.</p>
             <table>
                 <thead>
                     <tr>

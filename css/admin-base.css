@@ -1,0 +1,373 @@
+/* Área administrativa "Patas & Lares": base reutilizável (tokens, layout com sidebar,
+   barra mobile, botões, badges, cartões). Independente do CSS do site público.
+   Cada página interna acrescenta só o CSS próprio (ex.: admin-painel.css). */
+
+/* ---------- Tokens ---------- */
+
+:root {
+    --fundo: #F6F4EF;
+    --superficie: #FFFFFF;
+    --borda: #E2DCD2;
+    --texto: #26332F;
+    --texto-suave: #55625D;
+    --verde: #2F5D50;
+    --verde-escuro: #244A40;
+    --verde-claro: #EAF1EE;
+    --terracota: #C86B4A;
+    --sidebar: #1F3A33;
+    --sidebar-texto: #DCE6E1;
+    --sidebar-ativo: #2C5047;
+    --raio: 10px;
+    --sidebar-largura: 248px;
+    --conteudo-largura: 1080px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+h1, h2, h3, p, ul {
+    margin: 0;
+}
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    color: var(--verde);
+}
+
+:focus-visible {
+    outline: 3px solid var(--terracota);
+    outline-offset: 2px;
+}
+
+.icone {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.pular-conteudo {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 30;
+    padding: 0.5rem 1rem;
+    background: var(--verde);
+    color: #FFFFFF;
+    border-radius: 6px;
+}
+
+.pular-conteudo:focus {
+    top: 1rem;
+}
+
+/* ---------- Layout ---------- */
+
+.admin-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-largura) minmax(0, 1fr);
+    min-height: 100vh;
+}
+
+.admin-conteudo {
+    width: 100%;
+    max-width: var(--conteudo-largura);
+    padding: 2.5rem 2.5rem 4rem;
+}
+
+/* ---------- Sidebar ---------- */
+
+.admin-sidebar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+    background: var(--sidebar);
+    color: var(--sidebar-texto);
+}
+
+.admin-marca {
+    padding: 0 0.75rem 1.25rem;
+}
+
+.admin-marca a {
+    display: block;
+    color: #FFFFFF;
+    font-size: 1.2rem;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.admin-marca span {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.8125rem;
+    color: var(--sidebar-texto);
+}
+
+.admin-usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin: 0 0.25rem 1.25rem;
+    padding: 0.875rem 0.75rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.admin-usuario-nome {
+    max-width: 100%;
+    color: #FFFFFF;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+/* Perfil visível: texto (Administrador/Funcionário), a cor só reforça */
+.badge-perfil {
+    display: inline-block;
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.badge-perfil-admin {
+    background: #F3DFD5;
+    color: #7A3820;
+}
+
+.badge-perfil-funcionario {
+    background: #DCEBE5;
+    color: #1F3A33;
+}
+
+.admin-nav {
+    flex: 1;
+}
+
+.admin-nav a,
+.admin-sidebar-rodape a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 44px;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    color: var(--sidebar-texto);
+    text-decoration: none;
+}
+
+.admin-nav li + li {
+    margin-top: 0.15rem;
+}
+
+.admin-nav a:hover,
+.admin-sidebar-rodape a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+}
+
+.admin-nav a[aria-current="page"] {
+    background: var(--sidebar-ativo);
+    color: #FFFFFF;
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--terracota);
+}
+
+.admin-sidebar-rodape {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* A barra superior só aparece em telas menores */
+.admin-barra {
+    display: none;
+}
+
+/* ---------- Cabeçalho do conteúdo ---------- */
+
+.admin-cabecalho {
+    margin-bottom: 2rem;
+}
+
+.admin-cabecalho h1 {
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem);
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+.admin-cabecalho p {
+    margin-top: 0.4rem;
+    max-width: 42rem;
+    color: var(--texto-suave);
+}
+
+.admin-secao-titulo {
+    margin-bottom: 0.875rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+section + section {
+    margin-top: 2.25rem;
+}
+
+/* ---------- Botões e cartões ---------- */
+
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.6rem 1.1rem;
+    border: 2px solid var(--verde);
+    border-radius: 8px;
+    font: inherit;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.botao-primario {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+.botao-primario:hover {
+    background: var(--verde-escuro);
+    border-color: var(--verde-escuro);
+}
+
+.botao-secundario {
+    background: var(--superficie);
+    color: var(--verde);
+}
+
+.botao-secundario:hover {
+    background: var(--verde-claro);
+}
+
+.cartao {
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+}
+
+/* ---------- Telas menores: sidebar vira menu lateral ---------- */
+
+@media (max-width: 959.98px) {
+    .admin-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .admin-barra {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--sidebar);
+        color: #FFFFFF;
+    }
+
+    .admin-marca-curta {
+        font-weight: 750;
+    }
+
+    .admin-menu-botao {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-height: 40px;
+        padding: 0.4rem 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 8px;
+        background: transparent;
+        color: #FFFFFF;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Sem JavaScript: a sidebar aparece no fluxo, acima do conteúdo, e o botão some */
+    .admin-sidebar {
+        position: static;
+        height: auto;
+    }
+
+    html:not(.js) .admin-menu-botao {
+        display: none;
+    }
+
+    /* Com JavaScript: menu lateral sobreposto, aberto pelo botão */
+    .js .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 40;
+        width: min(82vw, var(--sidebar-largura));
+        height: 100vh;
+        transform: translateX(-100%);
+        /* visibility muda na hora (o foco já pode ir para o menu); só o deslize é animado */
+        visibility: hidden;
+        transition: transform 0.2s ease;
+        box-shadow: 4px 0 18px rgba(0, 0, 0, 0.25);
+    }
+
+    .js .admin-sidebar.aberta {
+        transform: none;
+        visibility: visible;
+    }
+
+    .admin-fundo {
+        position: fixed;
+        inset: 0;
+        z-index: 35;
+        background: rgba(20, 30, 27, 0.45);
+    }
+
+    .admin-conteudo {
+        padding: 1.75rem 1.25rem 3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .admin-sidebar {
+        transition: none;
+    }
+}

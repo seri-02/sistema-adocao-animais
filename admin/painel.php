@@ -55,6 +55,7 @@
             <button class="dropbtn">Cadastre <i class="fa-solid fa-arrow-down"></i></button>
             <div class="dropdown-content">
                 <a href="gato.php">Animal</a>
+                <a href="voluntario.php">Voluntário</a>
                 <?php if (eh_admin()) { ?>
                 <a href="usuario.php">Usuário</a>
                 <?php } ?>

@@ -15,15 +15,7 @@
 
     if (!$erros) {
         try {
-            $stmt = $conn->prepare(
-                'INSERT INTO voluntario (nome, email, idade, dia_disponivel)
-                 VALUES (:nome, :email, :idade, :dia_disponivel)'
-            );
-            $stmt->bindValue(':nome', $dados['nome']);
-            $stmt->bindValue(':email', $dados['email']);
-            $stmt->bindValue(':idade', $dados['idade'], PDO::PARAM_INT);
-            $stmt->bindValue(':dia_disponivel', $dados['dia_disponivel']);
-            $stmt->execute();
+            cadastrar_voluntario($conn, $dados);
         } catch (PDOException $e) {
             error_log('Falha ao cadastrar voluntário: ' . $e->getMessage());
             $erros[] = 'Não foi possível concluir o cadastro. Verifique os dados informados.';

@@ -52,6 +52,21 @@
         return [$dados, $erros];
     }
 
+    // Grava um voluntário já validado por ler_formulario_voluntario() (cadastro público e da equipe).
+    // Colunas sempre nomeadas; erros de banco sobem como PDOException para o endpoint tratar.
+    function cadastrar_voluntario(PDO $conn, array $dados): void
+    {
+        $stmt = $conn->prepare(
+            'INSERT INTO voluntario (nome, email, idade, dia_disponivel)
+             VALUES (:nome, :email, :idade, :dia_disponivel)'
+        );
+        $stmt->bindValue(':nome', $dados['nome']);
+        $stmt->bindValue(':email', $dados['email']);
+        $stmt->bindValue(':idade', $dados['idade'], PDO::PARAM_INT);
+        $stmt->bindValue(':dia_disponivel', $dados['dia_disponivel']);
+        $stmt->execute();
+    }
+
     // Id de voluntário vindo do cliente: inteiro positivo ou false (array/texto/vazio não geram warning)
     function ler_id_voluntario($valor)
     {

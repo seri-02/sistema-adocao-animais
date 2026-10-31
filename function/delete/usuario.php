@@ -37,9 +37,14 @@
             if ($conn->inTransaction()) {
                 $conn->rollBack();
             }
-            error_log('Falha ao excluir usuário: ' . $e->getMessage());
             $sucesso = false;
-            $mensagem = 'Não foi possível excluir o usuário.';
+            // 1451: o usuário é referenciado por solicitacao_adocao (FK ON DELETE RESTRICT)
+            if ((int) ($e->errorInfo[1] ?? 0) === 1451) {
+                $mensagem = 'Este usuário possui histórico de solicitações e não pode ser excluído.';
+            } else {
+                error_log('Falha ao excluir usuário: ' . $e->getMessage());
+                $mensagem = 'Não foi possível excluir o usuário.';
+            }
         }
     }
 ?>

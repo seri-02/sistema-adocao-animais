@@ -1,67 +1,10 @@
 <?php
-    // Fluxo LEGADO de adoção imediata (temporário até o workflow de solicitação da F3)
-    require_once __DIR__ . '/../lib/auth.php';
-    require_once __DIR__ . '/../lib/conn.php';
-    require_once __DIR__ . '/../lib/escape.php';
-
-    iniciar_sessao();
-    if (isset($_GET['id'])) {
-        $_SESSION['id_animal'] = (int) $_GET['id'];
-    }
-    $id_animal = (int) ($_SESSION['id_animal'] ?? 0);
-
-    $nome_adotante = trim((string) ($_POST['nome_adotante'] ?? ''));
-    $email_adotante = trim((string) ($_POST['email_adotante'] ?? ''));
-    $telefone = trim((string) ($_POST['telefone'] ?? ''));
-
-    $sucesso = false;
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST' || $id_animal <= 0) {
-        $mensagem = 'Escolha um animal no catálogo para adotar.';
-    } elseif ($nome_adotante === '' || mb_strlen($nome_adotante) > 50
-        || !filter_var($email_adotante, FILTER_VALIDATE_EMAIL) || mb_strlen($email_adotante) > 100
-        || $telefone === '' || mb_strlen($telefone) > 20) {
-        $mensagem = 'Preencha nome, e-mail e telefone válidos.';
-    } else {
-        try {
-            $conn->beginTransaction();
-
-            // A sessão só indica o animal escolhido: a disponibilidade é conferida aqui, com a linha travada
-            $stmt = $conn->prepare('SELECT status FROM animal WHERE id_animal = :id_animal FOR UPDATE');
-            $stmt->bindValue(':id_animal', $id_animal, PDO::PARAM_INT);
-            $stmt->execute();
-            $status = $stmt->fetchColumn();
-
-            if ($status === false) {
-                $conn->rollBack();
-                $mensagem = 'Animal não encontrado.';
-            } elseif ($status !== 'DISPONIVEL') {
-                $conn->rollBack();
-                $mensagem = 'Este animal não está disponível para adoção.';
-            } else {
-                $stmt = $conn->prepare('INSERT INTO adocoes (id_animal, nome_adotante, email_adotante, telefone)
-                                        VALUES (:id_animal, :nome_adotante, :email_adotante, :telefone)');
-                $stmt->bindValue(':id_animal', $id_animal, PDO::PARAM_INT);
-                $stmt->bindValue(':nome_adotante', $nome_adotante);
-                $stmt->bindValue(':email_adotante', $email_adotante);
-                $stmt->bindValue(':telefone', $telefone);
-                $stmt->execute();
-
-                $stmt = $conn->prepare("UPDATE animal SET status = 'ADOTADO' WHERE id_animal = :id_animal");
-                $stmt->bindValue(':id_animal', $id_animal, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $conn->commit();
-                $sucesso = true;
-                $mensagem = 'Animal adotado com sucesso!';
-            }
-        } catch (Throwable $e) {
-            if ($conn->inTransaction()) {
-                $conn->rollBack();
-            }
-            error_log('Falha na adoção: ' . $e->getMessage());
-            $mensagem = 'Não foi possível registrar a adoção. Tente novamente.';
-        }
-    }
+    // Fluxo LEGADO de adoção imediata: DESATIVADO na F3a.
+    // A adoção agora começa por uma solicitação (function/func_solicitar_adocao.php).
+    // Este endpoint não acessa o banco: não grava em `adocoes` nem altera o status do animal,
+    // qualquer que seja o método ou os dados enviados. Mantido só para responder de forma
+    // controlada a links/formulários antigos.
+    http_response_code(410);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -84,23 +27,16 @@
 <body id="adm">
     <header>
         <span>
-            <a href="index.php">Abrigo dos gatos</a> 
+            <a href="../index.php">Abrigo dos gatos</a>
         </span>
     </header>
-    
+
     <main>
-        <?php if ($sucesso) { ?>
-        <div class="alert success">
-            <img src="../img/animation_200_l9is3tof.gif" alt="">
-            <i class="far fa-check-circle"></i>
-            <p class="lead"><?= e($mensagem) ?></p>
-        </div>
-        <?php } else { ?>
         <div class="alert danger">
             <i class="fas fa-times"></i>
-            <p class="lead"><?= e($mensagem) ?></p>
+            <p class="lead">A adoção agora é feita por solicitação: entre na sua conta de adotante e escolha "Solicitar adoção" na página do animal.</p>
+            <p><a href="../adocoes.php">Voltar ao catálogo</a></p>
         </div>
-        <?php } ?>
     </main>
 
     <footer>

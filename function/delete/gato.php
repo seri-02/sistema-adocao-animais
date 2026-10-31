@@ -15,9 +15,9 @@
         $sucesso = $stmt->rowCount() > 0;
         $mensagem = $sucesso ? 'Animal excluído com sucesso!' : 'Animal não encontrado.';
     } catch (PDOException $e) {
-        // 1451: o animal é referenciado por adocoes (FK ON DELETE RESTRICT)
+        // 1451: o animal é referenciado por adocoes ou solicitacao_adocao (FK ON DELETE RESTRICT)
         if ((int) ($e->errorInfo[1] ?? 0) === 1451) {
-            $mensagem = 'Este animal possui histórico de adoção e não pode ser excluído.';
+            $mensagem = 'Este animal possui histórico de adoção ou solicitações e não pode ser excluído.';
         } else {
             error_log('Falha ao excluir animal: ' . $e->getMessage());
             $mensagem = 'Não foi possível excluir o animal.';

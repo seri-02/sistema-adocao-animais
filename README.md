@@ -73,6 +73,7 @@ C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-sour
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/003_gato_para_animal.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/005_usuario_perfis_autenticacao.up.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/006_solicitacao_adocao.up.sql"
 ```
 
 - A baseline (`sql/baseline/`) contém apenas a estrutura; os dados reais ficam em backups locais, fora do Git.
@@ -83,6 +84,15 @@ C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-sour
   `schema_migrations` (passo a passo em [`sql/README.md`](sql/README.md)).
 - O dump do projeto original foi removido da árvore e não deve ser usado para instalação
   (ver [`sql/legacy/README.md`](sql/legacy/README.md)).
+
+### Fluxo de adoção
+
+A adoção começa por uma **solicitação**: o adotante entra na conta, abre um animal **Disponível** e clica em
+**Solicitar adoção**. A solicitação fica **Pendente**, o animal passa a **Em processo de adoção** (sai do catálogo)
+e o adotante acompanha o pedido em **Minhas solicitações**. A análise pela equipe (aprovar/reprovar) é a próxima etapa.
+
+A antiga adoção imediata (formulário com nome/e-mail/telefone) foi desativada: a tabela `adocoes` guarda só o
+histórico legado e não recebe novos registros.
 
 ---
 

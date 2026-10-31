@@ -40,7 +40,6 @@
         <h4>Listagens</h4>
         <span>
             <a href="solicitacoes.php"><button class="btn-opcao">Solicitações de adoção (<?= e($pendentes) ?> pendentes)</button></a>
-            <a href="tabelas/tabela_adocoes.php"><button class="btn-opcao">Adoções legadas</button></a>
             <a href="tabelas/tabela_gatos.php"><button class="btn-opcao">Animais</button></a>
             <?php if (eh_admin()) { ?>
             <a href="tabelas/tabela_usuario.php"><button id="btn-usuario">Usuário</button></a>

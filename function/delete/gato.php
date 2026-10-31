@@ -1,6 +1,6 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
-    // Equipe (ADMIN/FUNCIONARIO). Animal com histórico continua protegido pela FK para qualquer perfil.
+    // Equipe (ADMIN/FUNCIONARIO). Animal ADOTADO/EM_PROCESSO ou com histórico não é excluído por nenhum perfil.
     $usuario_logado = exigir_perfis(PERFIS_EQUIPE);
 
     require_once __DIR__ . '/../../lib/conn.php';
@@ -14,15 +14,43 @@
     $sucesso = false;
     $mensagem = 'Animal não encontrado.';
 
+    // Status que nunca permitem exclusão, para qualquer perfil (sem bypass para ADMIN):
+    // ADOTADO é estado final/histórico; EM_PROCESSO é adoção em andamento.
+    // DISPONIVEL/INDISPONIVEL podem ser excluídos se não houver histórico: a FK de
+    // solicitacao_adocao (ON DELETE RESTRICT) continua como segunda barreira.
+    $bloqueios_por_status = [
+        'ADOTADO' => 'Este animal está adotado e não pode ser excluído.',
+        'EM_PROCESSO' => 'Este animal possui uma adoção em andamento e não pode ser excluído.',
+    ];
+
     if ($id !== false) {
         try {
-            $stmt = $conn->prepare("DELETE FROM animal WHERE id_animal = :id_animal");
+            $conn->beginTransaction();
+
+            // Trava a linha: o status conferido é o mesmo no momento do DELETE
+            $stmt = $conn->prepare('SELECT status FROM animal WHERE id_animal = :id_animal FOR UPDATE');
             $stmt->bindValue(':id_animal', $id, PDO::PARAM_INT);
             $stmt->execute();
-            $sucesso = $stmt->rowCount() > 0;
-            $mensagem = $sucesso ? 'Animal excluído com sucesso!' : 'Animal não encontrado.';
+            $status = $stmt->fetchColumn();
+
+            if ($status === false) {
+                $conn->rollBack();
+            } elseif (isset($bloqueios_por_status[$status])) {
+                $conn->rollBack();
+                $mensagem = $bloqueios_por_status[$status];
+            } else {
+                $stmt = $conn->prepare('DELETE FROM animal WHERE id_animal = :id_animal');
+                $stmt->bindValue(':id_animal', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                $conn->commit();
+                $sucesso = true;
+                $mensagem = 'Animal excluído com sucesso!';
+            }
         } catch (PDOException $e) {
-            // 1451: o animal é referenciado por adocoes ou solicitacao_adocao (FK ON DELETE RESTRICT)
+            if ($conn->inTransaction()) {
+                $conn->rollBack();
+            }
+            // 1451: o animal é referenciado por solicitacao_adocao (FK ON DELETE RESTRICT)
             if ((int) ($e->errorInfo[1] ?? 0) === 1451) {
                 $mensagem = 'Este animal possui histórico de adoção ou solicitações e não pode ser excluído.';
             } else {

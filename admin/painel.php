@@ -4,72 +4,112 @@
 
     require_once __DIR__ . '/../lib/conn.php';
     require_once __DIR__ . '/../lib/escape.php';
+    require_once __DIR__ . '/../lib/animal.php';
     require_once __DIR__ . '/../lib/solicitacao.php';
-    $pendentes = contar_solicitacoes_pendentes($conn);
+
+    $pagina_admin_atual = 'painel';
+
+    // Indicadores: contagens reais. Uma falha vira null ("—" na tela); o detalhe só vai para o log.
+    $contar = function (callable $consulta): ?int {
+        try {
+            return $consulta();
+        } catch (PDOException $e) {
+            error_log('Falha ao carregar indicador do painel: ' . $e->getMessage());
+            return null;
+        }
+    };
+
+    $indicadores = [
+        [
+            'rotulo' => 'Solicitações pendentes',
+            'valor' => $contar(fn() => contar_solicitacoes_pendentes($conn)),
+            'link' => 'solicitacoes.php?status=PENDENTE',
+            'acao' => 'Ver solicitações',
+        ],
+        [
+            'rotulo' => 'Animais disponíveis',
+            'valor' => $contar(fn() => contar_animais_por_status($conn, 'DISPONIVEL')),
+            'link' => 'tabelas/tabela_gatos.php',
+            'acao' => 'Ver animais',
+        ],
+        [
+            'rotulo' => 'Voluntários cadastrados',
+            'valor' => $contar(fn() => (int) $conn->query('SELECT COUNT(*) FROM voluntario')->fetchColumn()),
+            'link' => 'tabelas/tabela_voluntario.php',
+            'acao' => 'Ver voluntários',
+        ],
+    ];
+    if (eh_admin()) {
+        $indicadores[] = [
+            'rotulo' => 'Usuários ativos',
+            // ativo = 1: mesmo critério de lib/auth.php para conta ativa
+            'valor' => $contar(fn() => (int) $conn->query('SELECT COUNT(*) FROM usuario WHERE ativo = 1')->fetchColumn()),
+            'link' => 'tabelas/tabela_usuario.php',
+            'acao' => 'Ver usuários',
+        ];
+    }
+
+    $acoes_rapidas = [
+        ['Cadastrar animal', 'gato.php'],
+        ['Cadastrar voluntário', 'voluntario.php'],
+    ];
+    if (eh_admin()) {
+        $acoes_rapidas[] = ['Cadastrar usuário', 'usuario.php'];
+    }
+    $acoes_rapidas[] = ['Ver solicitações', 'solicitacoes.php'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <link rel="stylesheet" href="../css/style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <script src="../js/jquery.js"></script>
-
-    <link rel="icon" href="">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrigo dos Gatos</title>
+    <title>Visão geral - Área administrativa - Patas &amp; Lares</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C86B4A'%3E%3Cellipse cx='12' cy='16' rx='5' ry='4.2'/%3E%3Ccircle cx='5.5' cy='10' r='2.2'/%3E%3Ccircle cx='9.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='14.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='18.5' cy='10' r='2.2'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="../css/admin-base.css">
+    <link rel="stylesheet" href="../css/admin-painel.css">
+    <!-- Sem JavaScript a navegação fica sempre visível; com JavaScript vira menu recolhível no mobile -->
+    <script>document.documentElement.classList.add('js')</script>
+    <script src="../js/admin.js" defer></script>
 </head>
-<body id="adm">
-    <header class="header-adm">
-        <span>
-            <a href="../index.php">Abrigo dos gatos</a> 
-        </span>
-        <a href="../function/sair.php"><button class="sair">Sair <i class="fa-solid fa-right-to-bracket"></i></button></a>
-    </header>
-    
-    <h3 id="bem-vindo">Bem vindo!</h3>
-    
-    <main id="painel">
-        <h4>Listagens</h4>
-        <span>
-            <a href="solicitacoes.php"><button class="btn-opcao">Solicitações de adoção (<?= e($pendentes) ?> pendentes)</button></a>
-            <a href="tabelas/tabela_gatos.php"><button class="btn-opcao">Animais</button></a>
-            <?php if (eh_admin()) { ?>
-            <a href="tabelas/tabela_usuario.php"><button id="btn-usuario">Usuário</button></a>
-            <?php } ?>
-            <a href="tabelas/tabela_voluntario.php"><button id="btn-voluntario">Voluntário</button></a>
-        </span>
-    </main>
+<body class="admin">
+    <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
-    <div id="cadastros">
-        <h4>Cadastros</h4>
-        <div class="dropdown">
-            <button class="dropbtn">Cadastre <i class="fa-solid fa-arrow-down"></i></button>
-            <div class="dropdown-content">
-                <a href="gato.php">Animal</a>
-                <a href="voluntario.php">Voluntário</a>
-                <?php if (eh_admin()) { ?>
-                <a href="usuario.php">Usuário</a>
-                <?php } ?>
-            </div>
-        </div>
+    <div class="admin-layout">
+        <?php require __DIR__ . '/parciais/sidebar.php'; ?>
+
+        <main id="conteudo" class="admin-conteudo">
+            <header class="admin-cabecalho">
+                <h1>Visão geral</h1>
+                <p>Acompanhe as principais informações e acesse rapidamente as rotinas do Patas &amp; Lares.</p>
+            </header>
+
+            <section aria-labelledby="titulo-indicadores">
+                <h2 id="titulo-indicadores" class="admin-secao-titulo">Indicadores</h2>
+                <ul class="indicadores">
+                    <?php foreach ($indicadores as $indicador) { ?>
+                    <li class="cartao indicador">
+                        <span class="indicador-rotulo"><?= e($indicador['rotulo']) ?></span>
+                        <?php if ($indicador['valor'] === null) { ?>
+                        <span class="indicador-valor indicador-indisponivel">—</span>
+                        <span class="indicador-aviso">Não foi possível carregar agora.</span>
+                        <?php } else { ?>
+                        <span class="indicador-valor"><?= e($indicador['valor']) ?></span>
+                        <?php } ?>
+                        <a class="indicador-link" href="<?= e($indicador['link']) ?>"><?= e($indicador['acao']) ?></a>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </section>
+
+            <section aria-labelledby="titulo-acoes">
+                <h2 id="titulo-acoes" class="admin-secao-titulo">Ações rápidas</h2>
+                <ul class="acoes-rapidas">
+                    <?php foreach ($acoes_rapidas as [$rotulo, $link]) { ?>
+                    <li><a class="botao botao-secundario" href="<?= e($link) ?>"><?= e($rotulo) ?></a></li>
+                    <?php } ?>
+                </ul>
+            </section>
+        </main>
     </div>
-
-
-    <footer>
-        <div id="baixo">
-			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
-			</div>
-		</div>
-    </footer>
 </body>
 </html>

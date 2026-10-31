@@ -1,0 +1,57 @@
+/* Visão geral da área administrativa (admin/painel.php). Depende de admin-base.css. */
+
+.indicadores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1rem;
+}
+
+.indicador {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.25rem;
+    border-top: 3px solid var(--verde);
+}
+
+.indicador-rotulo {
+    color: var(--texto-suave);
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.indicador-valor {
+    font-size: 2.25rem;
+    font-weight: 750;
+    line-height: 1.1;
+    color: var(--texto);
+}
+
+.indicador-indisponivel {
+    color: var(--texto-suave);
+}
+
+.indicador-aviso {
+    font-size: 0.8125rem;
+    color: var(--texto-suave);
+}
+
+.indicador-link {
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-underline-offset: 3px;
+}
+
+.acoes-rapidas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+@media (max-width: 599.98px) {
+    .acoes-rapidas li,
+    .acoes-rapidas .botao {
+        width: 100%;
+    }
+}

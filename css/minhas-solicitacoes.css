@@ -1,0 +1,639 @@
+/* Minhas solicitações "Patas & Lares". Carregado SOMENTE por minhas_solicitacoes.php:
+   não importa style.css nem o CSS das outras telas. Header, footer e botões repetem
+   o visual da Home/catálogo/detalhe para manter a identidade sem acoplar as páginas. */
+
+:root {
+    --fundo: #FAF8F4;
+    --superficie: #FFFFFF;
+    --borda: #E7E0D7;
+    --texto: #26332F;
+    --texto-suave: #4F5D58;
+    --verde: #2F5D50;
+    --verde-escuro: #244A40;
+    --verde-claro: #EAF1EE;
+    --terracota: #C86B4A;
+    --raio: 10px;
+    --largura: 1120px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+h1, h2, p, ul {
+    margin: 0;
+}
+
+h1, h2 {
+    line-height: 1.2;
+    color: var(--texto);
+}
+
+h1 {
+    font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+    font-weight: 750;
+    letter-spacing: -0.01em;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: var(--verde);
+}
+
+:focus-visible {
+    outline: 3px solid var(--terracota);
+    outline-offset: 2px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--largura);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.pular-conteudo {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    background: var(--verde);
+    color: #FFFFFF;
+    border-radius: 6px;
+}
+
+.pular-conteudo:focus {
+    top: 1rem;
+}
+
+/* ---------- Botões ---------- */
+
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.65rem 1.25rem;
+    border: 2px solid var(--verde);
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.botao-primario {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+.botao-primario:hover {
+    background: var(--verde-escuro);
+    border-color: var(--verde-escuro);
+}
+
+.botao-secundario {
+    background: transparent;
+    color: var(--verde);
+}
+
+.botao-secundario:hover {
+    background: var(--verde-claro);
+}
+
+/* ---------- Header (mesmo visual da Home) ---------- */
+
+.topo {
+    background: var(--superficie);
+    border-bottom: 1px solid var(--borda);
+}
+
+.topo-barra {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 72px;
+}
+
+.marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 750;
+    color: var(--verde);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.marca-icone {
+    width: 28px;
+    height: 28px;
+    fill: var(--terracota);
+}
+
+.menu-botao {
+    display: none;
+}
+
+.navegacao {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.nav-links,
+.nav-conta {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-conta {
+    margin-left: auto;
+    gap: 0.5rem;
+}
+
+.nav-links a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    color: var(--texto);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    background: var(--fundo);
+    color: var(--verde);
+}
+
+.nav-links a[aria-current="page"] {
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
+.nav-conta a {
+    display: block;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--verde);
+    border-radius: 6px;
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-conta a:hover {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+/* Item da conta da página atual ("Minhas solicitações") */
+.nav-conta a[aria-current="page"] {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+/* ---------- Conteúdo ---------- */
+
+dl, dd {
+    margin: 0;
+}
+
+#conteudo {
+    max-width: 960px;
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+}
+
+.pagina-topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: 1.75rem;
+}
+
+.pagina-topo p {
+    margin-top: 0.5rem;
+    font-size: 1.0625rem;
+    color: var(--texto-suave);
+}
+
+/* Alerta compacto da mensagem de sessão (flash) */
+.alerta {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--verde-claro);
+    border: 1px solid #BFD5CC;
+    border-left: 4px solid var(--verde);
+    border-radius: 8px;
+    color: var(--verde-escuro);
+    font-weight: 600;
+}
+
+.alerta-icone {
+    flex-shrink: 0;
+    font-weight: 700;
+}
+
+.lista-solicitacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.solicitacao {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 1rem 1.5rem;
+    padding: 1.25rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+}
+
+/* Foto à esquerda ocupando a altura do texto e das ações */
+.sol-foto {
+    grid-row: span 2;
+    align-self: start;
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--borda);
+}
+
+/* Imagem fora do fluxo: a proporção do container nunca é alterada pela foto */
+.sol-foto img,
+.sem-foto {
+    position: absolute;
+    inset: 0;
+}
+
+.sol-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.sem-foto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--texto-suave);
+}
+
+.sol-topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+}
+
+.sol-nome {
+    font-size: 1.375rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.sol-nome a {
+    color: var(--texto);
+    text-decoration: none;
+}
+
+.sol-nome a:hover {
+    color: var(--verde);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.sol-especie {
+    color: var(--texto-suave);
+}
+
+/* O texto do status é o que informa; a cor só reforça */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.75rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-pendente {
+    background: #FDF3E1;
+    color: #8A5A12;
+}
+
+.badge-aprovada {
+    background: var(--verde-claro);
+    color: var(--verde);
+}
+
+.badge-reprovada {
+    background: #FBEBEA;
+    color: #9B3B33;
+}
+
+.badge-cancelada {
+    background: #F0EEEB;
+    color: #5B5650;
+}
+
+.sol-mensagem {
+    margin-top: 0.75rem;
+}
+
+.sol-datas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    margin-top: 0.75rem;
+}
+
+.sol-datas dt,
+.sol-texto dt {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.sol-texto {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--fundo);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+}
+
+.sol-texto dd {
+    margin-top: 0.25rem;
+}
+
+/* Texto livre do banco: preserva quebras de linha sem interpretar HTML */
+.texto-livre {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.sol-acoes {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sol-acoes form {
+    margin: 0;
+}
+
+/* Ação destrutiva, mas discreta: não compete com "Ver animal" */
+.botao-cancelar {
+    min-height: 44px;
+    padding: 0.6rem 1rem;
+    border: 1px solid #C9A99E;
+    border-radius: 8px;
+    background: transparent;
+    color: #8F3F2A;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.botao-cancelar:hover {
+    background: #FBEDE6;
+    border-color: #8F3F2A;
+}
+
+.vazio {
+    padding: 2.5rem 1.5rem;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+}
+
+.vazio h2 {
+    font-size: 1.375rem;
+}
+
+.vazio p {
+    margin: 0.5rem 0 1.5rem;
+    color: var(--texto-suave);
+}
+
+/* ---------- Footer (mesmo visual da Home) ---------- */
+
+.rodape {
+    background: var(--texto);
+    color: #D7DEDA;
+    padding-top: 3rem;
+}
+
+.rodape-grade {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.rodape-grade p + p {
+    margin-top: 0.25rem;
+}
+
+.rodape-marca {
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.rodape-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.rodape a {
+    color: #FFFFFF;
+    text-underline-offset: 3px;
+}
+
+.rodape a:hover {
+    color: var(--borda);
+}
+
+.rodape-base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.875rem;
+}
+
+/* ---------- Tablet e mobile ---------- */
+
+@media (max-width: 1023.98px) {
+    .topo-barra {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.75rem;
+        min-height: 64px;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .menu-botao {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-height: 40px;
+        padding: 0.4rem 0.75rem;
+        border: 1px solid var(--borda);
+        border-radius: 8px;
+        background: var(--superficie);
+        color: var(--texto);
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .menu-botao svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+    }
+
+    .navegacao {
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--borda);
+    }
+
+    /* Recolhido somente quando o JavaScript está ativo */
+    .js .navegacao {
+        display: none;
+    }
+
+    .js .navegacao.active {
+        display: flex;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .nav-links a {
+        padding: 0.65rem 0.5rem;
+    }
+
+    .nav-conta {
+        flex-wrap: wrap;
+        margin-left: 0;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--borda);
+    }
+}
+
+@media (max-width: 599.98px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    #conteudo {
+        padding-top: 1.75rem;
+        padding-bottom: 3rem;
+    }
+
+    .solicitacao {
+        grid-template-columns: 88px minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .sol-nome {
+        font-size: 1.1875rem;
+    }
+
+    .sol-foto {
+        grid-row: auto;
+    }
+
+    /* Ações ocupam a largura do card, fáceis de tocar */
+    .sol-acoes {
+        grid-column: 1 / -1;
+    }
+
+    .sol-acoes .botao,
+    .sol-acoes form,
+    .botao-cancelar {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+}

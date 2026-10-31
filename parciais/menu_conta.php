@@ -2,6 +2,7 @@
     // Itens de conta da navegação pública (páginas da raiz do site).
     // Espera $usuario_menu = usuario_logado_opcional() calculado ANTES de qualquer saída HTML.
     // $estilo_menu = 'botoes' para cabeçalhos simples; padrão: itens <li> do menu principal.
+    // $item_conta_atual (opcional) = href do item da página atual, marcado com aria-current="page".
     require_once __DIR__ . '/../lib/escape.php';
 
     $usuario_menu = $usuario_menu ?? null;
@@ -21,6 +22,7 @@
         if (($estilo_menu ?? 'lista') === 'botoes') {
             echo '<a href="', e($href), '"><button class="sair">', e($texto), '</button></a>', "\n";
         } else {
-            echo '<li><a href="', e($href), '">', e($texto), '</a></li>', "\n";
+            $atual = $href === ($item_conta_atual ?? null) ? ' aria-current="page"' : '';
+            echo '<li><a href="', e($href), '"', $atual, '>', e($texto), '</a></li>', "\n";
         }
     }

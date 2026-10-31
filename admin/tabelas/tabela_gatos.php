@@ -41,7 +41,7 @@
                     <th>Idade</th>
                     <th>Porte</th>
                     <th>Status</th>
-                    <?php if (eh_admin()) { ?><th>Excluir</th><?php } ?>
+                    <th>Excluir</th>
                     <th>Editar</th>
                 </tr>
             </thead>
@@ -62,9 +62,7 @@
                         <td><?= e(calcular_idade($animal->data_nascimento_estimada)) ?></td>
                         <td><?= e(rotulo(PORTES, $animal->porte)) ?></td>
                         <td><?= e(rotulo(STATUS_ANIMAL, $animal->status)) ?></td>
-                        <?php if (eh_admin()) { ?>
                         <td><a href="../../function/delete/gato.php?id=<?= e($animal->id_animal) ?>"><i class="fa-solid fa-trash"></i></a></td>
-                        <?php } ?>
                         <td><a href="../editar/gato.php?id=<?= e($animal->id_animal) ?>"><i class="fa-solid fa-user-pen"></i></a></td>
                     </tr>
                 <?php

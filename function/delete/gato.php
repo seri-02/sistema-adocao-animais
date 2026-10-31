@@ -1,6 +1,7 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
-    $usuario_logado = exigir_perfis([PERFIL_ADMIN]);
+    // Equipe (ADMIN/FUNCIONARIO). Animal com histórico continua protegido pela FK para qualquer perfil.
+    $usuario_logado = exigir_perfis(PERFIS_EQUIPE);
 
     require_once __DIR__ . '/../../lib/conn.php';
     require_once __DIR__ . '/../../lib/escape.php';

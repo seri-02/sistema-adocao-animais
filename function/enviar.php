@@ -27,7 +27,9 @@
     <?php
     require_once '../vendor/autoload.php';
     require_once __DIR__ . '/../lib/config.php';
-    extract($_POST);
+    // Só os campos do formulário de contato são lidos (nunca extract() com dados do cliente)
+    $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
+    $msg = is_string($_POST['msg'] ?? null) ? trim($_POST['msg']) : '';
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;

@@ -3,13 +3,21 @@
     require_once __DIR__ . '/../../lib/escape.php';
     $usuario_logado = exigir_perfis(PERFIS_EQUIPE);
 
-    require_once '../../lib/conn.php';
-    $id = (int)$_GET['id'];
-    $sql = "SELECT * FROM voluntario WHERE id_voluntario = :id_voluntario";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindValue(":id_voluntario", $id);
-    $stmt->execute();
-    $voluntario = $stmt->fetch(PDO::FETCH_OBJ);
+    require_once __DIR__ . '/../../lib/conn.php';
+    require_once __DIR__ . '/../../lib/voluntario.php';
+
+    // Id inválido (vazio, texto, negativo, decimal, array) ou inexistente: sem formulário, sem warning
+    $id = ler_id_voluntario($_GET['id'] ?? null);
+    $voluntario = false;
+    if ($id !== false) {
+        $stmt = $conn->prepare('SELECT * FROM voluntario WHERE id_voluntario = :id_voluntario');
+        $stmt->bindValue(':id_voluntario', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $voluntario = $stmt->fetch(PDO::FETCH_OBJ);
+    }
+    if (!$voluntario) {
+        http_response_code(404);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -38,6 +46,13 @@
     
     <main class="form-cadastros">
         <span>Editar Voluntário</span>
+        <?php if (!$voluntario) { ?>
+        <div class="alert danger">
+            <i class="fas fa-times"></i>
+            <p class="lead">Voluntário não encontrado.</p>
+            <p><a href="../tabelas/tabela_voluntario.php">Voltar para voluntários</a></p>
+        </div>
+        <?php } else { ?>
         <form action="../../function/update/func_editar_voluntario.php" method="post">
             <input type="hidden" id="id_voluntario" name="id_voluntario" value="<?= e($voluntario->id_voluntario) ?>">
                 <div class="campo">
@@ -58,6 +73,7 @@
                 </div>
                 <button type="submit">Atualizar</button>
             </form>
+        <?php } ?>
     </main>
 
     <footer>

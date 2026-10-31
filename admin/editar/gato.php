@@ -51,7 +51,7 @@
             <?php require __DIR__ . '/../parciais/campos_animal.php'; ?>
 
             <button type="submit">
-                Editar
+                Salvar alterações
             </button>
         </form>
         <?php } ?>

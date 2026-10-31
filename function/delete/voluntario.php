@@ -1,6 +1,30 @@
 <?php
     require_once __DIR__ . '/../../lib/auth.php';
     $usuario_logado = exigir_perfis([PERFIL_ADMIN]);
+
+    require_once __DIR__ . '/../../lib/conn.php';
+    require_once __DIR__ . '/../../lib/escape.php';
+    require_once __DIR__ . '/../../lib/voluntario.php';
+
+    // Id inválido ou inexistente nunca é anunciado como exclusão bem-sucedida
+    $id = ler_id_voluntario($_GET['id'] ?? null);
+    $sucesso = false;
+    $mensagem = 'Voluntário não encontrado.';
+
+    if ($id !== false) {
+        try {
+            $stmt = $conn->prepare('DELETE FROM voluntario WHERE id_voluntario = :id_voluntario');
+            $stmt->bindValue(':id_voluntario', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $sucesso = $stmt->rowCount() > 0;
+            if ($sucesso) {
+                $mensagem = 'Voluntário deletado com sucesso!';
+            }
+        } catch (PDOException $e) {
+            error_log('Falha ao excluir voluntário: ' . $e->getMessage());
+            $mensagem = 'Não foi possível excluir o voluntário.';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -18,37 +42,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="refresh" content="2; url=../../admin/tabelas/tabela_voluntario.php">
-    <title>Abrigo dos Gatos</title>
+    <title>Voluntário - Patas &amp; Lares</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="../index.php">Abrigo dos gatos</a> 
+            <a href="../../index.php">Patas &amp; Lares</a>
         </span>
     </header>
-    
+
     <main>
-        <?php
-            require_once '../../lib/conn.php';
-
-            $id = (int)$_GET['id'];
-
-            $sql = "DELETE FROM voluntario WHERE id_voluntario = :id_voluntario ";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':id_voluntario',$id);
-            $stmt->execute();
-        ?>
-        <div class="alert success">
-                    <i class="far fa-check-circle"></i>
-                    <p class="lead">Voluntário deletado com sucesso!</p> 
-                </div>
+        <div class="alert <?= $sucesso ? 'success' : 'danger' ?>">
+            <i class="<?= $sucesso ? 'far fa-check-circle' : 'fas fa-times' ?>"></i>
+            <p class="lead"><?= e($mensagem) ?></p>
+            <p><a href="../../admin/tabelas/tabela_voluntario.php">Voltar para voluntários</a></p>
+        </div>
     </main>
 
     <footer>
         <div id="baixo">
 			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
 			</div>
 		</div>
     </footer>

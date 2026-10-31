@@ -80,7 +80,9 @@
         <ul>
             <li><strong>Data:</strong> <?= e(formatar_data_hora($solicitacao->data_solicitacao)) ?></li>
             <li><strong>Situação:</strong> <?= e(rotulo(STATUS_SOLICITACAO, $solicitacao->status)) ?></li>
-            <?php if ($solicitacao->status !== 'PENDENTE') { ?>
+            <?php if ($solicitacao->status === 'CANCELADA') { ?>
+            <li><strong>Cancelada pelo adotante em:</strong> <?= e(formatar_data_hora($solicitacao->data_decisao)) ?></li>
+            <?php } elseif ($solicitacao->status !== 'PENDENTE') { ?>
             <li><strong>Avaliador:</strong> <?= e($solicitacao->avaliador_nome) ?></li>
             <li><strong>Data da decisão:</strong> <?= e(formatar_data_hora($solicitacao->data_decisao)) ?></li>
             <li><strong>Justificativa:</strong> <?= $solicitacao->justificativa === null ? e(NAO_INFORMADO) : nl2br(e($solicitacao->justificativa)) ?></li>

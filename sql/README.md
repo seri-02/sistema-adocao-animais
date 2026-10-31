@@ -24,6 +24,7 @@ sql/
 | 4 | `004_adocoes_fk_animal` | `adocoes.fk_id_gato` (varchar) vira `id_animal` (int) com FK para `animal` (`ON DELETE/UPDATE RESTRICT`) |
 | 5 | `005_usuario_perfis_autenticacao` | `usuario` ganha `id_usuario`, `nome`, `telefone`, `perfil` (ADOTANTE/FUNCIONARIO/ADMIN), `ativo`, timestamps, `senha` varchar(255) e `UNIQUE(email)`; contas existentes viram ADMIN ativas; hashes SHA-1 preservados (modernizados no próximo login) |
 | 6 | `006_solicitacao_adocao` | Cria `solicitacao_adocao` (`id_animal`, `id_adotante`, `status` PENDENTE/APROVADA/REPROVADA, `id_avaliador`, `data_solicitacao`, `data_decisao`, `justificativa`) com FKs para `animal` e `usuario` (`ON DELETE/UPDATE RESTRICT`). Não migra `adocoes` |
+| 7 | `007_cancelamento_solicitacao` | Acrescenta `CANCELADA` ao ENUM `solicitacao_adocao.status` (mantém `NOT NULL DEFAULT 'PENDENTE'`). Nenhuma coluna nova |
 
 ### Solicitação de adoção e `adocoes` legada
 
@@ -34,6 +35,12 @@ sql/
 - A tabela `adocoes` é **somente histórico legado** (adoções anônimas anteriores ao workflow, sem vínculo com
   `usuario`): não recebe novos registros e **não** foi convertida em solicitações.
 - Animal ou usuário com solicitações não pode ser excluído (FK `RESTRICT`); o histórico nunca é apagado em cascata.
+- **Cancelamento (007):** só o próprio ADOTANTE ativo cancela, e só solicitação `PENDENTE`. Numa transação, a
+  solicitação vira `CANCELADA` e o animal volta de `EM_PROCESSO` para `DISPONIVEL`. Cancelar e decidir travam a
+  mesma linha de `solicitacao_adocao` (`FOR UPDATE`), então só uma das duas ações encontra `PENDENTE`.
+- **Convenção de `data_decisao`:** é o momento em que a solicitação foi **encerrada**. Em `APROVADA`/`REPROVADA`,
+  data da decisão da equipe (com `id_avaliador`); em `CANCELADA`, data do cancelamento pelo adotante
+  (`id_avaliador` e `justificativa` ficam `NULL`). Não há coluna separada para cancelamento.
 
 Cada `up` registra sua versão em `schema_migrations` **como último comando**. Cada `down` remove o registro.
 Para saber o que já foi aplicado:
@@ -68,6 +75,7 @@ C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-sour
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/005_usuario_perfis_autenticacao.up.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/006_solicitacao_adocao.up.sql"
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/007_cancelamento_solicitacao.up.sql"
 ```
 
 #### Administrador local
@@ -127,6 +135,7 @@ C:/xampp/mysql/bin/mysql.exe -uroot -e "DROP DATABASE abrigo_restore_teste"
 Execute os `down` **em ordem inversa** (o mais recente primeiro):
 
 ```bash
+C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/007_cancelamento_solicitacao.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/006_solicitacao_adocao.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/005_usuario_perfis_autenticacao.down.sql"
 C:/xampp/mysql/bin/mysql.exe -uroot --default-character-set=utf8mb4 --abort-source-on-error abrigo_dos_gatos -e "source sql/migrations/004_adocoes_fk_animal.down.sql"
@@ -165,6 +174,10 @@ Limitações que devem ser conhecidas antes de depender do rollback:
   após a migração). Se existir qualquer solicitação, aborta **antes do `DROP TABLE`** — histórico de solicitações
   nunca é descartado em silêncio. Depois que a aplicação registrar solicitações, o rollback seguro é restaurar o
   backup pré-F3a.
+- O `down` da 007 é **conservador**: aborta **antes do `ALTER`** se existir qualquer solicitação `CANCELADA`
+  (cancelamentos nunca são convertidos em `PENDENTE`, `REPROVADA` ou outro status) ou se houver migração posterior
+  aplicada. Como segunda camada, ativa `STRICT_TRANS_TABLES` na própria sessão durante o `ALTER`. Depois que houver
+  cancelamentos, o rollback seguro é restaurar o backup pré-007.
 - Rollback de migração não desfaz dados criados pela aplicação depois dela: para isso, só o backup.
 
 ## SQL mode

@@ -37,7 +37,7 @@
 
     $recusas = [
         DECISAO_SOLICITACAO_INEXISTENTE => [404, 'Solicitação não encontrada.'],
-        DECISAO_JA_DECIDIDA => [409, 'Esta solicitação já foi decidida e não pode ser alterada.'],
+        DECISAO_JA_DECIDIDA => [409, 'Esta solicitação já foi encerrada (aprovada, reprovada ou cancelada) e não pode ser alterada.'],
         DECISAO_ADOTANTE_INVALIDO => [409, 'Não é possível aprovar esta solicitação porque o adotante não está mais ativo como ADOTANTE. Reprove a solicitação para liberar o animal.'],
         DECISAO_INCONSISTENTE => [409, 'Não foi possível registrar a decisão: a situação do animal não corresponde à solicitação. Nenhuma alteração foi feita.'],
         DECISAO_AVALIADOR_SEM_PERMISSAO => [403, 'Você não tem permissão para analisar solicitações.'],

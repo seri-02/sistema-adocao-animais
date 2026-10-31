@@ -63,6 +63,7 @@
                     <th>Espécie</th>
                     <th>Data da solicitação</th>
                     <th>Situação</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,11 +81,21 @@
                         <p><?= e(rotulo(STATUS_SOLICITACAO, $solicitacao->status)) ?></p>
                         <?php if ($solicitacao->status !== 'PENDENTE') { ?>
                             <?php if ($solicitacao->data_decisao !== null) { ?>
-                            <p>Decisão em <?= e(formatar_data_hora($solicitacao->data_decisao)) ?></p>
+                            <p><?= $solicitacao->status === 'CANCELADA' ? 'Cancelada em' : 'Decisão em' ?> <?= e(formatar_data_hora($solicitacao->data_decisao)) ?></p>
                             <?php } ?>
                             <?php if ($solicitacao->justificativa !== null && $solicitacao->justificativa !== '') { ?>
                             <p><?= $solicitacao->status === 'REPROVADA' ? 'Motivo:' : 'Observação:' ?> <?= nl2br(e($solicitacao->justificativa)) ?></p>
                             <?php } ?>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <?php if ($solicitacao->status === 'PENDENTE') { ?>
+                        <!-- Só o id da solicitação é enviado: o dono e o animal são conferidos no servidor -->
+                        <form action="function/update/func_cancelar_solicitacao.php" method="post"
+                              onsubmit="return confirm('Tem certeza de que deseja cancelar esta solicitação?');">
+                            <input type="hidden" name="id_solicitacao" value="<?= e($solicitacao->id_solicitacao) ?>">
+                            <button type="submit" class="sair">Cancelar solicitação</button>
+                        </form>
                         <?php } ?>
                     </td>
                 </tr>

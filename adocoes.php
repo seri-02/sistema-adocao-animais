@@ -1,185 +1,180 @@
-<?php require_once __DIR__ . '/lib/auth.php'; $usuario_menu = usuario_logado_opcional(); ?>
 <?php
-    require_once 'lib/conn.php';
-    require_once 'lib/escape.php';
-    require_once 'lib/animal.php';
+    require_once __DIR__ . '/lib/auth.php';
+    require_once __DIR__ . '/lib/escape.php';
+    $usuario_menu = usuario_logado_opcional();
+
+    require_once __DIR__ . '/lib/conn.php';
+    require_once __DIR__ . '/lib/animal.php';
     $sqlBuscaAnimais = "SELECT * FROM animal WHERE status = 'DISPONIVEL' ORDER BY id_animal";
     $buscaAnimais = $conn->query($sqlBuscaAnimais);
     $animais = $buscaAnimais->fetchAll(PDO::FETCH_OBJ);
+
+    // A contagem é a da própria consulta, então sempre bate com os cards exibidos
+    $total = count($animais);
+    $texto_total = $total . ($total === 1 ? ' animal disponível' : ' animais disponíveis');
+
+    // Dados rápidos do card: só valores conhecidos na linha principal;
+    // os ausentes viram uma nota única ("Sexo, idade e porte não informados")
+    $cards = [];
+    foreach ($animais as $animal) {
+        $sexo = rotulo(SEXOS, $animal->sexo);
+        $idade = calcular_idade($animal->data_nascimento_estimada);
+        $porte = rotulo(PORTES, $animal->porte);
+
+        $dados = [rotulo(ESPECIES, $animal->especie)];
+        $ausentes = [];
+        if ($sexo !== NAO_INFORMADO) {
+            $dados[] = $sexo;
+        } else {
+            $ausentes['sexo'] = 'Sexo não informado';
+        }
+        if ($idade !== 'Idade não informada') {
+            $dados[] = $idade;
+        } else {
+            $ausentes['idade'] = $idade;
+        }
+        if ($porte === NAO_INFORMADO) {
+            $ausentes['porte'] = 'Porte não informado';
+        }
+
+        if (count($ausentes) > 1) {
+            $nomes = array_keys($ausentes);
+            $ultimo = array_pop($nomes);
+            $nota = ucfirst(implode(', ', $nomes) . ' e ' . $ultimo) . ' não informados';
+        } else {
+            $nota = $ausentes ? reset($ausentes) : null;
+        }
+
+        $cards[] = [
+            'animal' => $animal,
+            'dados' => implode(' · ', $dados),
+            'porte' => $porte === NAO_INFORMADO ? null : 'Porte ' . mb_strtolower($porte),
+            'nota' => $nota,
+        ];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<link rel="stylesheet" href="css/style.css">
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<script src="js/jquery.js"></script>
-
-<link rel="icon" href="">
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abrigo dos Gatos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animais para adoção - Patas &amp; Lares</title>
+    <meta name="description" content="Conheça os animais disponíveis para adoção.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C86B4A'%3E%3Cellipse cx='12' cy='16' rx='5' ry='4.2'/%3E%3Ccircle cx='5.5' cy='10' r='2.2'/%3E%3Ccircle cx='9.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='14.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='18.5' cy='10' r='2.2'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="css/catalogo.css">
+    <!-- Sem JavaScript o menu mobile permanece aberto; com JavaScript ele vira recolhível -->
+    <script>document.documentElement.classList.add('js')</script>
+    <!-- Mesmo menu recolhível da Home (depende só dos ids btn-mobile e nav) -->
+    <script src="js/home.js" defer></script>
 </head>
-<body>
-    <header class="adote-header">
-        <span id="span-logo">
-            <a href="index.php" id="logo">Abrigo dos Gatos</a>
-        </span>
-        <nav id="nav">
-            <button id="btn-mobile"><img src="img/menu.svg" alt=""></button>
-            <ul id="menu">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="adocoes.php">Adoções</a></li>
-                <li><a href="localizacao.php">Localização</a></li>                
-                <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
-            </ul>
-        </nav>
-        <ul class="social">
-            <li>
-                <a href="https://www.facebook.com/gabrielaxavier.mendescoito" target="_blank"><i class="fab fa-facebook-f" aria-hidden="true"></i><div>Facebook</div></a>
-            </li>
-            <li>
-                <a href="https://api.whatsapp.com/send?phone=55996335800" target="_blank"><i class="fab fa-whatsapp" aria-hidden="true"></i><div>Whatsapp</div></a>
-            </li>
-            <li>
-                <a href="https://www.instagram.com/abrigo.dosgatos/" target="_blank"><i class="fab fa-instagram" aria-hidden="true"></i><div>Instagram</div></a>
-            </li>
-        </ul>
-    </header> 
+<body class="catalogo">
+    <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
-    <div class="conteudo-titulo">
-        <span id="titulo">Adote</span>
-    </div>
+    <header class="topo">
+        <div class="container topo-barra">
+            <a href="index.php" class="marca">
+                <svg class="marca-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <ellipse cx="12" cy="16" rx="5" ry="4.2"/>
+                    <circle cx="5.5" cy="10" r="2.2"/>
+                    <circle cx="9.5" cy="5.8" r="2.2"/>
+                    <circle cx="14.5" cy="5.8" r="2.2"/>
+                    <circle cx="18.5" cy="10" r="2.2"/>
+                </svg>
+                Patas &amp; Lares
+            </a>
 
-    <div class="container">
-        <?php
-            foreach($animais as $animal) {
-                $resumo = [
-                    rotulo(ESPECIES, $animal->especie),
-                    $animal->sexo === 'NAO_INFORMADO' ? 'Sexo não informado' : rotulo(SEXOS, $animal->sexo),
-                    calcular_idade($animal->data_nascimento_estimada),
-                    $animal->porte === null ? 'Porte não informado' : 'Porte ' . mb_strtolower(rotulo(PORTES, $animal->porte)),
-                ];
-        ?>
-            <div class="card">
-                <?php if ($animal->imagem) { ?>
-                <img src="image/<?= e($animal->imagem) ?>" alt="<?= e($animal->nome) ?>" height="398" width="395">
+            <button id="btn-mobile" class="menu-botao" type="button" aria-expanded="false" aria-controls="nav">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M4 7h16M4 12h16M4 17h16"/>
+                </svg>
+                Menu
+            </button>
+
+            <nav id="nav" class="navegacao" aria-label="Navegação principal">
+                <ul id="menu" class="nav-links">
+                    <li><a href="index.php">Início</a></li>
+                    <li><a href="adocoes.php" aria-current="page">Animais</a></li>
+                    <li><a href="index.php#como-adotar">Como adotar</a></li>
+                    <li><a href="seja_voluntario.php">Voluntariado</a></li>
+                </ul>
+                <ul class="nav-conta">
+                    <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="conteudo">
+        <section class="catalogo-topo" aria-labelledby="titulo-catalogo">
+            <div class="container">
+                <h1 id="titulo-catalogo">Animais para adoção</h1>
+                <p class="catalogo-descricao">Conheça os animais disponíveis e encontre um novo companheiro.</p>
+                <p class="catalogo-total"><?= e($texto_total) ?></p>
+            </div>
+        </section>
+
+        <section class="catalogo-lista" aria-label="Lista de animais disponíveis">
+            <div class="container">
+                <?php if ($cards) { ?>
+                <ul class="grade-animais">
+                    <?php foreach ($cards as $card) { $animal = $card['animal']; ?>
+                    <li>
+                        <article class="card-animal">
+                            <div class="card-foto">
+                                <?php if ($animal->imagem) { ?>
+                                <img src="image/<?= e($animal->imagem) ?>" alt="Foto de <?= e($animal->nome) ?>" loading="lazy">
+                                <?php } else { ?>
+                                <span class="card-sem-foto">Foto não disponível</span>
+                                <?php } ?>
+                                <span class="badge-status"><?= e(rotulo(STATUS_ANIMAL, $animal->status)) ?></span>
+                            </div>
+                            <div class="card-corpo">
+                                <h2 class="card-nome"><?= e($animal->nome) ?></h2>
+                                <p class="card-dados"><?= e($card['dados']) ?></p>
+                                <?php if ($card['porte'] !== null) { ?>
+                                <p class="card-dados"><?= e($card['porte']) ?></p>
+                                <?php } ?>
+                                <?php if ($card['nota'] !== null) { ?>
+                                <p class="card-nota"><?= e($card['nota']) ?></p>
+                                <?php } ?>
+                                <a class="botao botao-primario" href="gato.php?id=<?= e($animal->id_animal) ?>">
+                                    Ver detalhes<span class="sr-only"> de <?= e($animal->nome) ?></span>
+                                </a>
+                            </div>
+                        </article>
+                    </li>
+                    <?php } ?>
+                </ul>
+                <?php } else { ?>
+                <div class="catalogo-vazio">
+                    <h2>Nenhum animal disponível no momento</h2>
+                    <p>Novos animais podem ficar disponíveis para adoção em breve.</p>
+                    <a class="botao botao-secundario" href="index.php">Voltar ao início</a>
+                </div>
                 <?php } ?>
-                <div class="content">
-                    <h2><3</h2>
-                    <h3><?= e($animal->nome) ?></h3>
-                    <p><?= e(implode(' · ', $resumo)) ?></p>
-                    <p><?= e(mb_strimwidth((string) $animal->descricao, 0, 120, '…')) ?></p>
-                    <a href="gato.php?id=<?= e($animal->id_animal) ?>">ADOTAR</a>
-                </div>
             </div>
-                <?php
-                    }
-                ?>     
-    </div>
+        </section>
+    </main>
 
-    <div id="load" class="load"></div>
-
-    <div class="conteudo-atualizacoes">
-        <h3>Atualizações do Abrigo</h3>
-        <p>Acompanhe-nos!</p>
-        <div id="atualizacoes">
-            <span class="conteudo-atualizacoes-numero">
-                <p class="numero">
-                    <?php
-                        require_once 'lib/conn.php';
-                        require_once 'lib/animal.php';
-                        echo contar_animais_por_status($conn, 'ADOTADO');
-                    ?> 
-                </p>
-                <p>Adotados</p>
-            </span>
-            <span id="borda"></span>
-            <span class="conteudo-atualizacoes-numero">     
-                <p class="numero">
-                    <?php
-                        require_once 'lib/conn.php';
-                        require_once 'lib/animal.php';
-                        echo contar_animais_por_status($conn, 'DISPONIVEL');
-                    ?> 
-                </p>
-                <p>Disponíveis</p>
-            </span>
+    <footer class="rodape">
+        <div class="container rodape-grade">
+            <div>
+                <p class="rodape-marca">Patas &amp; Lares</p>
+                <p>Sistema demonstrativo para gerenciamento de adoção de animais.</p>
+                <p>Tatuí - SP</p>
+            </div>
+            <nav aria-label="Links do rodapé">
+                <ul class="rodape-links">
+                    <li><a href="adocoes.php">Animais</a></li>
+                    <li><a href="seja_voluntario.php">Voluntariado</a></li>
+                    <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
+                </ul>
+            </nav>
         </div>
-    </div>
-
-    <button class="back-to-top" href="#"><i class=" fa-solid fa-chevron-up"></i></button>
-
-    <footer>
-        <div id="conteudo-footer">
-            <div class="caixa esquerda">
-                <h3>Sobre nós</h3>
-                <div class="conteudos-footer">
-                    <p>Nosso Abrigo é particular, não temos nenhum vínculo com o município. Nosso abrigo é só de gatos. Nosso trabalho é 100% realizado por uma equipe de voluntários</p>                    
-                    <div class="social-footer">
-                        <a href="https://www.facebook.com/gabrielaxavier.mendescoito" target="_blank"><span class="fab fa-facebook-f"></span></a>
-                        <a  href="https://api.whatsapp.com/send?phone=55996335800" target="_blank"><span class="fab fa-whatsapp"></span></a>
-                        <a href="https://www.instagram.com/abrigo.dosgatos/" target="_blank"><span class="fab fa-instagram"></span></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="caixa centro">
-                <h3>Endereço</h3>
-                <div class="conteudos-footer">
-                    <div id="rua">
-                        <span class="fas fa-solid fa-location-dot"></span>
-                        <span class="texto">Santa Rita, Tatuí - SP</span>
-                    </div>
-
-                    <div id="telefone">
-                        <span class="fas fas fa-phone-alt"></span>
-						<span class="texto">+55 015 99633-5800</span>
-                    </div>
-                    
-                    <div id="email">
-                        <span class="fas fa-envelope"></span>
-						<span class="texto">abrigodosgatos@gmail.com</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="caixa direita">
-				<h3>Contato</h3>
-				<div class="conteudos-footer">
-					<form action="function/enviar.php" method="post">
-						<div class="email campo">
-                            <input type="email" id="email" name="email" required>
-							<span class="texto">Email</span>
-						</div>
-						<div class="mensagem campo">
-                            <textarea rows="2" cols="25" id="msg" name="msg" required></textarea>
-							<span class="texto">Mensagem</span>
-						</div>
-						<div class="btn">
-							<button type="submit">Enviar</button>
-						</div>
-					</form>
-				</div>
-			</div>
+        <div class="container rodape-base">
+            <p>&copy; 2026 Patas &amp; Lares · Projeto acadêmico</p>
+            <p>Desenvolvido por Jonathas e Gloria</p>
         </div>
-
-        <div id="baixo">
-			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
-			</div>
-		</div>
     </footer>
 </body>
-<script src="js/btn_menu.js"></script>
-<script src="js/maquina_escrever.js"></script>
-<script src="js/back_to_top.js"></script>
 </html>

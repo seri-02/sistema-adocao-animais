@@ -97,7 +97,7 @@
     function listar_solicitacoes_do_adotante(PDO $conn, int $id_adotante): array
     {
         $stmt = $conn->prepare(
-            'SELECT s.id_solicitacao, s.status, s.data_solicitacao, s.data_decisao, s.justificativa,
+            'SELECT s.id_solicitacao, s.id_animal, s.status, s.data_solicitacao, s.data_decisao, s.justificativa,
                     a.nome, a.especie, a.imagem
                FROM solicitacao_adocao s
                JOIN animal a ON a.id_animal = s.id_animal

@@ -18,7 +18,8 @@ apresentação do TG. Não é um serviço de adoção real. Este README não tra
 O sistema está **finalizado para a apresentação acadêmica** e foi validado por um *smoke test* final
 (fluxos públicos, conta do adotante, Área da equipe, permissões por perfil e responsividade).
 
-O projeto evoluiu a partir de um sistema anterior, voltado só para gatos. Nesta versão foram refeitos o
+O Patas & Lares foi desenvolvido a partir da evolução e reestruturação do projeto acadêmico Abrigo dos Gatos,
+voltado só para gatos. Nesta versão foram refeitos o
 modelo de dados, a autenticação por perfis, o fluxo de adoção e a interface.
 
 ---

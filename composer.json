@@ -1,6 +1,6 @@
 {
     "name": "ana-laura-almeida-ventura/tcc",
-    "description": "TCC | Abrigo para gatos",
+    "description": "Patas & Lares - Sistema de gerenciamento de adoção de animais",
     "minimum-stability": "stable",
     "type": "library",
     "license": "MIT",

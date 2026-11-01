@@ -18,5 +18,5 @@
 
     // Gmail: normalmente a própria conta autenticada no SMTP (SMTP_USER), salvo quando existir alias autorizado
     const MAIL_FROM = 'usuario@example.com';
-    const MAIL_FROM_NAME = 'Abrigo dos Gatos';
+    const MAIL_FROM_NAME = 'Patas & Lares';
     const MAIL_TO = 'destinatario@example.com';  // quem recebe as mensagens do formulário

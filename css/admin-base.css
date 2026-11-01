@@ -242,6 +242,22 @@ a {
     color: var(--texto-suave);
 }
 
+/* Link de retorno no topo das páginas internas (ex.: "Voltar para animais") */
+.admin-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 44px;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    text-underline-offset: 3px;
+}
+
+.admin-voltar .icone {
+    width: 18px;
+    height: 18px;
+}
+
 .admin-secao-titulo {
     margin-bottom: 0.875rem;
     font-size: 1rem;
@@ -258,6 +274,7 @@ section + section {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
     min-height: 44px;
     padding: 0.6rem 1.1rem;
     border: 2px solid var(--verde);
@@ -325,6 +342,12 @@ section + section {
 .badge-neutro {
     background: #F0EEEB;
     color: #555049;
+}
+
+/* Estado concluído/informativo (ex.: animal Adotado), distinto de positivo e neutro */
+.badge-info {
+    background: #E8EEF6;
+    color: #2E4A6B;
 }
 
 .alerta-sucesso {

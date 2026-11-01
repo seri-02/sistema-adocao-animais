@@ -25,53 +25,59 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <link rel="stylesheet" href="../css/style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="icon" href="">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php if (!$erros) { ?>
     <meta http-equiv="refresh" content="2; url=../seja_voluntario.php">
     <?php } ?>
     <title>Seja voluntário - Patas &amp; Lares</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C86B4A'%3E%3Cellipse cx='12' cy='16' rx='5' ry='4.2'/%3E%3Ccircle cx='5.5' cy='10' r='2.2'/%3E%3Ccircle cx='9.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='14.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='18.5' cy='10' r='2.2'/%3E%3C/svg%3E">
+    <!-- Mesmo card da resposta pública de cadastro de adotante (auth.css); sem CSS próprio -->
+    <link rel="stylesheet" href="../css/auth.css">
 </head>
-<body id="adm">
-    <header>
-        <span>
-            <a href="../index.php">Patas &amp; Lares</a>
-        </span>
+<body class="autenticacao">
+    <!-- Resposta simples: só a marca, sem o menu completo (o endpoint não carrega estado de sessão para o menu) -->
+    <header class="topo">
+        <div class="container topo-barra">
+            <a href="../index.php" class="marca">
+                <svg class="marca-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <ellipse cx="12" cy="16" rx="5" ry="4.2"/>
+                    <circle cx="5.5" cy="10" r="2.2"/>
+                    <circle cx="9.5" cy="5.8" r="2.2"/>
+                    <circle cx="14.5" cy="5.8" r="2.2"/>
+                    <circle cx="18.5" cy="10" r="2.2"/>
+                </svg>
+                Patas &amp; Lares
+            </a>
+        </div>
     </header>
 
-    <main>
-        <?php if (!$erros) { ?>
-        <div class="alert success">
-            <i class="far fa-check-circle"></i>
-            <p class="lead">Voluntário cadastrado com sucesso!</p>
-        </div>
-        <?php } else { ?>
-        <div class="alert danger">
-            <i class="fas fa-times"></i>
-            <?php foreach ($erros as $erro) { ?>
-                <p class="lead"><?= e($erro) ?></p>
+    <main id="conteudo" class="container">
+        <section class="auth-card" aria-labelledby="titulo-auth">
+            <?php if (!$erros) { ?>
+            <h1 id="titulo-auth">Voluntário cadastrado com sucesso!</h1>
+            <p class="auth-intro">Obrigado por se oferecer para ajudar. Você será direcionado de volta para a página de voluntariado.</p>
+            <a class="botao botao-primario" href="../seja_voluntario.php">Voltar para voluntariado</a>
+            <?php } else { ?>
+            <h1 id="titulo-auth">Não foi possível concluir seu cadastro</h1>
+            <div class="alerta-erro" role="alert">
+                <span class="alerta-icone" aria-hidden="true">!</span>
+                <div>
+                    <?php foreach ($erros as $erro) { ?>
+                    <p><?= e($erro) ?></p>
+                    <?php } ?>
+                </div>
+            </div>
+            <a class="botao botao-secundario" href="../seja_voluntario.php">Voltar ao formulário</a>
             <?php } ?>
-            <p><a href="javascript:history.back()">Voltar ao formulário</a></p>
-        </div>
-        <?php } ?>
+        </section>
     </main>
 
-    <footer>
-        <div id="baixo">
-			<div class="centro">
-				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
-			</div>
-		</div>
+    <footer class="rodape rodape-simples">
+        <div class="container rodape-base">
+            <p>&copy; 2026 Patas &amp; Lares · Projeto acadêmico</p>
+            <p>Desenvolvido por Jonathas e Gloria</p>
+        </div>
     </footer>
 </body>
 </html>

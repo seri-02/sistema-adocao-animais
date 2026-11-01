@@ -74,8 +74,8 @@
                     </div>
                 </div>
                 <div class="hero-imagem">
-                    <img src="img/gatos.jpg" width="1000" height="667"
-                         alt="Dois gatos deitados lado a lado olhando para a câmera: um preto e um tigrado com peito branco">
+                    <img src="img/cao_e_gato.jpg" width="1200" height="1500"
+                         alt="Um gato de pelo longo alaranjado encostado em um cachorro preto e branco sorridente, sobre fundo azul">
                 </div>
             </div>
         </section>

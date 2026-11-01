@@ -14,12 +14,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="refresh" content="2; url=../index.php">
-    <title>Abrigo dos Gatos</title>
+    <title>Contato - Patas &amp; Lares</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="index.php">Abrigo dos gatos</a> 
+            <a href="../index.php">Patas &amp; Lares</a>
         </span>
     </header>
     
@@ -54,7 +54,7 @@
         $mail->Port = SMTP_PORT;
 
         $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
-        $mail->addAddress(MAIL_TO, 'Abrigo para Gatos');
+        $mail->addAddress(MAIL_TO, 'Patas & Lares');
         $mail->addReplyTo($email, $msg);
 
         $mail->isHTML(true);
@@ -84,8 +84,7 @@
     <footer>
         <div id="baixo">
 			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
 			</div>
 		</div>
     </footer>

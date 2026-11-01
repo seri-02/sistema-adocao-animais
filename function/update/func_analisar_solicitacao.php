@@ -66,12 +66,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrigo dos Gatos</title>
+    <title>Solicitações de adoção - Patas &amp; Lares</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="../../index.php">Abrigo dos gatos</a>
+            <a href="../../index.php">Patas &amp; Lares</a>
         </span>
     </header>
 
@@ -91,8 +91,7 @@
     <footer>
         <div id="baixo">
 			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
 			</div>
 		</div>
     </footer>

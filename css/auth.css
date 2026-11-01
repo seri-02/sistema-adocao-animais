@@ -227,6 +227,18 @@ a {
     color: #FFFFFF;
 }
 
+/* "Área da equipe" (visitante): acesso secundário em texto, sem competir com Entrar/Cadastrar */
+.nav-conta .item-equipe a {
+    border-color: transparent;
+    color: var(--texto-suave);
+    font-weight: 500;
+}
+
+.nav-conta .item-equipe a:hover {
+    background: var(--fundo);
+    color: var(--verde);
+}
+
 /* Item da conta da página atual ("Entrar" ou "Cadastrar") */
 .nav-conta a[aria-current="page"] {
     background: var(--verde);
@@ -381,6 +393,14 @@ body {
 
 .auth-alternativa a {
     font-weight: 600;
+}
+
+/* Login: aviso discreto do acesso da equipe, logo abaixo de "Criar conta" */
+.auth-equipe {
+    margin-top: 0.75rem;
+    text-align: center;
+    color: var(--texto-suave);
+    font-size: 0.9375rem;
 }
 
 /* Alerta de erro compacto */
@@ -545,6 +565,15 @@ body {
         margin-left: 0;
         padding-top: 0.75rem;
         border-top: 1px solid var(--borda);
+    }
+
+    /* Linha própria acima de Entrar/Cadastrar, com a mesma área de toque dos links do menu */
+    .nav-conta .item-equipe {
+        flex-basis: 100%;
+    }
+
+    .nav-conta .item-equipe a {
+        padding: 0.65rem 0.5rem;
     }
 }
 

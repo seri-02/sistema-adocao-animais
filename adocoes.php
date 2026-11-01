@@ -98,7 +98,7 @@
                     <li><a href="seja_voluntario.php">Voluntariado</a></li>
                 </ul>
                 <ul class="nav-conta">
-                    <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
+                    <?php $mostrar_area_equipe = true; require __DIR__ . '/parciais/menu_conta.php'; ?>
                 </ul>
             </nav>
         </div>

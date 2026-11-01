@@ -6,13 +6,20 @@
     require_once __DIR__ . '/../../lib/escape.php';
     require_once __DIR__ . '/../../lib/animal.php';
 
-    $id_animal = (int) ($_POST['id_animal'] ?? 0);
+    // Só inteiro positivo: ausente, vazio, texto, decimal, array ou overflow nunca viram outro id
+    $id_recebido = $_POST['id_animal'] ?? null;
+    $id_animal = is_string($id_recebido)
+        ? filter_var($id_recebido, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])
+        : false;
     [$dados, $erros] = ler_formulario_animal($_POST);
 
-    $stmt = $conn->prepare('SELECT id_animal, imagem, status FROM animal WHERE id_animal = :id_animal');
-    $stmt->bindValue(':id_animal', $id_animal, PDO::PARAM_INT);
-    $stmt->execute();
-    $atual = $stmt->fetch(PDO::FETCH_OBJ);
+    $atual = false;
+    if ($id_animal !== false) {
+        $stmt = $conn->prepare('SELECT id_animal, imagem, status FROM animal WHERE id_animal = :id_animal');
+        $stmt->bindValue(':id_animal', $id_animal, PDO::PARAM_INT);
+        $stmt->execute();
+        $atual = $stmt->fetch(PDO::FETCH_OBJ);
+    }
 
     if (!$atual) {
         $erros = ['Animal não encontrado.'];

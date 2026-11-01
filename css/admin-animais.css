@@ -1,0 +1,310 @@
+/* Animais da área administrativa (admin/tabelas/tabela_gatos.php, admin/gato.php,
+   admin/editar/gato.php e admin/parciais/campos_animal.php). Depende de admin-base.css. */
+
+/* ---------- Listagem ---------- */
+
+.ani-cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+}
+
+.ani-lista {
+    display: grid;
+    gap: 0.75rem;
+}
+
+/* Prioridade visual: foto e nome > status > dados > ações */
+.ani-item {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem 1.25rem;
+    padding: 1rem 1.25rem;
+}
+
+.ani-miniatura {
+    width: 96px;
+    height: 72px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--verde-claro);
+}
+
+.ani-sem-foto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--verde);
+}
+
+.ani-sem-foto .icone {
+    width: 32px;
+    height: 32px;
+}
+
+.ani-titulo-linha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.75rem;
+}
+
+.ani-nome {
+    font-size: 1.15rem;
+    font-weight: 750;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+/* Pares rótulo/valor empilhados: 2x2 por padrão, uma linha só em telas largas */
+.ani-dados {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 1.25rem;
+    max-width: 26rem;
+    margin: 0.6rem 0 0;
+    font-size: 0.9rem;
+}
+
+.ani-dados dt {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.ani-dados dd {
+    margin: 0;
+    color: var(--texto);
+}
+
+.ani-acoes-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.ani-acoes-item .icone {
+    width: 18px;
+    height: 18px;
+}
+
+/* Destrutivo e secundário: sem preenchimento, cor só reforça o texto "Excluir" */
+.botao-excluir {
+    border-color: transparent;
+    background: transparent;
+    color: #8E352E;
+}
+
+.botao-excluir:hover {
+    border-color: #E3B9B4;
+    background: #FBEBEA;
+}
+
+.ani-vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.ani-vazio-titulo {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.ani-vazio p + p {
+    color: var(--texto-suave);
+}
+
+.ani-vazio .botao {
+    margin-top: 0.75rem;
+}
+
+/* ---------- Formulário (cadastro e edição) ---------- */
+
+.ani-form {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 52rem;
+}
+
+/* O espaçamento entre os blocos vem do gap, não de section + section */
+.ani-form section + section {
+    margin-top: 0;
+}
+
+.ani-bloco {
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.ani-bloco h2 {
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.ani-grade {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem 1.25rem;
+}
+
+.ani-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.ani-campo-largo {
+    grid-column: 1 / -1;
+}
+
+.ani-campo label,
+.ani-rotulo {
+    font-weight: 600;
+}
+
+.ani-obrigatorio {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--texto-suave);
+}
+
+.ani-campo input[type="text"],
+.ani-campo input[type="date"],
+.ani-campo select,
+.ani-campo textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #B9B0A3;
+    border-radius: 8px;
+    background: var(--superficie);
+    color: var(--texto);
+    font: inherit;
+}
+
+.ani-campo textarea {
+    resize: vertical;
+}
+
+.ani-campo input:focus-visible,
+.ani-campo select:focus-visible,
+.ani-campo textarea:focus-visible {
+    border-color: var(--verde);
+}
+
+.ani-campo input[type="file"] {
+    max-width: 100%;
+    padding: 0.5rem;
+    border: 1px dashed #B9B0A3;
+    border-radius: 8px;
+    background: var(--fundo);
+    font: inherit;
+    font-size: 0.9375rem;
+}
+
+.ani-campo input[type="file"]::file-selector-button {
+    margin-right: 0.75rem;
+    padding: 0.45rem 0.9rem;
+    border: 2px solid var(--verde);
+    border-radius: 8px;
+    background: var(--superficie);
+    color: var(--verde);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ani-ajuda {
+    font-size: 0.875rem;
+    color: var(--texto-suave);
+}
+
+.ani-situacao-fixa {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: var(--fundo);
+    color: var(--texto);
+}
+
+.ani-preview {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--verde-claro);
+}
+
+.ani-preview.ani-sem-foto .icone {
+    width: 48px;
+    height: 48px;
+}
+
+.ani-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+/* ---------- Telas largas e menores ---------- */
+
+@media (min-width: 1280px) {
+    .ani-dados {
+        grid-template-columns: repeat(4, max-content);
+        column-gap: 1.75rem;
+        max-width: none;
+    }
+}
+
+
+@media (max-width: 767.98px) {
+    .ani-item {
+        grid-template-columns: 80px minmax(0, 1fr);
+        align-items: start;
+    }
+
+    .ani-miniatura {
+        width: 80px;
+        height: 60px;
+    }
+
+    .ani-acoes-item {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+
+}
+
+@media (max-width: 639.98px) {
+    .ani-cabecalho .botao,
+    .ani-acoes .botao {
+        width: 100%;
+    }
+
+    .ani-item {
+        padding: 1rem;
+    }
+
+    .ani-acoes-item .botao {
+        flex: 1 1 0;
+    }
+
+    .ani-bloco {
+        padding: 1.1rem 1.1rem 1.25rem;
+    }
+
+    .ani-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

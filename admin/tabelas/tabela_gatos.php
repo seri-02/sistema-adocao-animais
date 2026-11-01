@@ -3,82 +3,108 @@
     require_once __DIR__ . '/../../lib/escape.php';
     require_once __DIR__ . '/../../lib/animal.php';
     $usuario_logado = exigir_perfis(PERFIS_EQUIPE);
+
+    require_once __DIR__ . '/../../lib/conn.php';
+
+    $pagina_admin_atual = 'animais';
+
+    $sql = "SELECT * FROM animal ORDER BY id_animal ASC";
+    $stmt = $conn->query($sql);
+    $animais = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    // Tom do selo de cada situação (o texto do selo é que informa)
+    $tons_status = ['DISPONIVEL' => 'positivo', 'EM_PROCESSO' => 'atencao', 'ADOTADO' => 'info', 'INDISPONIVEL' => 'neutro'];
+
+    // Status cuja exclusão o servidor sempre recusa (function/delete/gato.php): a ação não é oferecida
+    $status_sem_exclusao = ['ADOTADO', 'EM_PROCESSO'];
+
+    // Miniatura só quando o arquivo existe em image/; senão, placeholder
+    $tem_foto = fn(object $animal): bool => $animal->imagem !== null && $animal->imagem !== ''
+        && $animal->imagem === basename($animal->imagem) && is_file(PASTA_IMAGENS . '/' . $animal->imagem);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <link rel="stylesheet" href="../../css/style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="icon" href="">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrigo dos Gatos</title>
+    <title>Animais - Área administrativa - Patas &amp; Lares</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C86B4A'%3E%3Cellipse cx='12' cy='16' rx='5' ry='4.2'/%3E%3Ccircle cx='5.5' cy='10' r='2.2'/%3E%3Ccircle cx='9.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='14.5' cy='5.8' r='2.2'/%3E%3Ccircle cx='18.5' cy='10' r='2.2'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="../../css/admin-base.css">
+    <link rel="stylesheet" href="../../css/admin-animais.css">
+    <!-- Sem JavaScript a navegação fica sempre visível; com JavaScript vira menu recolhível no mobile -->
+    <script>document.documentElement.classList.add('js')</script>
+    <script src="../../js/admin.js" defer></script>
 </head>
-<body id="adm">
-    <header class="header-adm">
-        <span>
-            <a href="../index.php">Abrigo dos gatos</a> 
-        </span>
-        <a href="../painel.php"><button class="sair"><i class="fa-solid fa-chevron-left"></i> Voltar</button></a>
-    </header>
+<body class="admin">
+    <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
-    <div class="tabela">
-        <h3>Lista de Animais</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th class="opcao">#</th>
-                    <th>Nome</th>
-                    <th>Espécie</th>
-                    <th>Sexo</th>
-                    <th>Idade</th>
-                    <th>Porte</th>
-                    <th>Status</th>
-                    <th>Excluir</th>
-                    <th>Editar</th>
-                </tr>
-            </thead>
+    <div class="admin-layout">
+        <?php require __DIR__ . '/../parciais/sidebar.php'; ?>
 
-            <tbody>
-                <?php
-                    require_once '../../lib/conn.php';
-                    $sql = "SELECT * FROM animal ORDER BY id_animal ASC";
-                    $stmt = $conn->query($sql);
-                    $animais = $stmt->fetchAll(PDO::FETCH_OBJ);
-                    foreach ($animais as $animal) {
-                        ?>
-                    <tr>
-                        <td class="id"><?= e($animal->id_animal) ?></td>
-                        <td><?= e($animal->nome) ?></td>
-                        <td><?= e(rotulo(ESPECIES, $animal->especie)) ?></td>
-                        <td><?= e(rotulo(SEXOS, $animal->sexo)) ?></td>
-                        <td><?= e(calcular_idade($animal->data_nascimento_estimada)) ?></td>
-                        <td><?= e(rotulo(PORTES, $animal->porte)) ?></td>
-                        <td><?= e(rotulo(STATUS_ANIMAL, $animal->status)) ?></td>
-                        <td><a href="../../function/delete/gato.php?id=<?= e($animal->id_animal) ?>"><i class="fa-solid fa-trash"></i></a></td>
-                        <td><a href="../editar/gato.php?id=<?= e($animal->id_animal) ?>"><i class="fa-solid fa-user-pen"></i></a></td>
-                    </tr>
-                <?php
-                    }
-                ?>
-            </tbody>
-        </table>
+        <main id="conteudo" class="admin-conteudo">
+            <header class="admin-cabecalho ani-cabecalho">
+                <div>
+                    <h1>Animais</h1>
+                    <p>Gerencie os animais cadastrados e acompanhe a situação de cada um.</p>
+                </div>
+                <a class="botao botao-primario" href="../gato.php">
+                    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>
+                    Cadastrar animal
+                </a>
+            </header>
+
+            <?php if (!$animais) { ?>
+            <div class="cartao ani-vazio">
+                <p class="ani-vazio-titulo">Nenhum animal cadastrado</p>
+                <p>Cadastre um animal para começar a disponibilizá-lo no sistema.</p>
+                <a class="botao botao-primario" href="../gato.php">Cadastrar animal</a>
+            </div>
+            <?php } else { ?>
+            <section aria-labelledby="titulo-lista">
+                <h2 id="titulo-lista" class="visualmente-oculto">Animais cadastrados</h2>
+                <ul class="ani-lista">
+                    <?php foreach ($animais as $animal) { ?>
+                    <li class="cartao ani-item">
+                        <?php if ($tem_foto($animal)) { ?>
+                        <img class="ani-miniatura" src="../../image/<?= e($animal->imagem) ?>" alt="" width="96" height="72" loading="lazy">
+                        <?php } else { ?>
+                        <span class="ani-miniatura ani-sem-foto" aria-hidden="true">
+                            <svg class="icone" viewBox="0 0 24 24" focusable="false"><circle cx="6" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 12c-3 0-5 3-5 5.5S9 20 12 20s5-.5 5-2.5S15 12 12 12z"/></svg>
+                        </span>
+                        <?php } ?>
+
+                        <div class="ani-info">
+                            <div class="ani-titulo-linha">
+                                <h3 class="ani-nome"><?= e($animal->nome) ?></h3>
+                                <span class="badge badge-<?= e($tons_status[$animal->status] ?? 'neutro') ?>"><?= e(rotulo(STATUS_ANIMAL, $animal->status)) ?></span>
+                            </div>
+                            <dl class="ani-dados">
+                                <div><dt>Espécie</dt><dd><?= e(rotulo(ESPECIES, $animal->especie)) ?></dd></div>
+                                <div><dt>Sexo</dt><dd><?= e(rotulo(SEXOS, $animal->sexo)) ?></dd></div>
+                                <div><dt>Idade</dt><dd><?= e(calcular_idade($animal->data_nascimento_estimada)) ?></dd></div>
+                                <div><dt>Porte</dt><dd><?= e(rotulo(PORTES, $animal->porte)) ?></dd></div>
+                            </dl>
+                        </div>
+
+                        <div class="ani-acoes-item">
+                            <a class="botao botao-secundario" href="../editar/gato.php?id=<?= e($animal->id_animal) ?>">
+                                <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
+                                Editar<span class="visualmente-oculto"> <?= e($animal->nome) ?></span>
+                            </a>
+                            <!-- Só esconde a ação: a regra de exclusão (status/histórico) continua no servidor -->
+                            <?php if (!in_array($animal->status, $status_sem_exclusao, true)) { ?>
+                            <a class="botao botao-excluir" href="../../function/delete/gato.php?id=<?= e($animal->id_animal) ?>">
+                                <svg class="icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>
+                                Excluir<span class="visualmente-oculto"> <?= e($animal->nome) ?></span>
+                            </a>
+                            <?php } ?>
+                        </div>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </section>
+            <?php } ?>
+        </main>
     </div>
-
-    <footer id="footer-adm">
-        <div id="baixo">
-			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
-			</div>
-		</div>
-    </footer>
 </body>
 </html>

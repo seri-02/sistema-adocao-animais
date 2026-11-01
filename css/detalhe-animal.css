@@ -227,6 +227,18 @@ a {
     color: #FFFFFF;
 }
 
+/* "Área da equipe" (visitante): acesso secundário em texto, sem competir com Entrar/Cadastrar */
+.nav-conta .item-equipe a {
+    border-color: transparent;
+    color: var(--texto-suave);
+    font-weight: 500;
+}
+
+.nav-conta .item-equipe a:hover {
+    background: var(--fundo);
+    color: var(--verde);
+}
+
 /* ---------- Conteúdo do detalhe ---------- */
 
 dl, dd {
@@ -570,6 +582,15 @@ dl, dd {
         margin-left: 0;
         padding-top: 0.75rem;
         border-top: 1px solid var(--borda);
+    }
+
+    /* Linha própria acima de Entrar/Cadastrar, com a mesma área de toque dos links do menu */
+    .nav-conta .item-equipe {
+        flex-basis: 100%;
+    }
+
+    .nav-conta .item-equipe a {
+        padding: 0.65rem 0.5rem;
     }
 
     .principal {

@@ -52,7 +52,7 @@
                     <li><a href="seja_voluntario.php">Voluntariado</a></li>
                 </ul>
                 <ul class="nav-conta">
-                    <?php require __DIR__ . '/parciais/menu_conta.php'; ?>
+                    <?php $mostrar_area_equipe = true; require __DIR__ . '/parciais/menu_conta.php'; ?>
                 </ul>
             </nav>
         </div>
@@ -91,6 +91,8 @@
             </form>
 
             <p class="auth-alternativa">Ainda não tem uma conta? <a href="cadastro.php">Criar conta</a></p>
+            <!-- Login separado da equipe (ADMIN/FUNCIONARIO); este formulário só aceita adotante -->
+            <p class="auth-equipe">Faz parte da equipe? Acesse a <a href="admin/admin.php">Área da equipe</a>.</p>
         </section>
     </main>
 

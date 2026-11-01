@@ -1,0 +1,386 @@
+/* Solicitações de adoção da área administrativa (admin/solicitacoes.php e
+   admin/avaliar/solicitacao.php). Depende de admin-base.css. */
+
+/* ---------- Listagem ---------- */
+
+.sol-pendentes {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.875rem;
+    font-weight: 600;
+    color: var(--texto);
+}
+
+.sol-pendentes::before {
+    content: "";
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #C98A1E;
+}
+
+.sol-pendentes-zero::before {
+    background: var(--verde);
+}
+
+.sol-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.sol-filtros a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--borda);
+    border-radius: 999px;
+    background: var(--superficie);
+    color: var(--texto);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.sol-filtros a:hover {
+    border-color: var(--verde);
+    color: var(--verde);
+}
+
+.sol-filtros a[aria-current="page"] {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: #FFFFFF;
+}
+
+.sol-lista {
+    display: grid;
+    gap: 0.75rem;
+}
+
+/* Prioridade visual: animal > adotante > status > datas > ação */
+.sol-item {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 1rem 1.25rem;
+    padding: 1rem 1.25rem;
+}
+
+/* Faixa lateral sem alterar a largura do cartão (miniaturas continuam alinhadas) */
+.sol-item-pendente {
+    box-shadow: inset 4px 0 0 #C98A1E;
+}
+
+.sol-miniatura {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--verde-claro);
+}
+
+.sol-miniatura-vazia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--verde);
+}
+
+.sol-miniatura-vazia .icone {
+    width: 32px;
+    height: 32px;
+}
+
+.sol-animal {
+    font-size: 1.15rem;
+    font-weight: 750;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.sol-adotante {
+    margin-top: 0.15rem;
+    color: var(--texto);
+    overflow-wrap: anywhere;
+}
+
+.sol-adotante span {
+    color: var(--texto-suave);
+}
+
+.sol-dados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin: 0.6rem 0 0;
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+}
+
+.sol-dados div {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.35rem;
+}
+
+.sol-dados dt {
+    font-weight: 600;
+}
+
+.sol-dados dd {
+    margin: 0;
+    color: var(--texto);
+}
+
+.sol-justificativa {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    overflow-wrap: anywhere;
+}
+
+.sol-justificativa strong {
+    color: var(--texto-suave);
+}
+
+.sol-lateral {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.sol-lateral .botao {
+    min-width: 7.5rem;
+}
+
+.sol-vazio {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.sol-vazio-titulo {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.sol-vazio-titulo + p {
+    margin-top: 0.35rem;
+    color: var(--texto-suave);
+}
+
+/* ---------- Análise / detalhes ---------- */
+
+.sol-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 44px;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    text-underline-offset: 3px;
+}
+
+.sol-voltar .icone {
+    width: 18px;
+    height: 18px;
+}
+
+.sol-cabecalho-linha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sol-detalhe {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+    gap: 1.25rem;
+}
+
+.sol-coluna {
+    display: grid;
+    gap: 1.25rem;
+}
+
+/* O espaçamento entre os cartões vem do gap da grade, não de section + section */
+.sol-detalhe section + section {
+    margin-top: 0;
+}
+
+.sol-cartao {
+    padding: 1.25rem 1.5rem;
+}
+
+.sol-cartao h2 {
+    margin-bottom: 0.875rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.sol-foto {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--verde-claro);
+}
+
+.sol-foto-vazia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--verde);
+}
+
+.sol-foto-vazia .icone {
+    width: 56px;
+    height: 56px;
+}
+
+.sol-campos {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+}
+
+.sol-campos div {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+}
+
+.sol-campos dt {
+    color: var(--texto-suave);
+    font-weight: 600;
+}
+
+.sol-campos dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.sol-aviso {
+    padding: 1rem 1.25rem;
+    border-left: 4px solid #C98A1E;
+    background: #FDF3E1;
+    color: #5E3E0C;
+    font-weight: 600;
+}
+
+.sol-decisao {
+    border-top: 3px solid var(--verde);
+}
+
+.sol-decisao label {
+    display: block;
+    font-weight: 700;
+}
+
+.sol-ajuda {
+    margin-top: 0.15rem;
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+}
+
+.sol-decisao textarea {
+    display: block;
+    width: 100%;
+    min-height: 8rem;
+    margin-top: 0.6rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #B9B0A3;
+    border-radius: 8px;
+    background: var(--superficie);
+    color: var(--texto);
+    font: inherit;
+    resize: vertical;
+}
+
+.sol-decisao textarea:focus-visible {
+    border-color: var(--verde);
+}
+
+.sol-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.botao-aprovar {
+    background: var(--verde);
+    color: #FFFFFF;
+}
+
+.botao-aprovar:hover {
+    background: var(--verde-escuro);
+    border-color: var(--verde-escuro);
+}
+
+/* Negativo, mas sem destaque agressivo: contorno em vez de preenchimento */
+.botao-reprovar {
+    border-color: #A9473F;
+    background: var(--superficie);
+    color: #8E352E;
+}
+
+.botao-reprovar:hover {
+    background: #FBEBEA;
+}
+
+/* ---------- Telas menores ---------- */
+
+@media (max-width: 959.98px) {
+    .sol-detalhe {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sol-foto {
+        max-height: 320px;
+    }
+}
+
+@media (max-width: 639.98px) {
+    .sol-item {
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 0.75rem 1rem;
+        padding: 1rem;
+    }
+
+    .sol-miniatura {
+        width: 56px;
+        height: 56px;
+    }
+
+    .sol-lateral {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .sol-dados {
+        flex-direction: column;
+    }
+
+    .sol-cartao {
+        padding: 1.1rem 1.1rem;
+    }
+
+    .sol-campos div {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.1rem;
+    }
+
+    .sol-botoes .botao {
+        flex: 1 1 100%;
+    }
+}

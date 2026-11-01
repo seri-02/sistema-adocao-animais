@@ -85,6 +85,16 @@ a {
     top: 1rem;
 }
 
+/* Texto só para leitores de tela (ex.: completar "Analisar" com o nome do animal) */
+.visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
 /* ---------- Layout ---------- */
 
 .admin-layout {
@@ -284,11 +294,59 @@ section + section {
     border-radius: var(--raio);
 }
 
+/* ---------- Selos de status e alertas (genéricos para os módulos) ---------- */
+
+/* O texto do status é o que informa; o tom só reforça */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.65rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-atencao {
+    background: #FDF3E1;
+    color: #7D5210;
+}
+
+.badge-positivo {
+    background: var(--verde-claro);
+    color: var(--verde-escuro);
+}
+
+.badge-negativo {
+    background: #FBEBEA;
+    color: #8E352E;
+}
+
+.badge-neutro {
+    background: #F0EEEB;
+    color: #555049;
+}
+
+.alerta-sucesso {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--verde-claro);
+    border: 1px solid #BFD5CC;
+    border-left: 4px solid var(--verde);
+    border-radius: 8px;
+    color: var(--verde-escuro);
+    font-weight: 600;
+}
+
 /* ---------- Telas menores: sidebar vira menu lateral ---------- */
 
 @media (max-width: 959.98px) {
     .admin-layout {
         grid-template-columns: minmax(0, 1fr);
+        /* Conteúdo curto não estica a barra superior para preencher a altura da tela */
+        align-content: start;
     }
 
     .admin-barra {

@@ -52,12 +52,12 @@
     <?php if (!$erros) { ?>
     <meta http-equiv="refresh" content="2; url=../admin/gato.php">
     <?php } ?>
-    <title>Abrigo dos Gatos</title>
+    <title>Animais - Patas &amp; Lares</title>
 </head>
 <body id="adm">
     <header>
         <span>
-            <a href="../index.php">Abrigo dos gatos</a> 
+            <a href="../index.php">Patas &amp; Lares</a>
         </span>
     </header>
     
@@ -81,8 +81,7 @@
     <footer>
         <div id="baixo">
 			<div class="centro">
-				<span class="credito">&copy; Abrigo dos gatos |</span>
-				<span>Design by <a href="#">ANA LAURA </a>2022</span>
+				<span class="credito">&copy; 2026 Patas &amp; Lares · Projeto acadêmico</span>
 			</div>
 		</div>
     </footer>

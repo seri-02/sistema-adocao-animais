@@ -15,24 +15,29 @@
 
     $id_usuario = (int) $usuario_logado['id_usuario'];
     [$dados, $erros] = ler_formulario_adotante($_POST, null);
+    $campos_senha_malformados = tem_campo_nao_textual($_POST, ['senha_atual', 'nova_senha', 'confirmacao_nova_senha']);
 
     // Troca de senha opcional: só acontece se a nova senha for informada
-    $nova_senha = (string) ($_POST['nova_senha'] ?? '');
+    $nova_senha = valor_texto($_POST, 'nova_senha');
     $trocar_senha = $nova_senha !== '';
     if ($trocar_senha) {
         if (mb_strlen($nova_senha) < SENHA_TAMANHO_MINIMO) {
             $erros[] = 'A nova senha deve ter pelo menos ' . SENHA_TAMANHO_MINIMO . ' caracteres.';
         }
-        if ($nova_senha !== (string) ($_POST['confirmacao_nova_senha'] ?? '')) {
+        if ($nova_senha !== valor_texto($_POST, 'confirmacao_nova_senha')) {
             $erros[] = 'A confirmação da nova senha não confere.';
         }
         $stmt = $conn->prepare('SELECT senha FROM usuario WHERE id_usuario = :id_usuario');
         $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
         $stmt->execute();
-        $senha_atual = (string) ($_POST['senha_atual'] ?? '');
+        $senha_atual = valor_texto($_POST, 'senha_atual');
         if ($senha_atual === '' || !senha_confere($senha_atual, (string) $stmt->fetchColumn())) {
             $erros[] = 'A senha atual está incorreta.';
         }
+    }
+
+    if ($campos_senha_malformados) {
+        $erros = [MSG_DADOS_INVALIDOS];
     }
 
     if (!$erros && email_em_uso($conn, $dados['email'], $id_usuario)) {

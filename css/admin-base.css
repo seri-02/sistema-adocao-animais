@@ -180,6 +180,12 @@ a {
     color: #1F3A33;
 }
 
+/* Completa os perfis (sidebar mostra só equipe; a listagem de usuários mostra os três) */
+.badge-perfil-adotante {
+    background: #E8EEF6;
+    color: #2E4A6B;
+}
+
 .admin-nav {
     flex: 1;
 }

@@ -93,18 +93,6 @@
     height: 18px;
 }
 
-/* Destrutivo e secundário: sem preenchimento, cor só reforça o texto "Excluir" */
-.botao-excluir {
-    border-color: transparent;
-    background: transparent;
-    color: #8E352E;
-}
-
-.botao-excluir:hover {
-    border-color: #E3B9B4;
-    background: #FBEBEA;
-}
-
 .ani-vazio {
     display: flex;
     flex-direction: column;

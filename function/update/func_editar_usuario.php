@@ -6,7 +6,11 @@
     require_once __DIR__ . '/../../lib/escape.php';
     require_once __DIR__ . '/../../lib/usuario.php';
 
-    $id_alvo = (int) ($_POST['id_usuario'] ?? 0);
+    // Só inteiro positivo: ausente, vazio, texto, decimal, array ou overflow nunca viram outro id
+    $id_recebido = $_POST['id_usuario'] ?? null;
+    $id_alvo = is_string($id_recebido)
+        ? filter_var($id_recebido, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])
+        : false;
     $id_ator = (int) $usuario_logado['id_usuario'];
     $propria_conta = $id_alvo === $id_ator;
 
@@ -15,13 +19,13 @@
     if ($propria_conta) {
         // Regra do servidor (não só do formulário): o administrador não remove o próprio acesso
         if ((isset($_POST['perfil']) && $_POST['perfil'] !== PERFIL_ADMIN)
-            || (isset($_POST['ativo']) && (string) $_POST['ativo'] !== '1')) {
+            || (isset($_POST['ativo']) && valor_texto($_POST, 'ativo') !== '1')) {
             $erros[] = 'Você não pode alterar o próprio perfil nem desativar a própria conta.';
         }
         $entrada['perfil'] = PERFIL_ADMIN;
         $ativo = 1;
     } else {
-        $ativo = (string) ($_POST['ativo'] ?? '');
+        $ativo = valor_texto($_POST, 'ativo');
         if ($ativo !== '0' && $ativo !== '1') {
             $erros[] = 'Situação inválida.';
         }
@@ -30,6 +34,10 @@
 
     [$dados, $erros_formulario] = ler_formulario_usuario($entrada, array_keys(PERFIS), false);
     $erros = array_merge($erros, $erros_formulario);
+    if ($id_alvo === false) {
+        // Id malformado: nenhuma consulta nem UPDATE; mesma resposta de usuário inexistente
+        $erros = ['Usuário não encontrado.'];
+    }
 
     if (!$erros) {
         try {

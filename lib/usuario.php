@@ -13,19 +13,48 @@
     const MSG_EMAIL_DUPLICADO = 'Já existe um usuário cadastrado com este e-mail.';
     // Mesma situação, no vocabulário da área pública (cadastro e Minha conta)
     const MSG_EMAIL_CONTA_DUPLICADA = 'Já existe uma conta cadastrada com este e-mail.';
+    // Campo esperado como texto chegou como array/estrutura (só ocorre em requisição forjada)
+    const MSG_DADOS_INVALIDOS = 'Os dados enviados são inválidos.';
+
+    // Valor textual de um campo enviado pelo cliente. Só string é aceita: ausente, array ou
+    // qualquer outra estrutura vira '' (nunca é convertida implicitamente, o que geraria
+    // "Array to string conversion" e deixaria o texto "Array" passar adiante).
+    // Não apara espaços: quem chama decide (a senha, por exemplo, é usada como digitada).
+    function valor_texto(array $entrada, string $campo): string
+    {
+        $valor = $entrada[$campo] ?? '';
+        return is_string($valor) ? $valor : '';
+    }
+
+    // Algum dos campos foi ENVIADO, mas não como texto? Ausente continua com a semântica de
+    // cada campo; presente e malformado é recusado, inclusive em campo opcional (telefone,
+    // nova senha), para que nada malformado seja aceito como "vazio".
+    function tem_campo_nao_textual(array $entrada, array $campos): bool
+    {
+        foreach ($campos as $campo) {
+            if (array_key_exists($campo, $entrada) && !is_string($entrada[$campo])) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // Lê e valida nome, e-mail, telefone, perfil e senha.
     // Senha vazia só é aceita quando $senha_obrigatoria = false (edição: mantém a atual).
     function ler_formulario_usuario(array $entrada, array $perfis_permitidos, bool $senha_obrigatoria): array
     {
         $dados = [
-            'nome' => trim((string) ($entrada['nome'] ?? '')),
-            'email' => trim((string) ($entrada['email'] ?? '')),
-            'telefone' => trim((string) ($entrada['telefone'] ?? '')),
-            'perfil' => (string) ($entrada['perfil'] ?? ''),
-            'senha' => (string) ($entrada['senha'] ?? ''),
+            'nome' => trim(valor_texto($entrada, 'nome')),
+            'email' => trim(valor_texto($entrada, 'email')),
+            'telefone' => trim(valor_texto($entrada, 'telefone')),
+            'perfil' => valor_texto($entrada, 'perfil'),
+            'senha' => valor_texto($entrada, 'senha'),
         ];
         $dados['telefone'] = $dados['telefone'] === '' ? null : $dados['telefone'];
+
+        if (tem_campo_nao_textual($entrada, ['nome', 'email', 'telefone', 'perfil', 'senha'])) {
+            return [$dados, [MSG_DADOS_INVALIDOS]];
+        }
 
         $erros = [];
         if ($dados['nome'] === '' || mb_strlen($dados['nome']) > 100) {
@@ -62,7 +91,7 @@
             'email' => $entrada['email'] ?? '',
             'telefone' => $entrada['telefone'] ?? '',
             'perfil' => PERFIL_ADOTANTE,
-            'senha' => $campo_senha !== null ? (string) ($entrada[$campo_senha] ?? '') : '',
+            'senha' => $campo_senha !== null ? valor_texto($entrada, $campo_senha) : '',
         ];
         [$dados, $erros] = ler_formulario_usuario($base, [PERFIL_ADOTANTE], $campo_senha !== null);
 
@@ -70,8 +99,13 @@
         if ($dados['telefone'] !== null && !preg_match('/^[0-9 ()+\-]+$/', $dados['telefone'])) {
             $erros[] = 'O telefone pode conter apenas números, espaços, parênteses, "+" e "-".';
         }
-        if ($campo_senha !== null && (string) ($entrada['confirmacao_senha'] ?? '') !== $dados['senha']) {
+        if ($campo_senha !== null && valor_texto($entrada, 'confirmacao_senha') !== $dados['senha']) {
             $erros[] = 'A confirmação da senha não confere.';
+        }
+        // Senha/confirmação malformadas (os demais campos já foram conferidos acima)
+        $campos_senha = $campo_senha !== null ? [$campo_senha, 'confirmacao_senha'] : [];
+        if (in_array(MSG_DADOS_INVALIDOS, $erros, true) || tem_campo_nao_textual($entrada, $campos_senha)) {
+            $erros = [MSG_DADOS_INVALIDOS];
         }
 
         unset($dados['perfil']);

@@ -1,0 +1,231 @@
+/* Usuários da área administrativa (admin/tabelas/tabela_usuario.php, admin/usuario.php,
+   admin/editar/usuario.php e admin/parciais/campos_usuario.php). Depende de admin-base.css. */
+
+/* ---------- Listagem ---------- */
+
+.usu-cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+}
+
+.usu-lista {
+    display: grid;
+    gap: 0.75rem;
+}
+
+/* Nome > perfil/situação > contato > ações. A coluna de ações tem largura fixa e alinha
+   à esquerda: "Editar" fica na mesma posição mesmo quando "Excluir" não é oferecido */
+.usu-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 15.5rem;
+    align-items: center;
+    gap: 1rem 1.25rem;
+    padding: 1rem 1.25rem;
+}
+
+/* Conta inativa: o selo "Inativo" informa; o tom só reforça */
+.usu-item-inativo {
+    background: #FAF9F7;
+}
+
+.usu-item-inativo .usu-nome {
+    color: var(--texto-suave);
+}
+
+.usu-titulo-linha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+}
+
+.usu-nome {
+    font-size: 1.15rem;
+    font-weight: 750;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.usu-voce {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.usu-selos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+}
+
+.usu-dados {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 0.5rem 1.25rem;
+    max-width: 40rem;
+    margin: 0.6rem 0 0;
+    font-size: 0.9rem;
+}
+
+.usu-dados dt {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.usu-dados dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.usu-acoes-item {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.usu-acoes-item .icone {
+    width: 18px;
+    height: 18px;
+}
+
+.usu-vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.usu-vazio-titulo {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* ---------- Formulário (cadastro e edição): um único cartão ---------- */
+
+.usu-form {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 44rem;
+}
+
+.usu-cartao {
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.usu-cartao h2 {
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+/* Divisão simples dentro do mesmo cartão (substitui o espaçamento de section + section) */
+.usu-cartao .usu-subsecao {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--borda);
+}
+
+.usu-grade {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem 1.25rem;
+    align-items: start;
+}
+
+.usu-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.usu-campo-largo {
+    grid-column: 1 / -1;
+}
+
+.usu-campo label {
+    font-weight: 600;
+}
+
+.usu-opcional {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--texto-suave);
+}
+
+.usu-campo input,
+.usu-campo select {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #B9B0A3;
+    border-radius: 8px;
+    background: var(--superficie);
+    color: var(--texto);
+    font: inherit;
+}
+
+.usu-campo input:focus-visible,
+.usu-campo select:focus-visible {
+    border-color: var(--verde);
+}
+
+.usu-ajuda {
+    font-size: 0.875rem;
+    color: var(--texto-suave);
+}
+
+.usu-fixo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.usu-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+/* ---------- Telas menores ---------- */
+
+@media (max-width: 767.98px) {
+    .usu-item {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+    }
+}
+
+@media (max-width: 639.98px) {
+    .usu-cabecalho .botao,
+    .usu-acoes .botao {
+        width: 100%;
+    }
+
+    .usu-item {
+        padding: 1rem;
+    }
+
+    .usu-acoes-item .botao {
+        flex: 0 1 50%;
+    }
+
+    .usu-dados {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .usu-cartao {
+        padding: 1.1rem 1.1rem 1.25rem;
+    }
+
+    .usu-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

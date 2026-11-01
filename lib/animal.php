@@ -67,14 +67,26 @@
 
     // Lê e valida o formulário administrativo de animal.
     // Retorna [dados, erros]. Campos opcionais vazios viram NULL (não informado).
+    // Só texto é aceito: campo enviado como array/estrutura recusa o envio inteiro (nunca é
+    // convertido para "Array" nem tratado como vazio, o que apagaria um campo opcional).
     function ler_formulario_animal(array $entrada): array
     {
         $dados = [];
+        $malformado = false;
         foreach (CAMPOS_FORMULARIO_ANIMAL as $campo) {
-            $valor = trim((string) ($entrada[$campo] ?? ''));
+            $valor = $entrada[$campo] ?? '';
+            if (!is_string($valor)) {
+                $malformado = true;
+                $valor = '';
+            }
+            $valor = trim($valor);
             $dados[$campo] = $valor === '' ? null : $valor;
         }
         $dados['sexo'] = $dados['sexo'] ?? 'NAO_INFORMADO';
+
+        if ($malformado) {
+            return [$dados, ['Os dados enviados são inválidos.']];
+        }
 
         $erros = [];
         if ($dados['nome'] === null) {

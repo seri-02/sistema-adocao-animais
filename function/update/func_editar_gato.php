@@ -28,8 +28,9 @@
     // ADOTADO / EM_PROCESSO pertencem ao workflow: o formulário não altera esses status
     $status = $atual ? $atual->status : null;
     if ($atual && in_array($atual->status, STATUS_ADMINISTRAVEIS, true)) {
-        $status = (string) ($_POST['status'] ?? $atual->status);
-        if (!in_array($status, STATUS_ADMINISTRAVEIS, true)) {
+        // Só texto: status[] (array) é recusado, nunca convertido para "Array"
+        $status = $_POST['status'] ?? $atual->status;
+        if (!is_string($status) || !in_array($status, STATUS_ADMINISTRAVEIS, true)) {
             $erros[] = 'Disponibilidade inválida.';
         }
     }

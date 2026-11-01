@@ -16,6 +16,18 @@
     function iniciar_sessao(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
+            // Cookie de sessão inacessível a JavaScript e não enviado em POST de outro site.
+            // Duração, path, domínio e secure continuam os do ambiente (secure fixo quebraria o
+            // XAMPP local em http://).
+            $parametros = session_get_cookie_params();
+            session_set_cookie_params([
+                'lifetime' => $parametros['lifetime'],
+                'path' => $parametros['path'],
+                'domain' => $parametros['domain'],
+                'secure' => $parametros['secure'],
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ]);
             session_start();
         }
     }
@@ -222,8 +234,14 @@
         $_SESSION = [];
         if (ini_get('session.use_cookies')) {
             $parametros = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000, $parametros['path'], $parametros['domain'],
-                $parametros['secure'], $parametros['httponly']);
+            setcookie(session_name(), '', [
+                'expires' => time() - 42000,
+                'path' => $parametros['path'],
+                'domain' => $parametros['domain'],
+                'secure' => $parametros['secure'],
+                'httponly' => $parametros['httponly'],
+                'samesite' => $parametros['samesite'],
+            ]);
         }
         session_destroy();
     }

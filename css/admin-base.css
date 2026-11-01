@@ -305,6 +305,19 @@ section + section {
     background: var(--verde-claro);
 }
 
+/* Ação destrutiva secundária (Excluir): sem preenchimento; o texto informa, a cor só reforça.
+   Reutilizável por Animais, Voluntários e Usuários. */
+.botao-excluir {
+    border-color: transparent;
+    background: transparent;
+    color: #8E352E;
+}
+
+.botao-excluir:hover {
+    border-color: #E3B9B4;
+    background: #FBEBEA;
+}
+
 .cartao {
     background: var(--superficie);
     border: 1px solid var(--borda);
